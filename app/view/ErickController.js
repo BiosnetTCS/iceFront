@@ -10,8 +10,8 @@ Ext.define('Ice.view.ErickController', {
         if(!Ext.isEmpty(objeto)){
             if(!Ext.isEmpty(objeto['callback'])){
                 if((typeof objeto['callback'])  === 'function'){
-                    objeto['callback']();
                     alert('callback ejecutado');
+                    objeto['callback']();                    
                 }
             }
         }
