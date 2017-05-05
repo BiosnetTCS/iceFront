@@ -57,11 +57,12 @@ Ext.define('Ice.view.cesar.Cesar', {
 
 		    // Reset and Submit buttons
 		    buttons: [{
-		        text: 'Reset',
+		        text: 'Reset'
 //		        handler: function() {
 //		            this.up('form').getForm().reset();
 //		        }
-		    }, {
+		    }, 
+		    {
 		        text: 'Submit',
 		        formBind: true, //only enabled once the form is valid
 		        disabled: true,
