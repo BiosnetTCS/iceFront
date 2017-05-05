@@ -16,7 +16,7 @@ Ext.define('Ice.view.cesar.Cesar', {
 		{
 		    title: 'Buscar',
 		    xtype:'formpanel',
-		    fullscreen: true,
+		    //fullscreen: true,
 		    bodyPadding: 5,
 		    width: 350,
 

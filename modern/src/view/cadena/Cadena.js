@@ -9,6 +9,8 @@ Ext.define('Ice.view.cadena.Cadena', {
     
     title: 'Cadena',
     
+    scrollable: true,
+    
     items: [
         {
             xtype: 'erickCmp',
@@ -26,12 +28,14 @@ Ext.define('Ice.view.cadena.Cadena', {
             xtype: 'alvaroCmp',
             reference: 'alvaro',
             title: 'Componente de Alvaro'
+        }, {
+            xtype: 'toolbar',
+            docked: 'bottom',
+            items: [{
+                text: 'Encadenar',
+                iconCls: 'x-fa fa-save',
+                handler: 'onEncadenarClic'
+            }]
         }
-    ],
-    
-    buttons: [{
-        text: 'Encadenar',
-        iconCls: 'x-fa fa-save',
-        handler: 'onEncadenarClic'
-    }]
+    ]
 });
