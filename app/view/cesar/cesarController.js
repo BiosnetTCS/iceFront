@@ -18,6 +18,7 @@ Ext.define('Ice.view.cesar.cesarController', {
 
     lastView: null,
     buscar:function(obj){
+    	alert()
     	if(obj.callback && typeof obj.callback=="function"){
     		obj.callback();
     	}
