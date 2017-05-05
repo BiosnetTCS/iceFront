@@ -11,7 +11,7 @@ Ext.define('Ice.view.cesar.Cesar', {
 		'Ext.grid.Panel'
 	]
 	,controller:'cesarController'
-	,cls:'cesarCmp'
+	,cls:'cs-cls'
 	,items:[
 		{
 		    title: 'Buscar',

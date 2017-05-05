@@ -11,7 +11,7 @@ Ext.define('Ice.view.cesar.Cesar', {
 		'Ext.Toolbar'
 	]
 	,controller:'cesarController'
-	,cls:'cesarCmp'
+	,cls:'cs-md'
 	,items:[
 		{
 		    title: 'Buscar',
