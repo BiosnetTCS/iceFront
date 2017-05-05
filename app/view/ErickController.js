@@ -6,11 +6,12 @@ Ext.define('Ice.view.ErickController', {
     alias:  'controller.erickCntlr',
     
     imprimeNombre: function(objeto){
-        Ext.Msg.alert('Nombre','Erick');
+//        Ext.Msg.alert('Nombre','Erick');
+        alert('callback ejecutado');
         if(!Ext.isEmpty(objeto)){
             if(!Ext.isEmpty(objeto['callback'])){
                 if((typeof objeto['callback'])  === 'function'){
-                    objeto['callback']();
+                    objeto['callback']();                    
                 }
             }
         }

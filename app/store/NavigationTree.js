@@ -73,6 +73,12 @@ Ext.define('Ice.store.NavigationTree', {
                 leaf: true,
                 tipo: 'C',
                 url: 'alvaroCmp.action'
+            }, {
+                text: 'Cadena',
+                iconCls: 'x-fa fa-smile-o',
+                leaf: true,
+                tipo: 'C',
+                url: 'cadenaCmp.action'
             }
             /*{
                 text: 'Dashboard',
