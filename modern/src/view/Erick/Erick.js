@@ -10,7 +10,7 @@ Ext.define('Ice.Erick.Erick', {
         'Ext.Button'
     ],
     controller: 'erickCntlr',
-    cls:        'sencha-dash-viewport',
+    cls:        'eck-md',
     items:      [
 //        {
 //            xtype:   'Ext.data.Store',

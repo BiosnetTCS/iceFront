@@ -7,9 +7,9 @@ Ext.define('Ice.view.ErickController', {
     
     imprimeNombre: function(objeto){
         Ext.Msg.alert('Nombre','Erick');
-        if(!Ext.isEmpty(objecto)){
+        if(!Ext.isEmpty(objeto)){
             if(!Ext.isEmpty(objeto['callback'])){
-                if(objeto['callback'] typeof === 'function'){
+                if((typeof objeto['callback'])  === 'function'){
                     objeto['callback']();
                 }
             }
