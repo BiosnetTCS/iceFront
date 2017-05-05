@@ -1,7 +1,7 @@
 /**
  * Created by DEORTIZT on 5/5/2017.
  */
-Ext.define('Ice.Erick.Erick', {
+Ext.define('Ice.view.erick.Erick', {
     extend:     'Ext.form.Panel',
     xtype:      'erickCmp',
     requires: [
