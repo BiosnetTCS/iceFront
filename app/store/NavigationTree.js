@@ -49,6 +49,30 @@ Ext.define('Ice.store.NavigationTree', {
                 iconCls: 'x-fa fa-money',
                 viewType: 'pantallacobranza',
                 leaf: true
+            }, {
+                text: 'Erick',
+                iconCls: 'x-fa fa-smile-o',
+                leaf: true,
+                tipo: 'C',
+                url: 'erickCmp.action'
+            }, {
+                text: 'Cesar',
+                iconCls: 'x-fa fa-smile-o',
+                leaf: true,
+                tipo: 'C',
+                url: 'cesarCmp.action'
+            }, {
+                text: 'Ricardo',
+                iconCls: 'x-fa fa-smile-o',
+                leaf: true,
+                tipo: 'C',
+                url: 'ricardoCmp.action'
+            }, {
+                text: 'Alvaro',
+                iconCls: 'x-fa fa-smile-o',
+                leaf: true,
+                tipo: 'C',
+                url: 'alvaroCmp.action'
             }
             /*{
                 text: 'Dashboard',
