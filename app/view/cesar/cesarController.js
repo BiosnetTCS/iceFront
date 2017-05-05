@@ -17,7 +17,9 @@ Ext.define('Ice.view.cesar.cesarController', {
     },
 
     lastView: null,
-    buscar:function(){
-    	alert();
+    buscar:function(obj){
+    	if(obj.callback && typeof obj.callback=="function"){
+    		obj.callback();
+    	}
     }
 });
