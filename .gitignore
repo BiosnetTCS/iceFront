@@ -1,0 +1,10 @@
+.project/*
+.settings/*
+bootstrap.css
+bootstrap.js
+build/*
+classic.json
+classic.jsonp
+modern.json
+modern.jsonp
+sass/example/*
