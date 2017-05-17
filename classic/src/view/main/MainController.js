@@ -17,78 +17,88 @@ Ext.define('Ice.view.main.MainController', {
     lastView: null,
 
     setCurrentView: function (hashTag) {
-        console.log('setCurrentView: ', arguments);
+        Ice.log('Ice.view.main.MainController.setCurrentView args:', arguments);
+        var paso = 'Agregando nuevo componente al contenedor';
+        try {
         
-        //hashTag = (hashTag || '').toLowerCase();
-
-        var me = this,
-            refs = me.getReferences(),
-            mainCard = refs.mainCardPanel,
-            mainLayout = mainCard.getLayout(),
-            navigationList = refs.navigationTreeList,
-            store = navigationList.getStore(),
-            node = store.findNode('url', hashTag),
-            url = (node && node.get('url')) || 'page404',
-            lastView = me.lastView,
-            // existingItem = mainCard.child('component[routeId=' + hashTag + ']'), <<< jtezva: para siempre crear uno
-            existingItem = false,
-            newView;
-
-        // Kill any previously routed window
-        if (lastView && lastView.isWindow) {
-            lastView.destroy();
-        }
-
-        lastView = mainLayout.getActiveItem();
-        
-        if (!existingItem) {
-            var splitPuntoAction = url.indexOf('.action') !== -1 && url.split('.action'),
-                splitNombreAction = splitPuntoAction && splitPuntoAction.length > 0 && splitPuntoAction[0].split('/'),
-                nombreComp = (splitNombreAction && splitNombreAction.length > 0 && splitNombreAction[splitNombreAction.length - 1])
-                    || 'page404',
-                params = (splitPuntoAction && splitPuntoAction.length > 1 && splitPuntoAction[1]
-                    && splitPuntoAction[1].indexOf('?') !== -1 && splitPuntoAction[1].split('?')[1]
-                    && Ext.urlDecode(splitPuntoAction[1].split('?')[1])
-                    ) || {};
-            console.log('nombreComp:', nombreComp, 'params:', params);
+            //hashTag = (hashTag || '').toLowerCase();
+    
+            var me = this,
+                refs = me.getReferences(),
+                mainCard = refs.mainCardPanel,
+                mainLayout = mainCard.getLayout(),
+                navigationList = refs.navigationTreeList,
+                store = navigationList.getStore(),
+                node = store.findNode('url', hashTag),
+                url = (node && node.get('url')) || 'mesacontrol.action', // 'page404',
+                lastView = me.lastView,
+                // existingItem = mainCard.child('component[routeId=' + hashTag + ']'), <<< jtezva: para siempre crear uno
+                existingItem = false,
+                newView;
             
-            var config = Object.assign({
-                xtype: nombreComp,
-                //routeId: hashTag,  // for existingItem search later (jtezva: comentado)
-                hideMode: 'offsets'
-            }, params);
+            // para login y roltree no aplica 404
+            if (hashTag === 'login.action' || hashTag === 'roltree.action' || hashTag === 'mesacontrol.action') {
+                url = hashTag;
+            }
+    
+            // Kill any previously routed window
+            if (lastView && lastView.isWindow) {
+                lastView.destroy();
+            }
+    
+            lastView = mainLayout.getActiveItem();
             
-            console.log('config:', config);
+            if (!existingItem) {
+                var splitPuntoAction = url.indexOf('.action') !== -1 && url.split('.action'),
+                    splitNombreAction = splitPuntoAction && splitPuntoAction.length > 0 && splitPuntoAction[0].split('/'),
+                    nombreComp = (splitNombreAction && splitNombreAction.length > 0 && splitNombreAction[splitNombreAction.length - 1])
+                        || 'page404',
+                    params = (splitPuntoAction && splitPuntoAction.length > 1 && splitPuntoAction[1]
+                        && splitPuntoAction[1].indexOf('?') !== -1 && splitPuntoAction[1].split('?')[1]
+                        && Ext.urlDecode(splitPuntoAction[1].split('?')[1])
+                        ) || {};
+                Ice.log('Ice.view.main.MainController.setCurrentView nombreComp:', nombreComp, 'params:', params);
+                
+                var config = Object.assign({
+                    xtype: nombreComp,
+                    //routeId: hashTag,  // for existingItem search later (jtezva: comentado)
+                    hideMode: 'offsets'
+                }, params);
+                
+                Ice.log('Ice.view.main.MainController.setCurrentView config:', config);
+                
+                newView = Ext.create(config);
+            }
             
-            newView = Ext.create(config);
-        }
-
-        if (!newView || !newView.isWindow) {
-            // !newView means we have an existing view, but if the newView isWindow
-            // we don't add it to the card layout.
-            if (existingItem) {
-                // We don't have a newView, so activate the existing view.
-                if (existingItem !== lastView) {
-                    mainLayout.setActiveItem(existingItem);
+            if (!newView || !newView.isWindow) {
+                // !newView means we have an existing view, but if the newView isWindow
+                // we don't add it to the card layout.
+                if (existingItem) {
+                    // We don't have a newView, so activate the existing view.
+                    if (existingItem !== lastView) {
+                        mainLayout.setActiveItem(existingItem);
+                    }
+                    newView = existingItem;
                 }
-                newView = existingItem;
+                else {
+                    // newView is set (did not exist already), so add it and make it the
+                    // activeItem.
+                    Ext.suspendLayouts();
+                    mainLayout.setActiveItem(mainCard.add(newView));
+                    Ext.resumeLayouts(true);
+                }
             }
-            else {
-                // newView is set (did not exist already), so add it and make it the
-                // activeItem.
-                Ext.suspendLayouts();
-                mainLayout.setActiveItem(mainCard.add(newView));
-                Ext.resumeLayouts(true);
+    
+            navigationList.setSelection(node);
+    
+            if (newView.isFocusable(true)) {
+                newView.focus();
             }
+    
+            me.lastView = newView;
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
         }
-
-        navigationList.setSelection(node);
-
-        if (newView.isFocusable(true)) {
-            newView.focus();
-        }
-
-        me.lastView = newView;
     },
 
     onNavigationTreeSelectionChange: function (tree, node) {
@@ -155,10 +165,17 @@ Ext.define('Ice.view.main.MainController', {
         }
     },
 
-    onMainViewRender:function() {
+    onMainViewRender: function() {
         if (!window.location.hash) {
             //jtezva: para que no
             //this.redirectTo("mesacontrol");
+        }
+        
+        var paso = 'Invocando carga de sesi\u00f3n';
+        try {
+            this.cargarDatosSesion();
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
         }
     },
 
@@ -182,6 +199,60 @@ Ext.define('Ice.view.main.MainController', {
             // Add "?modern&" before the remaining tokens and strip & if there are
             // none.
             window.location.search = ('?modern&' + s).replace(/&$/, '');
+        }
+    },
+    
+    onLogoutClic: function () {
+        Ice.logout();
+    },
+    
+    cargarDatosSesion: function () {
+        Ice.log('Ice.view.main.MainController.cargarDatosSesion');
+        var me = this,
+            view = me.getView(),
+            paso = 'Recuperando usuario y rol activo';
+        try {
+            Ice.request({
+                mascara: paso,
+                url: Ice.url.core.recuperarDatosSesion,
+                success: function (action) {
+                    var paso2 = 'Ligando datos de sesi\u00f3n';
+                    try {
+                        view.viewModel.set('cdusuari', action.params.cdusuari || '');
+                        view.viewModel.set('cdsisrol', action.params.cdsisrol || '');
+                        view.viewModel.data.roles.removeAll();
+                        view.viewModel.data.roles.reload();
+                    } catch (e) {
+                        Ice.manejaExcepcion(e, paso2);
+                    }
+                }
+            });
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
+    },
+    
+    onComboRolesSesionSelect: function (combo, record) {
+        Ice.log('Ice.view.main.MainController.onComboRolesSesionSelect args:', arguments);
+        var paso = 'Seleccionando rol';
+        try {
+            Ice.request({
+                mascara: paso,
+                url: Ice.url.core.seleccionaRol,
+                params: {
+                    'params.cdsisrol': record.get('cdsisrol')
+                },
+                success: function (action) {
+                    var paso2 = 'Redireccionando...';
+                    try {
+                        Ice.query('#mainView').getController().redirectTo('roltree.action', true);
+                    } catch(e) {
+                        Ice.manejaExcepcion(e, paso2);
+                    }
+                }
+            });
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
         }
     }
 });

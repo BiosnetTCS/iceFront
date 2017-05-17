@@ -9,6 +9,15 @@ Ext.define('Ice.view.mesacontrol.MesaControl', {
         'Ext.grid.Panel'
     ],
     
+    
+    // validacion y modificacion de parametros (config)
+    constructor: function (config) {
+        Ice.log('Ice.view.mesacontrol.MesaControl.constructor config:', config);
+        this.callParent(arguments);
+    },
+    
+    
+    // configuracion que no usa parametros
     layout: 'responsivecolumn',
     
     defaultFocus: 'form',
@@ -146,5 +155,23 @@ Ext.define('Ice.view.mesacontrol.MesaControl', {
                 ]
             }
         }
-    ]
+    ],
+    
+    
+    // propiedades no ext (se generan getters y setters)
+    config: {},
+    
+    
+    // configuracion que usa parametros (config ya se encuentra copiada en this)
+    initComponent: function () {
+        Ice.log('Ice.view.mesacontrol.MesaControl.initComponent');
+        var me = this,
+            paso = 'Construyendo componente de mesa de control';
+        try {
+            var secciones = Ice.generaComponentes();
+        } catch(e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        me.callParent(arguments);
+    }
 });

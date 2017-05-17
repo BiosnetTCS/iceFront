@@ -15,10 +15,12 @@ Ext.define('Ice.view.main.MainController', {
     },
 
     config: {
-        showNavigation: true
+        showNavigation: true,
+        showUserNavigation: true
     },
 
     collapsedCls: 'main-nav-collapsed',
+    collapsedUserCls: 'user-nav-collapsed',
 
     init: function (view) {
         var me = this,
@@ -27,7 +29,19 @@ Ext.define('Ice.view.main.MainController', {
         me.callParent([ view ]);
 
         me.nav = refs.navigation;
+        me.userNav = refs.userNavigation;
         me.navigationTree = refs.navigationTree;
+        
+        if (this.getShowUserNavigation() === true) {
+            this.setShowUserNavigation(false);
+        }
+        
+        var paso = 'Invocando carga de datos de sesi\u00f3n';
+        try {
+            me.cargarDatosSesion();
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
     },
 
     onNavigationItemClick: function () {
@@ -70,46 +84,61 @@ Ext.define('Ice.view.main.MainController', {
         this.setShowNavigation(!this.getShowNavigation());
     },
 
+    onToggleUserNavigationSize: function () {
+        this.setShowUserNavigation(!this.getShowUserNavigation());
+    },
+
     setCurrentView: function (hashTag) {
-        hashTag = (hashTag || '').toLowerCase();
-
-        var me = this,
-            refs = me.getReferences(),
-            mainCard = refs.mainCard,
-            navigationTree = me.navigationTree,
-            store = navigationTree.getStore(),
-            node = store.findNode('url', hashTag),
-            url = (node && node.get('url')) || 'page404',
-            item = false; //mainCard.child('component[routeId=' + hashTag + ']'); jtezva para crear siempre nuevo
-
-        if (!item) {
-            var splitPuntoAction = url.indexOf('.action') !== -1 && url.split('.action'),
-                splitNombreAction = splitPuntoAction && splitPuntoAction.length > 0 && splitPuntoAction[0].split('/'),
-                nombreComp = (splitNombreAction && splitNombreAction.length > 0 && splitNombreAction[splitNombreAction.length - 1])
-                    || 'page404',
-                params = (splitPuntoAction && splitPuntoAction.length > 1 && splitPuntoAction[1]
-                    && splitPuntoAction[1].indexOf('?') !== -1 && splitPuntoAction[1].split('?')[1]
-                    && Ext.urlDecode(splitPuntoAction[1].split('?')[1])
-                    ) || {};
-            console.log('nombreComp:', nombreComp, 'params:', params);
+        Ice.log('Ice.view.main.MainController.setCurrentView args:', arguments);
+        var paso = 'Agregando nuevo componente al contenedor';
+        try {
+            hashTag = (hashTag || '').toLowerCase();
+    
+            var me = this,
+                refs = me.getReferences(),
+                mainCard = refs.mainCard,
+                navigationTree = me.navigationTree,
+                store = navigationTree.getStore(),
+                node = store.findNode('url', hashTag),
+                url = (node && node.get('url')) || 'page404',
+                item = false; //mainCard.child('component[routeId=' + hashTag + ']'); jtezva para crear siempre nuevo
             
-            var config = Object.assign({
-                xtype: nombreComp
-                //routeId: hashTag,  // for existingItem search later (jtezva: comentado)
-            }, params);
+            // para login y roltree no aplica 404
+            if (hashTag === 'login.action' || hashTag === 'roltree.action' || hashTag === 'mesacontrol.action') {
+                url = hashTag;
+            }
+    
+            if (!item) {
+                var splitPuntoAction = url.indexOf('.action') !== -1 && url.split('.action'),
+                    splitNombreAction = splitPuntoAction && splitPuntoAction.length > 0 && splitPuntoAction[0].split('/'),
+                    nombreComp = (splitNombreAction && splitNombreAction.length > 0 && splitNombreAction[splitNombreAction.length - 1])
+                        || 'page404',
+                    params = (splitPuntoAction && splitPuntoAction.length > 1 && splitPuntoAction[1]
+                        && splitPuntoAction[1].indexOf('?') !== -1 && splitPuntoAction[1].split('?')[1]
+                        && Ext.urlDecode(splitPuntoAction[1].split('?')[1])
+                        ) || {};
+                Ice.log('Ice.view.main.MainController.setCurrentView nombreComp:', nombreComp, 'params:', params);
+                
+                var config = Object.assign({
+                    xtype: nombreComp
+                    //routeId: hashTag,  // for existingItem search later (jtezva: comentado)
+                }, params);
+                
+                Ice.log('Ice.view.main.MainController.setCurrentView config:', config);
+                
+                item = mainCard.add(config);
+            }
             
-            console.log('config:', config);
+            mainCard.setActiveItem(item);
             
-            item = mainCard.add(config);
+            navigationTree.setSelection(node);
+    
+            //if (newView.isFocusable(true)) {
+            //    newView.focus();
+            //}
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
         }
-        
-        mainCard.setActiveItem(item);
-        
-        navigationTree.setSelection(node);
-
-        //if (newView.isFocusable(true)) {
-        //    newView.focus();
-        //}
     },
 
     updateShowNavigation: function (showNavigation, oldValue) {
@@ -155,8 +184,86 @@ Ext.define('Ice.view.main.MainController', {
         }
     },
 
+    updateShowUserNavigation: function (showUserNavigation, oldValue) {
+        // Ignore the first update since our initial state is managed specially. This
+        // logic depends on view state that must be fully setup before we can toggle
+        // things.
+        //
+        if (oldValue !== undefined) {
+            var me = this,
+                cls = me.collapsedUserCls,
+                refs = me.getReferences(),
+                navigation = me.userNav;
+
+            navigation.toggleCls(cls);
+        }
+    },
+
     toolbarButtonClick: function(btn){
         var href = btn.config.href;
         this.redirectTo(href);
+    },
+    
+    cargarDatosSesion: function () {
+        Ice.log('Ice.view.main.MainController.cargarDatosSesion');
+        var me = this,
+            view = me.getView(),
+            viewModel = me.getView().getViewModel(),
+            paso = 'Recuperando usuario y rol activo';
+        try {
+            Ice.request({
+                mascara: paso,
+                url: Ice.url.core.recuperarDatosSesion,
+                success: function (action) {
+                    var paso2 = 'Ligando datos de sesi\u00f3n';
+                    try {
+                        viewModel.set('cdusuari', action.params.cdusuari || '');
+                        viewModel.set('cdsisrol', action.params.cdsisrol || '');
+                        viewModel.data.roles.removeAll();
+                        viewModel.data.roles.reload();
+                    } catch (e) {
+                        Ice.manejaExcepcion(e, paso2);
+                    }
+                }
+            });
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
+    },
+    
+    onLogoutClic: function () {
+        this.onToggleUserNavigationSize();
+        Ice.logout();
+    },
+    
+    onComboRolesSesionSelect: function (combo, record, oldRecord) {
+        Ice.log('Ice.view.main.MainController.onComboRolesSesionSelect args:', arguments);
+        var me = this,
+            paso = 'Seleccionando rol';
+        try {
+            if (record && oldRecord && record.get('cdsisrol') === oldRecord.get('cdsisrol')) {
+                return;
+            }
+            if (record) {
+                Ice.request({
+                    mascara: paso,
+                    url: Ice.url.core.seleccionaRol,
+                    params: {
+                        'params.cdsisrol': record.get('cdsisrol')
+                    },
+                    success: function (action) {
+                        var paso2 = 'Redireccionando...';
+                        try {
+                            me.setShowUserNavigation(false);
+                            Ice.query('#mainView').getController().redirectTo('roltree.action', true);
+                        } catch(e) {
+                            Ice.manejaExcepcion(e, paso2);
+                        }
+                    }
+                });
+            }
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
     }
 });

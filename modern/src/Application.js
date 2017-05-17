@@ -8,7 +8,7 @@ Ext.define('Ice.Application', {
     
     name: 'Ice',
 
-    //defaultToken : 'mesacontrol',
+    defaultToken : 'mesacontrol.action',
 
     mainView: 'Ice.view.main.Main',
 

@@ -6,8 +6,20 @@ Ext.define('Ice.store.NavigationTree', {
     fields: [{
         name: 'text'
     }],
-
-    root: {
+    
+    autoLoad: true,
+    
+    proxy: {
+        type: 'ajax',
+        url: Ice.url.core.recuperarMenus,
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            messageProperty: 'message'
+        }
+    }
+        
+    /*root: {
         expanded: true,
         children: [
             {
@@ -185,7 +197,7 @@ Ext.define('Ice.store.NavigationTree', {
                 iconCls: 'x-fa fa-pie-chart',
                 viewType: 'charts',
                 leaf: true
-            }*/
+            }
         ]
-    }
+    }*/
 });

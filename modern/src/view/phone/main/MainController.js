@@ -8,24 +8,35 @@ Ext.define('Ice.view.phone.main.MainController', {
     alias: 'controller.phone-main',
 
     slidOutCls: 'main-nav-slid-out',
+    slidOutUserCls: 'user-nav-slid-out',
 
     showNavigation: false,
+    showUserNavigation: false,
 
     init: function (view) {
         var me = this,
             refs = me.getReferences(),
             logo = refs.logo,
-            nav;
+            nav,
+            userNav;
 
         me.callParent([ view ]);
 
         nav = me.nav;
+        userNav = me.userNav;
 
         // Detach the navigation container so we can float it in from the edge.
         nav.getParent().remove(nav, false);
         nav.addCls(['x-floating', 'main-nav-floated', me.slidOutCls]);
         nav.setScrollable(true);
         nav.getRefOwner = function () {
+            // we still need events to route here or our base
+            return view;
+        };
+        userNav.getParent().remove(userNav, false);
+        userNav.addCls(['x-floating', 'user-nav-floated', me.slidOutUserCls]);
+        userNav.setScrollable(true);
+        userNav.getRefOwner = function () {
             // we still need events to route here or our base
             return view;
         };
@@ -36,6 +47,7 @@ Ext.define('Ice.view.phone.main.MainController', {
         logo.setDocked('top');
 
         Ext.getBody().appendChild(nav.element);
+        Ext.getBody().appendChild(userNav.element);
     },
 
     onNavigationItemClick: function (tree, info) {
@@ -84,6 +96,39 @@ Ext.define('Ice.view.phone.main.MainController', {
             }
 
             nav.toggleCls(me.slidOutCls, !showNavigation);
+        }
+    },
+
+    updateShowUserNavigation: function (showUserNavigation, oldValue) {
+        // Ignore the first update since our initial state is managed specially. This
+        // logic depends on view state that must be fully setup before we can toggle
+        // things.
+        //
+        // NOTE: We do not callParent here; we replace its logic since we took over
+        // the navigation container.
+        //
+        if (oldValue !== undefined) {
+            var me = this,
+                userNav = me.userNav,
+                mask = me.mask;
+
+            if (showUserNavigation) {
+                me.mask = mask = Ext.Viewport.add({
+                    xtype: 'loadmask',
+                    userCls: 'user-nav-mask'
+                });
+
+                mask.element.on({
+                    tap: me.onToggleUserNavigationSize,
+                    scope: me,
+                    single: true
+                });
+            } else if (mask) {
+                mask.destroy();
+                me.mask = null;
+            }
+
+            userNav.toggleCls(me.slidOutUserCls, !showUserNavigation);
         }
     }
 });

@@ -1,5 +1,5 @@
 $app-name:  dynamic( 'Ice' );
-$image-search-path: '/home/jtezva/Sencha/Ice/build/production/Ice/classic/resources';
+$image-search-path: '/home/jtezva/workspace/iceFront/build/production/Ice/classic/resources';
 $theme-name:  dynamic( 'theme-triton' );
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractcontainer: dynamic(true);;
@@ -991,12 +991,30 @@ $include-ext-window-window: dynamic(true);;
 $include-ice-application: dynamic(true);;
 $include-ice-override-menu-item: dynamic(true);;
 $include-ice-store-navigationtree: dynamic(true);;
+$include-ice-view-erickcontroller: dynamic(true);;
+$include-ice-view-alvaro-alvaro: dynamic(true);;
+$include-ice-view-alvaro-alvarocontroller: dynamic(true);;
+$include-ice-view-bloque-mpolizas: dynamic(true);;
+$include-ice-view-bloques-mpolizascontroller: dynamic(true);;
+$include-ice-view-cadena-cadena: dynamic(true);;
+$include-ice-view-cadena-cadenacontroller: dynamic(true);;
+$include-ice-view-cesar-cesar: dynamic(true);;
+$include-ice-view-cesar-cesarcontroller: dynamic(true);;
 $include-ice-view-cotizacion-cotizacion: dynamic(true);;
+$include-ice-view-erick-erick: dynamic(true);;
+$include-ice-view-field-comboice: dynamic(true);;
+$include-ice-view-field-datefieldice: dynamic(true);;
+$include-ice-view-field-numberfieldice: dynamic(true);;
+$include-ice-view-field-switchfieldice: dynamic(true);;
+$include-ice-view-field-textareaice: dynamic(true);;
+$include-ice-view-field-textfieldice: dynamic(true);;
 $include-ice-view-main-main: dynamic(true);;
 $include-ice-view-main-maincontainerwrap: dynamic(true);;
 $include-ice-view-main-maincontroller: dynamic(true);;
 $include-ice-view-main-mainmodel: dynamic(true);;
 $include-ice-view-mesacontrol-mesacontrol: dynamic(true);;
+$include-ice-view-ricardo-ricardocontroller: dynamic(true);;
+$include-ice-view-ricardo-ricardoview: dynamic(true);;
 
 
 /* ======================== ETC ======================== */

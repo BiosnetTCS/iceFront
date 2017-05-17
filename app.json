@@ -56,7 +56,8 @@
      */
     "requires": [
         "font-awesome",
-        "ux"
+        "ux",
+        "ext-locale"
     ],
 
     /**
@@ -232,6 +233,9 @@
             {
                 "path": "${framework.dir}/build/ext-all-rtl-debug.js"
             }
+        ],
+        "requires": [
+            "ext-locale"
         ]
     },
 
@@ -319,10 +323,10 @@
         },
         "cache": {
             "enable": true
-        },
+        }/*,
         "compressor": {
             "type": "yui"
-        }
+        }*/
     },
     
     /**
@@ -572,5 +576,7 @@
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.
      */
-    "id": "947fb0b2-a214-451b-8366-8ad7dc79d90b"
+    "id": "947fb0b2-a214-451b-8366-8ad7dc79d90b",
+    
+    "locale": "es"
 }

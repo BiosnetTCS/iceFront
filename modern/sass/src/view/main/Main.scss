@@ -164,6 +164,7 @@ a {
 }
 
 .main-nav-container,
+.user-nav-container,
 .main-container {
     height: calc(100vh - #{$main-toolbar-height});
 }
@@ -176,11 +177,18 @@ a {
     height: 100vh;
 }
 
+.phone .user-nav-container {
+    height: 100vh;
+}
+
 // ios has a bug where vh units are not interpreted correctly resulting
 // in additional height.  Fortunately height 100% works to make the nav/content area
 // fill its container in ios.
 .x-ios .main-container,
 .x-ios .main-nav-container {
+    height: 100%;
+}
+.x-ios .user-nav-container {
     height: 100%;
 }
 
@@ -202,6 +210,12 @@ a {
     width: $main-nav-width;
 }
 
+.user-nav-container, .main-logo {
+    position: relative;
+    transition: width 0.3s;
+    width: $user-nav-width;
+}
+
 $logosura-image-width: 140px;
 $logosura-image-height: 48px;
 
@@ -213,6 +227,10 @@ $logosura-image-height: 48px;
 
 .main-nav-collapsed {
     width: $main-nav-collapsed-width;
+}
+
+.user-nav-collapsed {
+    width: $user-nav-collapsed-width;
 }
 
 .main-toolbar {
@@ -245,8 +263,21 @@ $logosura-image-height: 48px;
     z-index: 10;
 }
 
+.user-nav-floated {
+    background-color: white;
+    transition: right 0.3s;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    z-index: 10;
+}
+
 .main-nav-slid-out {
     left: -$main-nav-width;
+}
+
+.user-nav-slid-out {
+    right: -$user-nav-width;
 }
 
 $small-image-size: 35px;
@@ -289,6 +320,9 @@ $logo-image-height: 25px;
 
 // hide the mask message
 .main-nav-mask > .x-mask-inner {
+    display: none;
+}
+.user-nav-mask > .x-mask-inner {
     display: none;
 }
 

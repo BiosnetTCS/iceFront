@@ -7,6 +7,15 @@ Ext.define('Ice.view.mesacontrol.MesaControl', {
         'Ext.field.*'
     ],
     
+    
+    // validacion y modificacion de parametros (config)
+    constructor: function (config) {
+        Ice.log('Ice.view.mesacontrol.MesaControl.constructor config:', config);
+        this.callParent(arguments);
+    },
+    
+    
+    // configuracion que no usa parametros
     cls: 'dashboard',
     
     scrollable: true,
@@ -80,42 +89,26 @@ Ext.define('Ice.view.mesacontrol.MesaControl', {
                 }
             ]
         }
-    ]
-        /*
-        layout: 'hbox',
-        
-        height: 380,
-
-        platformConfig: {
-            phone: {
-                height: 300
-            }
-        },
-
-        bodyPadding: 15,
-        
-        defaults: {
-            userCls: 'big-50 small-100',
-            style: 'border: 1px solid green;'
-        },
-        
-        items: [
-            {
-                xtype: 'textfield',
-                label: 'Primer campo'
-            }, {
-                xtype: 'textfield',
-                label: 'Segundo campo'
-            }, {
-                xtype: 'textfield',
-                label: 'Tercer campo'
-            }, {
-                xtype: 'textfield',
-                label: 'Cuarto campo'
-            }, {
-                xtype: 'textfield',
-                label: 'Quinto campo'
-            }
-        ]
-    }]*/
+    ],
+    
+    
+    // propiedades no ext (se generan getters y setters)
+    config: {
+        cdramo: null,
+        cdtipsit: null
+    },
+    
+    
+    // configuracion que usa parametros (config ya se encuentra copiada en this)
+    initialize: function () {
+        Ice.log('Ice.view.mesacontrol.MesaControl.initialize');
+        var me = this,
+            paso = 'Construyendo componente de mesa de control';
+        try {
+            var secciones = Ice.generaComponentes();
+        } catch(e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        me.callParent(arguments);
+    }
 });
