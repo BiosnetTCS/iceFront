@@ -217,8 +217,10 @@ Ext.define('Ice.view.main.MainController', {
                 success: function (action) {
                     var paso2 = 'Ligando datos de sesi\u00f3n';
                     try {
-                        viewModel.set('cdusuari', action.params.cdusuari || '');
-                        viewModel.set('cdsisrol', action.params.cdsisrol || '');
+                        viewModel.set('cdusuari', action.user && action.user.cdusuari || '');
+                        viewModel.set('dsusuari', action.user && action.user.dsusuari || '');
+                        viewModel.set('cdsisrol', action.user && action.user.rolActivo && action.user.rolActivo.cdsisrol || '');
+                        viewModel.set('dssisrol', action.user && action.user.rolActivo && action.user.rolActivo.dssisrol || '');
                         viewModel.data.roles.removeAll();
                         viewModel.data.roles.reload();
                     } catch (e) {
@@ -261,6 +263,8 @@ Ext.define('Ice.view.main.MainController', {
                         }
                     }
                 });
+            } else {
+                Ice.log('Ice.view.main.MainController.onComboRolesSesionSelect sin valor');
             }
         } catch (e) {
             Ice.manejaExcepcion(e, paso);

@@ -5,7 +5,9 @@ Ext.define('Ice.view.main.MainModel', {
     data: {
         currentView: null,
         cdusuari: null,
+        dsusuari: null,
         cdsisrol: null,
+        dssisrol: null,
         rolesCount: 0
     },
     
@@ -28,7 +30,7 @@ Ext.define('Ice.view.main.MainModel', {
                 url: Ice.url.core.recuperarRoles,
                 reader: {
                     type: 'json',
-                    rootProperty: 'list',
+                    rootProperty: 'roles',
                     successProperty: 'success',
                     messageProperty: 'message'
                 }

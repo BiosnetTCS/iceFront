@@ -8,15 +8,26 @@ var Ice = Object.assign(Ice || {}, {
      */
      url: {
          
-         // URLs del core
-         core: {
+         // corePhp
+         corePhp: {
              recuperarComponentes: 'http://10.142.79.136/icePhp/recuperarComponentes.php',
              login:                'http://10.142.79.136/icePhp/login.php',
              recuperarRoles:       'http://10.142.79.136/icePhp/getRoles.php',
              seleccionaRol:        'http://10.142.79.136/icePhp/seleccionaRol.php',
-             recuperarMenus:       'http://10.142.79.136/icePhp/getMenus.php',
              logout:               'http://10.142.79.136/icePhp/logout.php',
-             recuperarDatosSesion: 'http://10.142.79.136/icePhp/recuperarDatosSesion.php'
+             recuperarDatosSesion: 'http://10.142.79.136/icePhp/recuperarDatosSesion.php',
+             recuperarMenus:       'http://10.142.79.136/icePhp/getMenus.php'
+         },
+         
+         // URLs del core
+         core: {
+             recuperarComponentes: 'componentes/recuperarComponentes.action',
+             login:                'authentication/login.action',
+             recuperarRoles:       'authentication/roles.action',
+             seleccionaRol:        'authentication/selectRol.action',
+             logout:               'authentication/logout.action',
+             recuperarDatosSesion: 'authentication/datosSesion.action',
+             recuperarMenus:       'authentication/menu.action'
          },
          
          // URLs de cotizacion
@@ -516,7 +527,7 @@ var Ice = Object.assign(Ice || {}, {
                     if (json.success !== true) {
                         throw json.message;
                     }
-                    if (json.params.redirect) {
+                    if (json.params && json.params.redirect) {
                         paso = 'Redirigiendo componente';
                         var mainView = Ice.query('#mainView'),
                             mainReferences = mainView.getReferences(),
@@ -531,20 +542,24 @@ var Ice = Object.assign(Ice || {}, {
                         navigationTreeList.getStore().reload();
                         mainController.cargarDatosSesion();
                         mainController.redirectTo(json.params.redirect + '.action');
-                        throw 'break -se va a redireccionar la pantalla';
+                        throw 'break -se va a redireccionar la pantalla: ' + json.params.redirect;
                     }
                     
-                    paso = 'Construyendo componentes';
-                    for (var i = 0; i < lista.length; i++) {
-                        comps[lista[i].pantalla] = comps[lista[i].pantalla] || {};
-                        comps[lista[i].pantalla][lista[i].seccion] = Ice.generaSeccion(json.componentes[lista[i].seccion],
-                            {
-                                items: lista[i].items === true,
-                                columns: lista[i].columns === true,
-                                buttons: lista[i].buttons === true,
-                                listeners: lista[i].listeners === true
-                            }
-                        );
+                    if (lista.length > 0 && lista[0].pantalla !== 'LOGIN' && lista[0].pantalla !== 'ROLTREE') {
+                        paso = 'Construyendo componentes';
+                        for (var i = 0; i < lista.length; i++) {
+                            comps[lista[i].pantalla] = comps[lista[i].pantalla] || {};
+                            comps[lista[i].pantalla][lista[i].seccion] = Ice.generaSeccion(json.componentes[lista[i].seccion],
+                                {
+                                    items: lista[i].items === true,
+                                    columns: lista[i].columns === true,
+                                    buttons: lista[i].buttons === true,
+                                    listeners: lista[i].listeners === true
+                                }
+                            );
+                        }
+                    } else {
+                        Ice.log('No se construye porque no hay secciones o es login o es roltree lista:', lista);
                     }
                 },
                 failure: function () {
@@ -791,6 +806,9 @@ var Ice = Object.assign(Ice || {}, {
                 success: function (action) {
                     var paso2 = 'Redireccionando...';
                     try {
+                        if (Ext.manifest.toolkit === 'classic') {
+                            Ice.query('#mainView').getController().onToggleUserMenuSize();
+                        }
                         Ice.query('#mainView').getController().redirectTo('mesacontrol.action', true);
                     } catch (e) {
                         Ice.manejaExcepcion(e, paso2);

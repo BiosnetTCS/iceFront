@@ -23,7 +23,7 @@ Ext.define('Ice.view.login.LoginController', {
                 mascara: 'Iniciando sesi\u00f3n',
                 url: Ice.url.core.login,
                 params: {
-                    'params.cdusuari': values.cdusuari || '',
+                    'params.user': values.cdusuari || '',
                     'params.password': values.password || ''
                 },
                 success: function (action) {

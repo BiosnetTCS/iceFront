@@ -60,7 +60,7 @@ Ext.define('Ice.view.login.RolTree', {
                         url: Ice.url.core.recuperarRoles,
                         reader: {
                             type: 'json',
-                            rootProperty: 'list',
+                            rootProperty: 'roles',
                             successProperty: 'success',
                             messageProperty: 'message'
                         }

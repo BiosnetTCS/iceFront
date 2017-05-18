@@ -37,7 +37,7 @@ Ext.define('Ice.view.main.Toolbar', {
             },
             bind: {
                 hidden: '{!rolOUsuario}',
-                text: '{cdusuari}<br/>{cdsisrol}'
+                text: '{dsusuari}<br/>{dssisrol}'
             }
         }
     ]

@@ -5,7 +5,7 @@ Ext.define('Ice.view.field.SwitchfieldIce', {
     extend: 'Ext.field.Checkbox',
     xtype: 'switchice',
     
-    initComponent: function () {
+    initialize: function () {
         var me = this,
             configIce = me.config, // la configuracion recibida de TCONFSCR
             configTra = {};        // la transformacion en atributos ext (ejemplo: label se pasa a fieldLabel en toolkit classic)

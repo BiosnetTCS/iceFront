@@ -17,6 +17,74 @@ Ext.define('Ice.store.NavigationTree', {
             successProperty: 'success',
             messageProperty: 'message'
         }
+    },
+    
+    transformarMenu: function (me, configs) {
+        Ice.log('Ice.store.NavigationTree.transformarMenu configs:', configs);
+        var paso = 'Generando menu recursivo',
+            items = [];
+        try {
+            for (var i = 0; i < configs.length; i++) {
+                var config = configs[i],
+                    item = {
+                        text: config.atrMenu || '',
+                        url: config.atrWork || '',
+                        leaf: config.atrFinish === true,
+                        tipo: config.atrTarget || '',
+                        iconCls: '',
+                        children: [],
+                        selectable: config.atrFinish === true
+                    };
+                if (item.url.indexOf('iconCls') !== -1) {
+                    var iconCls = item.url.substring(item.url.indexOf('iconCls')), // iconCls=xxx, iconCls=xxx&...
+                        iconCls = iconCls.substring(iconCls.indexOf('=') + 1), // xxx, xxx&...
+                        iconCls = iconCls.split('&')[0]; // xxx
+                    item.iconCls = 'x-fa fa-' + iconCls;
+                }
+                if (item.text.toLowerCase().indexOf('iconcls') !== -1) {
+                    var iconCls = item.text.substring(item.text.toLowerCase().indexOf('iconcls')), // Iconcls=Dollar, Iconcls=Dollar&...
+                        iconCls = iconCls.substring(iconCls.indexOf('=') + 1), // Dollar, Dollar&...
+                        iconCls = iconCls.split('&')[0].toLowerCase(); // dollar
+                    item.iconCls = 'x-fa fa-' + iconCls;
+                    item.text = item.text.substring(0, item.text.indexOf('?'));
+                }
+                if (config && config.nodes && config.nodes.length > 0) {
+                    item.children = me.transformarMenu(me, config.nodes);
+                }
+                items.push(item);
+            }
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        Ice.log('Ice.store.NavigationTree.transformarMenu items:', items, 'configs:', configs);
+        return items;
+    },
+    
+    listeners: {
+        load: function (me, records, success, op) {
+            Ice.log('Ice.store.NavigationTree.load args:', arguments);
+            var paso = 'Construyendo menu';
+            try {
+                if (success !== true) {
+                    return;
+                }
+                var json = Ext.JSON.decode(op.getResponse().responseText),
+                    json = Ext.JSON.decode(json.message);
+                Ice.log('Ice.store.NavigationTree menu original:', json);
+                if (json && json.lstChildNodes && json.lstChildNodes.length > 0) {
+                    json.children = me.transformarMenu(me, json.lstChildNodes);
+                    Ice.log('Ice.store.NavigationTree menu transformado:', json);
+                    me.getRoot().removeAll();
+                    me.setRoot(Ext.create('Ext.data.TreeModel', {
+                        children: json.children
+                    }));
+                } else {
+                    Ice.log('Ice.store.NavigationTree no hay menu para transformar');
+                }
+            } catch (e) {
+                Ice.manejaExcepcion(e, paso);
+            }
+        }
     }
         
     /*root: {

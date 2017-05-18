@@ -52,7 +52,8 @@ Ext.define('Ice.view.main.Main', {
                     xtype: 'tbtext',
                     reference: 'userBind',
                     bind: {
-                        text: '{cdusuari} - {cdsisrol}',
+                        text: '{dsusuari} - {dssisrol}',
+                        hidden: '{!rolOUsuario}'
                     },
                     cls: 'top-user-name'
                 }, {
@@ -61,27 +62,7 @@ Ext.define('Ice.view.main.Main', {
                     bind: {
                         hidden: '{!rolOUsuario}'
                     },
-                    menu: [
-                        {
-                            xtype: 'comboice',
-                            label: 'Cambiar rol',
-                            labelWidth: 90,
-                            valueField: 'cdsisrol',
-                            displayField: 'dssisrol',
-                            bind: {
-                                value: '{cdsisrol}',
-                                store: '{roles}',
-                                hidden: '{rolesCount < 2}'
-                            },
-                            listeners: {
-                                select: 'onComboRolesSesionSelect'
-                            }
-                        }, {
-                            text: 'Salir',
-                            iconCls: 'x-fa fa-sign-out',
-                            handler: 'onLogoutClic'
-                        }
-                    ]
+                    handler: 'onToggleUserMenuSize'
                 }
             ]
         }, {
@@ -112,6 +93,46 @@ Ext.define('Ice.view.main.Main', {
                         type: 'card',
                         anchor: '100%'
                     }
+                }, {
+                    xtype: 'panel',
+                    reference: 'userMenu',
+                    itemId: 'userMenu',
+                    width: 0,
+                    layout: 'anchor',
+                    cls: 'shadow',
+                    style: 'background: white;',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    micro: true,
+                    getMicro: function () {
+                        return this.micro;
+                    },
+                    setMicro: function (micro) {
+                        this.micro = micro;
+                    },
+                    items: [
+                        {
+                            xtype: 'comboice',
+                            label: 'Cambiar rol',
+                            labelWidth: 90,
+                            valueField: 'cdsisrol',
+                            displayField: 'dssisrol',
+                            bind: {
+                                value: '{cdsisrol}',
+                                store: '{roles}',
+                                hidden: '{rolesCount < 2}'
+                            },
+                            listeners: {
+                                select: 'onComboRolesSesionSelect'
+                            }
+                        }, {
+                            xtype: 'button',
+                            text: 'Salir',
+                            iconCls: 'x-fa fa-sign-out',
+                            handler: 'onLogoutClic'
+                        }
+                    ]
                 }
             ]
         }

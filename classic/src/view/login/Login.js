@@ -6,7 +6,8 @@ Ext.define('Ice.view.login.Login', {
     xtype: 'login',
     
     requires: [
-        'Ext.form.Panel'
+        'Ext.form.Panel',
+        'Ext.button.Button'
     ],
     
     // validacion y modificacion de parametros

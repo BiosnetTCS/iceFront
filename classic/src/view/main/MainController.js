@@ -218,8 +218,10 @@ Ext.define('Ice.view.main.MainController', {
                 success: function (action) {
                     var paso2 = 'Ligando datos de sesi\u00f3n';
                     try {
-                        view.viewModel.set('cdusuari', action.params.cdusuari || '');
-                        view.viewModel.set('cdsisrol', action.params.cdsisrol || '');
+                        view.viewModel.set('cdusuari', action.user && action.user.cdusuari || '');
+                        view.viewModel.set('dsusuari', action.user && action.user.dsusuari || '');
+                        view.viewModel.set('cdsisrol', action.user && action.user.rolActivo && action.user.rolActivo.cdsisrol || '');
+                        view.viewModel.set('dssisrol', action.user && action.user.rolActivo && action.user.rolActivo.dssisrol || '');
                         view.viewModel.data.roles.removeAll();
                         view.viewModel.data.roles.reload();
                     } catch (e) {
@@ -245,6 +247,7 @@ Ext.define('Ice.view.main.MainController', {
                 success: function (action) {
                     var paso2 = 'Redireccionando...';
                     try {
+                        Ice.query('#mainView').getController().onToggleUserMenuSize();
                         Ice.query('#mainView').getController().redirectTo('roltree.action', true);
                     } catch(e) {
                         Ice.manejaExcepcion(e, paso2);
@@ -253,6 +256,58 @@ Ext.define('Ice.view.main.MainController', {
             });
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
+        }
+    },
+
+    onToggleUserMenuSize: function () {
+        Ice.log('Ice.view.main.MainController.onToggleUserMenuSize');
+        var me = this,
+            refs = me.getReferences(),
+            userMenu = refs.userMenu,
+            wrapContainer = refs.mainContainerWrap,
+            collapsing = !userMenu.getMicro(),
+            new_width = collapsing ? 0 : 250;
+
+        if (Ext.isIE9m || !Ext.os.is.Desktop) {
+            Ext.suspendLayouts();
+
+            userMenu.setWidth(new_width);
+            userMenu.setMicro(collapsing);
+
+            Ext.resumeLayouts(); // do not flush the layout here...
+
+            // No animation for IE9 or lower...
+            wrapContainer.layout.animatePolicy = wrapContainer.layout.animate = null;
+            wrapContainer.updateLayout();  // ... since this will flush them
+        }
+        else {
+            if (!collapsing) {
+                // If we are leaving micro mode (expanding), we do that first so that the
+                // text of the items in the navlist will be revealed by the animation.
+                userMenu.setMicro(false);
+            }
+            userMenu.canMeasure = false;
+
+            // Directly adjust the width config and then run the main wrap container layout
+            // as the root layout (it and its chidren). This will cause the adjusted size to
+            // be flushed to the element and animate to that new size.
+            userMenu.width = new_width;
+            wrapContainer.updateLayout({isRoot: true});
+            userMenu.el.addCls('nav-tree-animating');
+
+            // We need to switch to micro mode on the navlist *after* the animation (this
+            // allows the "sweep" to leave the item text in place until it is no longer
+            // visible.
+            if (collapsing) {
+                userMenu.on({
+                    afterlayoutanimation: function () {
+                        userMenu.setMicro(true);
+                        userMenu.el.removeCls('nav-tree-animating');
+                        userMenu.canMeasure = true;
+                    },
+                    single: true
+                });
+            }
         }
     }
 });
