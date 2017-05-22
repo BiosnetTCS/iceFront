@@ -16,7 +16,7 @@ var Ice = Object.assign(Ice || {}, {
              seleccionaRol:        'jsonLocal/seleccionaRol.json',
              logout:               'jsonLocal/logout.json',
              recuperarDatosSesion: 'jsonLocal/recuperarDatosSesion.json',
-             recuperarMenus:       'jsonLocal/getMenus.json'
+             recuperarMenus:       'jsonLocal/getMenus.json',
          },
          
          // corePhp
@@ -52,6 +52,9 @@ var Ice = Object.assign(Ice || {}, {
          bloque: {
             datosGenerales: {
                 cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json'
+            },
+            istaSituaciones: {
+            	situaciones: 'jsonLocal/bloqueDatosGeneralesCargar.json'
             }
          }
      },
