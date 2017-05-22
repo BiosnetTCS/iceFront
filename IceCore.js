@@ -47,6 +47,12 @@ var Ice = Object.assign(Ice || {}, {
          
          // URLs de emision
          emision: {
+         },
+         
+         bloque: {
+            datosGenerales: {
+                cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json'
+            }
          }
      },
     
@@ -829,5 +835,13 @@ var Ice = Object.assign(Ice || {}, {
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
         }
+    },
+    
+    suspendEvents: function (view) {
+        Ice.log('Ice.suspendEvents view:', view);
+    },
+    
+    resumeEvents: function (view) {
+        Ice.log('Ice.resumeEvents view:', view);
     }
 });

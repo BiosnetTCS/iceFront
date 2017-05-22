@@ -1,4 +1,4 @@
 {
     success: true,
-    message: '{"lstChildNodes":[{"atrWork": "cotizacion.action?iconCls=dollar","atrMenu": "prueba","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"}]}'
+    message: '{"lstChildNodes":[{"atrWork": "bloquedatosgenerales.action?iconCls=dollar&cdramo=501&cdtipsit=51","atrMenu": "Datos generales","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"},{"atrWork": "mesacontrol.action?iconCls=home","atrMenu": "Mesa control","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"}]}'
 }

@@ -1,11 +1,28 @@
 {
     success: true,
-    componentes: [
-        {
-            tipo: 'N',
-            label: 'SUCURSAL',
-            name: 'cdunieco',
-            referencia: 'cdunieco'
-        }
-    ]
+    componentes: {
+        FORMULARIO: [
+            {
+                tipocampo: 'N',
+                label: 'Sucursal',
+                name_cdatribu: 'cdunieco'
+            }, {
+                tipocampo: 'N',
+                label: 'Ramo',
+                name_cdatribu: 'cdramo'
+            }, {
+                tipocampo: 'N',
+                label: 'P\u00f3liza',
+                name_cdatribu: 'nmpoliza'
+            }, {
+                tipocampo: 'F',
+                label: 'Inicio de vigencia',
+                name_cdatribu: 'feefecto'
+            }, {
+                tipocampo: 'F',
+                label: 'Fin de vigencia',
+                name_cdatribu: 'feproren'
+            }
+        ]
+    }
 }
