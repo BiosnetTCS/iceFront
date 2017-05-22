@@ -1,0 +1,11 @@
+{
+    success: true,
+    componentes: [
+        {
+            tipo: 'N',
+            label: 'SUCURSAL',
+            name: 'cdunieco',
+            referencia: 'cdunieco'
+        }
+    ]
+}

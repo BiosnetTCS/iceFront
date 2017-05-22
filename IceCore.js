@@ -8,6 +8,17 @@ var Ice = Object.assign(Ice || {}, {
      */
      url: {
          
+         // coreLocal
+         core: {
+             recuperarComponentes: 'jsonLocal/recuperarComponentes.json',
+             login:                'jsonLocal/login.json',
+             recuperarRoles:       'jsonLocal/getRoles.json',
+             seleccionaRol:        'jsonLocal/seleccionaRol.json',
+             logout:               'jsonLocal/logout.json',
+             recuperarDatosSesion: 'jsonLocal/recuperarDatosSesion.json',
+             recuperarMenus:       'jsonLocal/getMenus.json'
+         },
+         
          // corePhp
          corePhp: {
              recuperarComponentes: 'http://10.142.79.136/icePhp/recuperarComponentes.php',
@@ -20,14 +31,14 @@ var Ice = Object.assign(Ice || {}, {
          },
          
          // URLs del core
-         core: {
+         core2: {
              recuperarComponentes: 'componentes/recuperarComponentes.action',
-             login:                'authentication/login.action',
-             recuperarRoles:       'authentication/roles.action',
-             seleccionaRol:        'authentication/selectRol.action',
+             login:                'authentication/validaUsuario.action',
+             recuperarRoles:       'authentication/obtenerRoles.action',
+             seleccionaRol:        'authentication/seleccionarRol.action',
              logout:               'authentication/logout.action',
-             recuperarDatosSesion: 'authentication/datosSesion.action',
-             recuperarMenus:       'authentication/menu.action'
+             recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
+             recuperarMenus:       'authentication/obtenerMenu.action'
          },
          
          // URLs de cotizacion
