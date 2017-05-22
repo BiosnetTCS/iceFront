@@ -19,17 +19,6 @@ var Ice = Object.assign(Ice || {}, {
              recuperarMenus:       'jsonLocal/getMenus.json',
          },
          
-         // corePhp
-         corePhp: {
-             recuperarComponentes: 'http://10.142.79.136/icePhp/recuperarComponentes.php',
-             login:                'http://10.142.79.136/icePhp/login.php',
-             recuperarRoles:       'http://10.142.79.136/icePhp/getRoles.php',
-             seleccionaRol:        'http://10.142.79.136/icePhp/seleccionaRol.php',
-             logout:               'http://10.142.79.136/icePhp/logout.php',
-             recuperarDatosSesion: 'http://10.142.79.136/icePhp/recuperarDatosSesion.php',
-             recuperarMenus:       'http://10.142.79.136/icePhp/getMenus.php'
-         },
-         
          // URLs del core
          core2: {
              recuperarComponentes: 'componentes/recuperarComponentes.action',
@@ -53,7 +42,7 @@ var Ice = Object.assign(Ice || {}, {
             datosGenerales: {
                 cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json'
             },
-            istaSituaciones: {
+            listaSituaciones: {
             	situaciones: 'jsonLocal/bloqueDatosGeneralesCargar.json'
             }
          }
@@ -497,7 +486,9 @@ var Ice = Object.assign(Ice || {}, {
      *         items: true,
      *         columns: false,
      *         buttons: false,
-     *         listeners: true
+     *         listeners: true,
+     *         fields: true,
+     *         validators: true
      *     }, {
      *         pantalla: 'MESA_CONTROL',
      *         seccion: 'FORMULARIO',
@@ -510,13 +501,17 @@ var Ice = Object.assign(Ice || {}, {
      *             items: [...],
      *             columns: [...],
      *             buttons: [...],
-     *             listeners: [...]
+     *             listeners: [...],
+     *             fields: [...],
+     *             validators: [...]
      *         },
      *         FORMULARIO: {
      *             items: [...],
      *             columns: [...],
      *             buttons: [...],
-     *             listeners: [...]
+     *             listeners: [...],
+     *             fields: [...],
+     *             validators: [...]
      *         }
      *     }
      * }
@@ -574,7 +569,9 @@ var Ice = Object.assign(Ice || {}, {
                                     items: lista[i].items === true,
                                     columns: lista[i].columns === true,
                                     buttons: lista[i].buttons === true,
-                                    listeners: lista[i].listeners === true
+                                    listeners: lista[i].listeners === true,
+                                    fields: lista[i].fields === true,
+                                    validators: lista[i].validators === true
                                 }
                             );
                         }
@@ -608,7 +605,9 @@ var Ice = Object.assign(Ice || {}, {
      *     items: (boolean),
      *     columns: (boolean),
      *     buttons: (boolean),
-     *     listeners: (boolean)
+     *     listeners: (boolean),
+     *     fields: (boolean),
+     *     validators: (boolean)
      * }
      * @return seccion: {
      *     items: [
@@ -621,7 +620,9 @@ var Ice = Object.assign(Ice || {}, {
      *     ],
      *     columns: [ ... ],
      *     buttons: [ ... ],
-     *     listeners: [ ... ]
+     *     listeners: [ ... ],
+     *     fields: [ ... ],
+     *     validators: [ ... ]
      * }
      */
     generaSeccion: function (configComps, banderas) {
@@ -644,6 +645,12 @@ var Ice = Object.assign(Ice || {}, {
             }
             if (banderas.listeners === true) {
                 seccion.listeners = Ice.generaListeners(configComps);
+            }
+            if (banderas.fields === true) {
+                seccion.fields = Ice.generaFields(configComps);
+            }
+            if (banderas.validators === true) {
+                seccion.validators = Ice.generaValidators(configComps);
             }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
@@ -725,6 +732,44 @@ var Ice = Object.assign(Ice || {}, {
             Ice.generaExcepcion(e, paso);
         }
         return listeners;
+    },
+    
+    
+    /*
+     *
+     */
+    generaFields: function (configComps) {
+        Ice.log('Ice.generaFields args:', arguments);
+        var paso = 'Generando fields',
+            fields = [];
+        try {
+            configComps = configComps || [];
+            for (var i = 0; i < configComps.length; i++) {
+                fields.push(Ice.generaField(configComps[i]));
+            }
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        return fields;
+    },
+    
+    
+    /*
+     *
+     */
+    generaValidators: function (configComps) {
+        Ice.log('Ice.generaValidators args:', arguments);
+        var paso = 'Generando validators',
+            validators = [];
+        try {
+            configComps = configComps || [];
+            for (var i = 0; i < configComps.length; i++) {
+                validators.push(Ice.generaValidator(configComps[i]));
+            }
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        return validators;
     },
     
     
@@ -843,9 +888,27 @@ var Ice = Object.assign(Ice || {}, {
     /*
      *
      */
-    generaListeners: function (config) {
-        Ice.log('Ice.generaListeners args:', arguments);
-        alert('Ice.generaListeners TODO');
+    generaListener: function (config) {
+        Ice.log('Ice.generaListener args:', arguments);
+        alert('Ice.generaListener TODO');
+    },
+    
+    
+    /*
+     *
+     */
+    generaField: function (config) {
+        Ice.log('Ice.generaField args:', arguments);
+        alert('Ice.generaField TODO');
+    },
+    
+    
+    /*
+     *
+     */
+    generaValidator: function (config) {
+        Ice.log('Ice.generaValidator args:', arguments);
+        alert('Ice.generaValidator TODO');
     },
     
     
