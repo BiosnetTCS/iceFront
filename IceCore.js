@@ -847,12 +847,11 @@ var Ice = Object.assign(Ice || {}, {
                     column.width = config.width;
                 }
                 else{
-                    column.width = 'flex 1';
+                    column.flex = config.width;
                 }
             }
-                         
-            if (!column.xtype) {
-                throw 'tipocampo incorrecto';
+            else{
+                column.flex = 1;
             }
                     
             // name_cdatribu
@@ -860,7 +859,7 @@ var Ice = Object.assign(Ice || {}, {
                 throw 'falta name_cdatribu';
             }
             if (/^\d+$/.test(config.name_cdatribu)) {
-                column.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(-3));
+                column.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) < 100 ? -3 : -2));
             } else {
                 column.dataIndex = config.name_cdatribu;
             }
