@@ -756,8 +756,7 @@ var Ice = Object.assign(Ice || {}, {
             
             if (config.catalogo) {
                 item.xtype = 'comboice';
-            }
-            
+            }            
             
             // name_cdatribu
             if (!config.name_cdatribu) {
@@ -791,7 +790,44 @@ var Ice = Object.assign(Ice || {}, {
      */
     generaColumn: function (config) {
         Ice.log('Ice.generaColumn args:', arguments);
-        alert('Ice.generaColumn TODO');
+        var paso = 'Construyendo Columns',
+        column = {};
+        try {
+            if (!config) {
+                throw 'No se recibi\u00f3 configuraci\u00f3n de column';
+            }        
+                   
+            if(config.width){
+                if(Number(config.width) > 10){
+                    column.width = config.width;
+                }
+                else{
+                    column.width = 'flex 1';
+                }
+            }
+                         
+            if (!column.xtype) {
+                throw 'tipocampo incorrecto';
+            }
+                    
+            // name_cdatribu
+            if (!config.name_cdatribu) {
+                throw 'falta name_cdatribu';
+            }
+            if (/^\d+$/.test(config.name_cdatribu)) {
+                column.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(-3));
+            } else {
+                column.dataIndex = config.name_cdatribu;
+            }
+            
+            // label
+            if (config.label) {
+                column.text = config.label
+            }        
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        return column;
     },
     
     
