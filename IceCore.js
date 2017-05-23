@@ -898,7 +898,37 @@ var Ice = Object.assign(Ice || {}, {
      */
     generaField: function (config) {
         Ice.log('Ice.generaField args:', arguments);
-        alert('Ice.generaField TODO');
+//        alert('Ice.generaField TODO');
+        var paso = "";
+        field = {};
+        try{
+            if(!config.tipocampo){
+                throw 'No se recibi\u00f3 configuraci\u00f3n de column';
+            }
+            
+            field.type = {
+                    A: 'textfieldice',
+                    N: 'numberfieldice',
+                    P: 'numberfieldice',
+                    F: 'datefieldice',
+                    T: 'textareaice',
+                    S: 'switchice'
+                }[config.tipocampo];
+            
+            if (!config.name_cdatribu) {
+                throw 'falta name_cdatribu';
+            }
+            
+            if (/^\d+$/.test(config.name_cdatribu)) {
+                field.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) < 100 ? -3 : -2));
+            } else {
+                field.dataIndex = config.name_cdatribu;
+            }
+        } catch (e){
+            Ice.generaExcepcion(e, paso);
+        }
+        
+        return field;
     },
     
     
