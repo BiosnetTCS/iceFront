@@ -11,21 +11,8 @@ Ext.define('Ice.view.bloque.ListaSituacionesController', {
             view = me.getView(),
             paso = 'Configurando comportamiento de bloque lista de situaciones';
         try {
-            var refs = view.getReferences(),
-                feefecto = refs.feefecto,
-                feproren = refs.feproren;
+            var refs = view.getReferences();
             Ice.log('Ice.view.bloque.DatosGeneralesController refs:', refs);
-            feefecto.on({
-                change: function (me, value) {
-                    var paso = 'Calculando fin de vigencia';
-                    alert(paso);
-                    try {
-                        feproren.setValue(Ext.Date.add(value, Ext.Date.YEAR, 1));
-                    } catch (e) {
-                        Ice.logWarn(paso, e);
-                    }
-                }
-            });
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -47,13 +34,13 @@ Ext.define('Ice.view.bloque.ListaSituacionesController', {
                 url: Ice.url.bloque.listaSituaciones.cargar,
                 params: {},
                 success: function (json) {
-                    var paso2 = 'Seteando valores';
+                    var paso2 = 'LLenando store';
                     try {
-                        var refs = view.getReferences(),
-                            feefecto = refs.feefecto,
-                            feproren = refs.feproren;                        
-                        feproren.setValue(new Date());
-                        feefecto.setValue(new Date());
+                        var store = view.store;                        
+                        Ice.log("lista",json.lista);
+                        if(json.lista){
+                            store.loadData(json.lista);
+                        }
                         Ice.resumeEvents(view);
                     } catch (e) {
                         Ice.manejaExcepcion(e, paso2);

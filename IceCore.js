@@ -43,7 +43,7 @@ var Ice = Object.assign(Ice || {}, {
                 cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json'
             },
             listaSituaciones: {
-            	situaciones: 'jsonLocal/bloqueDatosGeneralesCargar.json'
+            	cargar: 'jsonLocal/bloqueDatosSituacionCargar.json'
             }
          }
      },
@@ -808,7 +808,7 @@ var Ice = Object.assign(Ice || {}, {
                 throw 'falta name_cdatribu';
             }
             if (/^\d+$/.test(config.name_cdatribu)) {
-                item.name = 'otvalor' + (('x000' + config.name_cdatribu).slice(-3));
+                item.name = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
             } else {
                 item.name = config.name_cdatribu;
             }
@@ -859,7 +859,7 @@ var Ice = Object.assign(Ice || {}, {
                 throw 'falta name_cdatribu';
             }
             if (/^\d+$/.test(config.name_cdatribu)) {
-                column.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) < 100 ? -3 : -2));
+                column.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
             } else {
                 column.dataIndex = config.name_cdatribu;
             }
@@ -907,12 +907,12 @@ var Ice = Object.assign(Ice || {}, {
             }
             
             field.type = {
-                    A: 'textfieldice',
-                    N: 'numberfieldice',
-                    P: 'numberfieldice',
-                    F: 'datefieldice',
-                    T: 'textareaice',
-                    S: 'switchice'
+                    A: 'string',
+                    N: 'float',
+                    P: 'float',
+                    F: 'date',
+                    T: 'string',
+                    S: 'string'
                 }[config.tipocampo];
             
             if (!config.name_cdatribu) {
@@ -920,7 +920,7 @@ var Ice = Object.assign(Ice || {}, {
             }
             
             if (/^\d+$/.test(config.name_cdatribu)) {
-                field.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) < 100 ? -3 : -2));
+                field.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
             } else {
                 field.dataIndex = config.name_cdatribu;
             }
