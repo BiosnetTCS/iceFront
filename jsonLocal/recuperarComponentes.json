@@ -62,6 +62,34 @@
                 swcolumn:'S',
                 width: 2
             }
-        ]        
+        ],
+      COBERTURAS: [
+      					 {
+			                tipocampo: 'A',
+			                label: 'Amparada',
+			                name_cdatribu: 'amparada',
+			                swcolumn:'S',
+			                width: 0
+			            }, {
+			                tipocampo: 'A',
+			                label: 'Clave',
+			                name_cdatribu: 'clave',
+			                swcolumn:'S',
+			                width: 0
+			            }, {
+			                tipocampo: 'A',
+			                label: 'Cobertura',
+			                name_cdatribu: 'cobertura',
+			                swcolumn:'S',
+			                width: 0
+			            }, {
+			                tipocampo: 'A',
+			                label: 'Suma asegurada',
+			                name_cdatribu: 'suma_asegurada',
+			                swcolumn:'S',
+			                width: 0
+			            }
+      
+      ]        
     }
 }

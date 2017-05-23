@@ -24,7 +24,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	                }
 	                
 	                if (!config.cdramo || !config.cdtipsit) {
-	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de datos generales';
+	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de datos generales =(';
 	                }
 	                
 	                config.modulo = config.modulo || 'COTIZACION';
@@ -92,7 +92,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	                         }
 	                     }
 	                },*/
-	                buttons:me.config.buttons,
+	                tbar:me.config.buttons,
 	                
 	            });
 	        } catch (e) {
