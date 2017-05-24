@@ -932,9 +932,9 @@ var Ice = Object.assign(Ice || {}, {
             }
             
             if (/^\d+$/.test(config.name_cdatribu)) {
-                field.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
+                field.name = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
             } else {
-                field.dataIndex = config.name_cdatribu;
+                field.name = config.name_cdatribu;
             }
         } catch (e){
             Ice.generaExcepcion(e, paso);
