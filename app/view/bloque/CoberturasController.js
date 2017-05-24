@@ -70,7 +70,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     	var me = this,
         view = me.getView();
 		view.down("[xtype=bloquelistasituaciones]").store.load();
-    	alert();
+    	
 	},
 	
 	agregarCobertura:function(me){
@@ -113,13 +113,15 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    	handler : function(me){
 			    		
 			    		Ext.ComponentQuery.query("#gridAgrega").forEach(function(it,idx){
-			    			it.store.data.forEach(function(e,i){
+			    			Ice.log("Data: ",it.store.getData())
+			    			it.store.data.items.forEach(function(e,i){
 			    				Ice.log("item..:",e)
 			    				if(e.amparada){
 			    					gridCoberturas.add(e);
 			    				}
 			    			})
 			    		})
+			    		me.up("[xtype=window]").hide();
 			    	}
 			    }]
 			}).show();

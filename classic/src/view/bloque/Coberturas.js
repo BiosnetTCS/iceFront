@@ -54,8 +54,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    
 	    bodyPadding: '10px 0px 0px 10px',
 	    defaults: {
-	        margin: '0px 10px 10px 0px',
-	        cls: 'big-50 small-100'
+	    	
+			width	: "100%"
 	    },
 	    
 	    buttons: [],
@@ -183,7 +183,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	        	//var me = this,
 	           // view = me.getView(),
 	    		me.down("[xtype=bloquelistasituaciones]").store.load();
-	        	alert()
+	        	
 	    	}
 	    }
 });
