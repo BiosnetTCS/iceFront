@@ -23,6 +23,45 @@
                 label: 'Fin de vigencia',
                 name_cdatribu: 'feproren'
             }
-        ]
+        ],
+        LISTA: [
+            {
+                tipocampo: 'A',
+                label: 'Situacion',
+                name_cdatribu: 'nmsituac',
+                swcolumn:'S',
+                width: 0
+            }, {
+                tipocampo: 'A',
+                label: 'Modalidad',
+                name_cdatribu: '1',
+                swcolumn:'S',
+                width: 0
+            }, {
+                tipocampo: 'A',
+                label: 'Giro',
+                name_cdatribu: '2',
+                swcolumn:'S',
+                width: 0
+            }, {
+                tipocampo: 'A',
+                label: 'Subgiro',
+                name_cdatribu: '3',
+                swcolumn:'S',
+                width: 0
+            }, {
+                tipocampo: 'A',
+                label: 'Tipo de riesgo',
+                name_cdatribu: '4',
+                swcolumn:'S',
+                width: 0
+            }, {
+                tipocampo: 'A',
+                label: 'Tipo de cotizacion',
+                name_cdatribu: '5',
+                swcolumn:'S',
+                width: 2
+            }
+        ]        
     }
 }
