@@ -43,7 +43,7 @@ var Ice = Object.assign(Ice || {}, {
                 cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json'
             },
             listaSituaciones: {
-            	cargar: 'jsonLocal/bloqueDatosSituacionCargar.json'
+            	cargar: 'jsonLocal/bloqueDatosSituacionCargar.json',
             	situaciones: 'jsonLocal/bloqueDatosGeneralesCargar.json'
             },
             coberturas:{

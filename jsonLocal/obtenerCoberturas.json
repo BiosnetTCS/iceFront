@@ -1,19 +1,19 @@
 [
 	{
 		amparada: "true",
-		clave:"123",
+		cdgarant:"123",
 		cobertura:"EXPLOSIVOS",
 		suma_asegurada: "1234543"
 	},
 	{
 		amparada: "true",
-		clave:"1253",
+		cdgarant:"1253",
 		cobertura:"EXPLOSIVOS",
 		suma_asegurada: "1234543"
 	},
 	{
 		amparada: "true",
-		clave:"1323",
+		cdgarant:"1323",
 		cobertura:"EXPLOSIVOS",
 		suma_asegurada: "1234543"
 	}

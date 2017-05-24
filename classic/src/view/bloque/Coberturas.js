@@ -10,9 +10,9 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    
 	    requires: [],
 	    
-	    layout: {
-	        type: 'vbox',
-	        align: 'left'
+	    layout: "anchor",
+	    defaults:{
+	    	columnWidth:1
 	    },
 	    
 	    
@@ -83,12 +83,20 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                fields:true
 	            });
 	            Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);
-	            
+	            paso="creando checkcolumns";
+	            var chk=Ext.Array.findBy(comps.COBERTURAS.COBERTURAS.columns,function(it,idx){
+	            	if(it.dataIndex=='amparada'){
+	            		return true;
+	            	}
+	            })
+	            chk.xtype='checkcolumn'
+	            paso=" creando grid coberturas";
 	            var store={
 	                	fields: comps.COBERTURAS.COBERTURAS.fields,
 	                	 proxy: {
 	                         type: 'ajax',
-	                         url: Ice.url.bloque.coberturas,
+	                         autoLoad: true,
+	                         url: Ice.url.bloque.coberturas.datosCoberturas,
 	                         reader: {
 	                             type: 'json',
 	                             //rootProperty: 'roles',
@@ -107,46 +115,43 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    	{
 	    	    		xtype	:		'gridpanel',
 	    	    		tbar	:		 [
-				    	    			  	{ xtype: 'button', text: 'Agregar' }
-				    	    			 ]
-	    	    		columns	:		comps.COBERTURAS.COBERTURAS.columns.concat({
-																    	                xtype:'actioncolumn',
-																    	                width:50,
-																    	                items: [{
-																    	                    iconCls: 'x-fa fa-edit',
-																    	                    tooltip: 'Edit',
-																    	                    handler: function(grid, rowIndex, colIndex) {
-																    	                        
-																    	                        alert("Edit ");
-																    	                    }
-																    	                },{
-																    	                    icon: 'extjs-build/examples/restful/images/delete.png',
-																    	                    iconCls: 'x-fa fa-remove',
-																    	                    tooltip: 'Delete',
-																    	                    handler: function(grid, rowIndex, colIndex) {
-																    	                       
-																    	                        alert("Terminate " );
-																    	                    }
-																    	                }]
-																    	            })
+				    	    			  	{ 
+				    	    			  		xtype: 'button', 
+				    	    			  		text: 'Agregar',
+				    	    			  		handler: 'agregarCobertura'
+				    	    			  	}
+				    	    			 ],
+	    	    		columns	:		comps.COBERTURAS.COBERTURAS.columns.concat( {
+	                        xtype:'actioncolumn',
+	                        width:50,
+	                        items: [{
+	                            iconCls: 'x-fa fa-edit',
+	                            tooltip: 'Edit',
+	                            handler: function(grid, rowIndex, colIndex) {
+	                                alert()
+	                            }
+	                        },{ 
+	                        	iconCls: 'x-fa fa-remove',
+	                            tooltip: 'Delete',
+	                            handler: function(grid, rowIndex, colIndex) {
+	                               grid.store.removeAt(rowIndex)
+	                            }
+	                        }]
+	                    })
 																    	            ,
 	    	    		 bbar	:		Ext.create('Ext.PagingToolbar', {
 				    	    	            store: store,
 				    	    	            displayInfo: true,
 				    	    	            displayMsg: 'Displaying topics {0} - {1} of {2}',
 				    	    	            emptyMsg: "NO HAY COBERTURAS",
-				    	    	            inputItemWidth: 35//,
-	//			    	    	            items:[
-	//			    	    	                '-', {
-	//			    	    	                text: 'Show Preview',
-	//			    	    	                pressed: pluginExpanded,
-	//			    	    	                enableToggle: true,
-	//			    	    	                toggleHandler: function(btn, pressed) {
-	//			    	    	                    grid.getPlugin('preview').toggleExpanded(pressed);
-	//			    	    	                }
-	//			    	    	            }]
+				    	    	            inputItemWidth: 35
 			    	    	        	}),
 			    	    store	:	store	
+			    	    
+	    	    		
+	    	    	},
+	    	    	{
+	    	    		xtype	:		'form',
 	    	    		
 	    	    	}
 	    	    	]
@@ -166,9 +171,19 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	        // comportamiento
 	        paso = '';
 	        try {
-	           // me.getController().custom();
+	            me.getController().custom();
 	        } catch (e) {
 	            Ice.generaExcepcion(e, paso);
 	        }
+	    }
+	    ,
+	    listeners: {
+	    	afterrender:function(me){
+	        	
+	        	//var me = this,
+	           // view = me.getView(),
+	    		me.down("[xtype=bloquelistasituaciones]").store.load();
+	        	alert()
+	    	}
 	    }
 });

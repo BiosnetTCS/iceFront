@@ -79,19 +79,29 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	            
 	            Ext.apply(me, {
 	                columns: comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns.concat(me.config.actionColumns),
-	                /*store  : {
+	                store  : {
 	                	fields: comps.BLOQUE_LISTA_SITUACIONES.LISTA.fields,
 	                	 proxy: {
 	                         type: 'ajax',
-	                         url: Ice.url.bloque.listaSituaciones,
+	                         url: Ice.url.bloque.listaSituaciones.cargar,
 	                         reader: {
 	                             type: 'json',
-	                             //rootProperty: 'roles',
+	                             rootProperty: 'lista',
 	                             successProperty: 'success',
 	                             messageProperty: 'message'
+	                         },
+	                         autoLoad:true,
+	                         listeners:{
+	                        	 beforeload:function(){
+	                        		 alert("asfd")
+	                        	 },
+	                        	 load:function(){
+	                        		 alert("despues")
+	                        	 }
 	                         }
+	            				
 	                     }
-	                },*/
+	                },
 	                tbar:me.config.buttons,
 	                
 	            });
