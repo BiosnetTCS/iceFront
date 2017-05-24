@@ -3,8 +3,7 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
     xtype: 'cotizacion',
     
     requires: [
-        'Ext.ux.layout.ResponsiveColumn',
-        'Ext.picker.Date'
+        'Ext.ux.layout.ResponsiveColumn'
     ],
     
     
@@ -50,23 +49,14 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             Ext.apply(me, {
                 items: [
                     {
-                        xtype: 'mpolizas',
+                        xtype: 'bloquedatosgenerales',
                         cdunieco: me.config.cdunieco || '',
                         cdramo: me.config.cdramo || '',
                         cdtipsit: me.config.cdtipsit || '',
                         estado: me.config.estado || '',
                         nmpoliza: me.config.nmpoliza || '',
                         nmsuplem: me.config.nmsuplem || 0,
-                        flujo: me.config.flujo || {},
-                        buttons: [
-                            {
-                                text: 'Log values',
-                                iconCls: 'x-fa fa-bug',
-                                handler: 'logValues'
-                            }
-                        ]
-                    }, {
-                        xtype: 'datepicker'
+                        flujo: me.config.flujo || {}
                     }
                 ]
             });

@@ -5,6 +5,9 @@ Ext.define('Ice.view.field.ComboIce', {
     extend: 'Ext.form.field.ComboBox',
     xtype: 'comboice',
     
+    labelAlign: 'top',
+    msgTarget: 'under',
+    
     initComponent: function () {
         var me = this,
             configIce = me.config, // la configuracion recibida de TCONFSCR

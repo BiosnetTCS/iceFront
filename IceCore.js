@@ -9,7 +9,7 @@ var Ice = Object.assign(Ice || {}, {
      url: {
          
          // coreLocal
-         core: {
+         coreLocal: {
              recuperarComponentes: 'jsonLocal/recuperarComponentes.json',
              login:                'jsonLocal/login.json',
              recuperarRoles:       'jsonLocal/getRoles.json',
@@ -20,7 +20,7 @@ var Ice = Object.assign(Ice || {}, {
          },
          
          // URLs del core
-         core2: {
+         core: {
              recuperarComponentes: 'componentes/recuperarComponentes.action',
              login:                'authentication/validaUsuario.action',
              recuperarRoles:       'authentication/obtenerRoles.action',
@@ -40,7 +40,8 @@ var Ice = Object.assign(Ice || {}, {
          
          bloque: {
             datosGenerales: {
-                cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json'
+                cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json',
+                guardar: 'jsonLocal/bloqueDatosGeneralesGuardar.json'
             },
             listaSituaciones: {
             	cargar: 'jsonLocal/bloqueDatosSituacionCargar.json',
@@ -432,7 +433,9 @@ var Ice = Object.assign(Ice || {}, {
                         var json = Ext.JSON.decode(response.responseText);
                         Ice.log('### ' + params.url.slice(-50) + ' json:', json);
                         if (json.success !== true) {
-                            throw json.message || 'La petici\u00f3n no fue exitosa';
+                            throw json.message || (params.mascara
+                                ? 'Error ' + params.mascara.toLowerCase()
+                                : 'La petici\u00f3n no fue exitosa');
                         }
                         if (params.success && typeof params.success === 'function') {
                             paso2 = 'Ejecutando callback posterior al request';
@@ -762,11 +765,14 @@ var Ice = Object.assign(Ice || {}, {
     generaValidators: function (configComps) {
         Ice.log('Ice.generaValidators args:', arguments);
         var paso = 'Generando validators',
-            validators = [];
+            validators = {};
         try {
             configComps = configComps || [];
             for (var i = 0; i < configComps.length; i++) {
-                validators.push(Ice.generaValidator(configComps[i]));
+                var validator = Ice.generaValidator(configComps[i]);
+                if (validator) {
+                    validators[validator.nombre] = validator.arreglo;
+                }
             }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
@@ -825,6 +831,10 @@ var Ice = Object.assign(Ice || {}, {
                 item.label = config.label
             }
             
+            // readOnly
+            if (config.swlectura === 'S') {
+                item.readOnly = true;
+            }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -939,7 +949,92 @@ var Ice = Object.assign(Ice || {}, {
      */
     generaValidator: function (config) {
         Ice.log('Ice.generaValidator args:', arguments);
-        alert('Ice.generaValidator TODO');
+        var paso = 'Construyendo validator',
+            validator;
+        try {
+            if (!config || !config.name_cdatribu) {
+                throw 'Falta name para validator';
+            }
+            
+            var name;
+            if (/^\d+$/.test(config.name_cdatribu)) {
+                name = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) < 100 ? -2 : -3));
+            } else {
+                name = config.name_cdatribu;
+            }
+            
+            
+            // obligatorio
+            if (config.swobliga === 'S') {
+                validator = validator || {
+                    nombre: name,
+                    arreglo: []
+                };
+                
+                validator.arreglo.push({
+                    type: 'presence'
+                });
+            }
+            
+            
+            // longitud minima
+            if (config.minlength && /^\d+$/.test(config.minlength)) {
+                validator = validator || {
+                    nombre: name,
+                    arreglo: []
+                };
+                
+                validator.arreglo.push({
+                    type: 'length',
+                    min: Number(config.minlength)
+                });
+            }
+            
+            
+            // longitud maxima
+            if (config.maxlength && /^\d+$/.test(config.maxlength)) {
+                validator = validator || {
+                    nombre: name,
+                    arreglo: []
+                };
+                
+                validator.arreglo.push({
+                    type: 'length',
+                    max: Number(config.maxlength)
+                });
+            }
+            
+            
+            // valor minimo
+            if (config.minvalue && /^\d+$/.test(config.minvalue)) {
+                validator = validator || {
+                    nombre: name,
+                    arreglo: []
+                };
+                
+                validator.arreglo.push({
+                    type: 'range',
+                    min: Number(config.minvalue)
+                });
+            }
+            
+            
+            // valor maximo
+            if (config.maxvalue && /^\d+$/.test(config.maxvalue)) {
+                validator = validator || {
+                    nombre: name,
+                    arreglo: []
+                };
+                
+                validator.arreglo.push({
+                    type: 'range',
+                    max: Number(config.maxvalue)
+                });
+            }
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        return validator;
     },
     
     
@@ -972,9 +1067,39 @@ var Ice = Object.assign(Ice || {}, {
     
     suspendEvents: function (view) {
         Ice.log('Ice.suspendEvents view:', view);
+        var paso = 'Suspendiendo eventos';
+        try {
+            if (!view) {
+                throw 'Falta vista para suspender eventos';
+            }
+            var comps = Ice.query('[suspendEvents]', view);
+            for (var i = 0; i < comps.length; i++) {
+                var comp = comps[i];
+                if (comp.suspendEvents && typeof comp.suspendEvents === 'function') {
+                    comp.suspendEvents();
+                }
+            }
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
     },
     
     resumeEvents: function (view) {
         Ice.log('Ice.resumeEvents view:', view);
+        var paso = 'Reanudando eventos';
+        try {
+            if (!view) {
+                throw 'Falta vista para reaundar eventos';
+            }
+            var comps = Ice.query('[resumeEvents]', view);
+            for (var i = 0; i < comps.length; i++) {
+                var comp = comps[i];
+                if (comp.resumeEvents && typeof comp.resumeEvents === 'function') {
+                    comp.resumeEvents();
+                }
+            }
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
     }
 });
