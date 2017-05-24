@@ -804,17 +804,19 @@ var Ice = Object.assign(Ice || {}, {
                 S: 'switchice'
             }[config.tipocampo];
             if (!item.xtype) {
-                throw 'tipocampo incorrecto';
+                throw 'Tipocampo incorrecto para item';
             }
             
             if (config.catalogo) {
                 item.xtype = 'comboice';
             }            
             
+            
             // name_cdatribu
             if (!config.name_cdatribu) {
-                throw 'falta name_cdatribu';
+                throw 'Falta name_cdatribu para item';
             }
+            
             if (/^\d+$/.test(config.name_cdatribu)) {
                 item.name = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
             } else {
@@ -830,6 +832,7 @@ var Ice = Object.assign(Ice || {}, {
             if (config.label) {
                 item.label = config.label
             }
+            
             
             // readOnly
             if (config.swlectura === 'S') {
@@ -847,13 +850,15 @@ var Ice = Object.assign(Ice || {}, {
      */
     generaColumn: function (config) {
         Ice.log('Ice.generaColumn args:', arguments);
-        var paso = 'Construyendo Columns',
-        column = {};
+        var paso = 'Construyendo column',
+            column = {};
         try {
             if (!config) {
                 throw 'No se recibi\u00f3 configuraci\u00f3n de column';
-            }        
-                   
+            }
+            
+            
+            // width / flex       
             if(config.width){
                 if(Number(config.width) > 10){
                     column.width = config.width;
@@ -861,22 +866,24 @@ var Ice = Object.assign(Ice || {}, {
                 else{
                     column.flex = config.width;
                 }
-            }
-            else{
+            } else {
                 column.flex = 1;
             }
-                    
-            // name_cdatribu
+            
+            
+            // dataIndex
             if (!config.name_cdatribu) {
-                throw 'falta name_cdatribu';
+                throw 'Falta name_cdatribu para column';
             }
+            
             if (/^\d+$/.test(config.name_cdatribu)) {
                 column.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
             } else {
                 column.dataIndex = config.name_cdatribu;
             }
             
-            // label
+            
+            // text
             if (config.label) {
                 column.text = config.label
             }        
@@ -910,14 +917,15 @@ var Ice = Object.assign(Ice || {}, {
      */
     generaField: function (config) {
         Ice.log('Ice.generaField args:', arguments);
-//        alert('Ice.generaField TODO');
-        var paso = "";
-        field = {};
-        try{
-            if(!config.tipocampo){
-                throw 'No se recibi\u00f3 configuraci\u00f3n de column';
+        var paso = 'Construyendo field',
+            field = {};
+        try {
+            if (!config) {
+                throw 'No se recibi\u00f3 configuraci\u00f3n de field';
             }
             
+            
+            // type
             field.type = {
                     A: 'string',
                     N: 'float',
@@ -926,15 +934,20 @@ var Ice = Object.assign(Ice || {}, {
                     T: 'string',
                     S: 'string'
                 }[config.tipocampo];
+            if (!field.type) {
+                throw 'Tipocampo incorrecto para field';
+            }
             
+            
+            // name
             if (!config.name_cdatribu) {
-                throw 'falta name_cdatribu';
+                throw 'Falta name_cdatribu para field';
             }
             
             if (/^\d+$/.test(config.name_cdatribu)) {
-                field.dataIndex = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
+                field.name = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) > 100 ? -3 : -2));
             } else {
-                field.dataIndex = config.name_cdatribu;
+                field.name = config.name_cdatribu;
             }
         } catch (e){
             Ice.generaExcepcion(e, paso);
