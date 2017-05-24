@@ -5,6 +5,9 @@ Ext.define('Ice.view.field.TextareaIce', {
     extend: 'Ext.form.field.TextArea',
     xtype: 'textareaice',
     
+    labelAlign: 'top',
+    msgTarget: 'under',
+    
     initComponent: function () {
         var me = this,
             configIce = me.config, // la configuracion recibida de TCONFSCR

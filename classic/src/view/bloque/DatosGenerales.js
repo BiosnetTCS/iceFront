@@ -8,7 +8,9 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     controller: 'bloquedatosgenerales',
     viewModel: 'bloquedatosgenerales',
     
-    requires: [],
+    requires: [
+        'Ext.ux.layout.ResponsiveColumn'
+    ],
     
     
     // validacion de parametros de entrada
@@ -38,11 +40,13 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     config: {},
     
     
-    // configuracio ext
+    // configuracion ext
     title: 'Datos generales',
     
     // para el responsive small-(%) big-(%)
     layout: 'responsivecolumn',
+    
+    modelValidation: true,
     
     bodyPadding: '10px 0px 0px 10px',
     defaults: {
@@ -50,18 +54,25 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
         cls: 'big-50 small-100'
     },
     
-    buttons: [{
-        text: 'Cargar',
-        iconCls: 'x-fa fa-download',
-        handler: 'onCargarClic'
-    }],
+    buttons: [
+        {
+            text: 'Cargar',
+            iconCls: 'x-fa fa-download',
+            handler: 'onCargarClic'
+        }, {
+            text: 'Guardar',
+            iconCls: 'x-fa fa-save',
+            handler: 'onGuardarClic'
+        }
+    ],
     
-    // contruccion usando metodos ext y parametros de entrada
+    // configuracion que usa datos de entrada
     initComponent: function () {
         Ice.log('Ice.view.bloque.DatosGenerales.initComponent');
         var me = this,
             paso = 'Construyendo bloque de datos generales';
         try {
+            // generar componentes
             var comps = Ice.generaComponentes({
                 pantalla: 'BLOQUE_DATOS_GENERALES',
                 seccion: 'FORMULARIO',
@@ -71,29 +82,33 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
                 cdtipsit: me.cdtipsit ||'',
                 auxKey: me.auxkey || '',
                 
-                items: true
+                items: true,
+                fields: true,
+                validators: true
             });
             Ice.log('Ice.view.bloque.DatosGenerales.initComponent comps:', comps);
             
+            
+            // agregar binding a los componentes
+            for (var i = 0; i < comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items.length; i++) {
+                var item = comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items[i];
+                item.bind = '{datos.' + item.name + '}';
+            }
+            Ice.log('items con bind:', comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items);
+
+            
+            // agregar items, y agregar fields y validators para viewmodel
             Ext.apply(me, {
-                items: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items
+                items: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items,
+                modelFields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
+                modelValidators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
             });
-        } catch (e) {
-            Ice.generaExcepcion(e, paso);
-        }
-        
-        
-        // construir componente
-        me.callParent(arguments);
-        
-        
-        // comportamiento
-        paso = '';
-        try {
-            me.getController().custom();
+            
+            
+            // construir componente
+            me.callParent(arguments);
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
     }
-    
 });
