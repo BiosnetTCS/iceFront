@@ -5,6 +5,9 @@ Ext.define('Ice.view.field.SwitchfieldIce', {
     extend: 'Ext.form.field.Checkbox',
     xtype: 'switchice',
     
+    labelAlign: 'top',
+    msgTarget: 'under',
+    
     initComponent: function () {
         var me = this,
             configIce = me.config, // la configuracion recibida de TCONFSCR

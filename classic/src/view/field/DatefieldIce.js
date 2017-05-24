@@ -5,6 +5,9 @@ Ext.define('Ice.view.field.DatefieldIce', {
     extend: 'Ext.form.field.Date',
     xtype: 'datefieldice',
     
+    labelAlign: 'top',
+    msgTarget: 'under',
+    
     initComponent: function () {
         var me = this,
             configIce = me.config, // la configuracion recibida de TCONFSCR
