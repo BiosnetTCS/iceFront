@@ -8,7 +8,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	    xtype: 'bloquelistasituaciones',
 	    
 	    controller: 'bloquelistasituaciones',
-	    //viewModel: 'bloquedatosgenerales',
+//	    viewModel: 'bloquelistasituaciones',
 	    
 	    requires: [],
 	    
@@ -38,24 +38,41 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	    
 	    // configuracion del componente (no EXT)
 	    config: {
-	    	buttons:[],
-	    	actionColumns:[]
+	    	actionColumns:[
+	    	    {
+	                xtype:'actioncolumn',
+	                items: [{
+	                    iconCls: 'x-fa fa-edit',
+	                    tooltip: 'Editar',
+	                    handler: function(grid, rowIndex, colIndex) {
+	                        var rec = grid.getStore().getAt(rowIndex);
+	                        alert("Edit " + rec.get('firstname'));
+	                    }
+	                },{
+	                    iconCls: 'x-fa fa-minus-circle',
+	                    tooltip: 'Borrar',
+	                    handler: 'onBorrarClic'
+	                }]
+	            }
+	    	]
 	    },
 	    
 	    
 	    // configuracio ext
 	    title: 'Lista Situaciones',
-	    
-	    // para el responsive small-(%) big-(%)
-	    layout: 'responsivecolumn',
-	    
-	    bodyPadding: '10px 0px 0px 10px',
-	    defaults: {
-	        margin: '0px 10px 10px 0px',
-	        cls: 'big-50 small-100'
-	    },
-	    
-	    buttons: [],
+	    	    
+	    tbar: [
+	        {
+	            text: 'Cargar',
+	            iconCls: 'x-fa fa-download',
+	            handler: 'onCargarClic'
+	        },{
+                text: 'Agregar',
+                iconCls: 'x-fa fa-plus-circle',
+                handler: 'onAgregarClic'
+            }
+	        
+	     ],
 	    
 	    // contruccion usando metodos ext y parametros de entrada
 	    initComponent: function () {
@@ -70,7 +87,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	                estatus: (me.flujo && me.flujo.estatus) || '',
 	                cdramo: me.cdramo || '',
 	                cdtipsit: me.cdtipsit ||'',
-	                auxKey: me.auxkey || '',	                
+	                auxKey: me.auxkey || '',
 //	                items: true,
 	                columns: true,
 	                fields:true
@@ -79,21 +96,21 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	            
 	            Ext.apply(me, {
 	                columns: comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns.concat(me.config.actionColumns),
-	                /*store  : {
+	                store  : {
 	                	fields: comps.BLOQUE_LISTA_SITUACIONES.LISTA.fields,
-	                	 proxy: {
-	                         type: 'ajax',
-	                         url: Ice.url.bloque.listaSituaciones,
-	                         reader: {
-	                             type: 'json',
-	                             //rootProperty: 'roles',
-	                             successProperty: 'success',
-	                             messageProperty: 'message'
+	                	autoLoad: true,
+	                	proxy: {
+	                        type: 'ajax',
+	                        url: Ice.url.bloque.listaSituaciones.cargar,
+	                        reader: {
+	                            type: 'json',
+	                            successProperty: 'success',
+	                            messageProperty: 'message',
+	                            rootProperty: 'lista'
 	                         }
 	                     }
-	                },*/
+	                },
 	                buttons:me.config.buttons,
-	                
 	            });
 	        } catch (e) {
 	            Ice.generaExcepcion(e, paso);
@@ -107,7 +124,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	        // comportamiento
 	        paso = '';
 	        try {
-	           // me.getController().custom();
+	            me.getController().custom();
 	        } catch (e) {
 	            Ice.generaExcepcion(e, paso);
 	        }
