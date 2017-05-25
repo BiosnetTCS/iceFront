@@ -40,8 +40,8 @@ var Ice = Object.assign(Ice || {}, {
          
          bloque: {
             datosGenerales: {
-                cargar: 'jsonLocal/bloqueDatosGeneralesCargar.json',
-                guardar: 'jsonLocal/bloqueDatosGeneralesGuardar.json'
+                cargar: 'emision/datosGenerales/cargar.action',
+                guardar: 'emision/datosGenerales/guardar.action'
             },
             listaSituaciones: {
             	cargar: 'jsonLocal/bloqueDatosSituacionCargar.json',
@@ -809,7 +809,13 @@ var Ice = Object.assign(Ice || {}, {
             
             if (config.catalogo) {
                 item.xtype = 'comboice';
-            }            
+            }
+            
+            
+            // format
+            if (item.xtype === 'datefieldice') {
+                item.format = Ext.util.Format.dateFormat;
+            }
             
             
             // name_cdatribu
@@ -936,6 +942,12 @@ var Ice = Object.assign(Ice || {}, {
                 }[config.tipocampo];
             if (!field.type) {
                 throw 'Tipocampo incorrecto para field';
+            }
+            
+            
+            // dateFormat
+            if (field.type === 'date') {
+                field.dateFormat = Ext.util.Format.dateFormat; // viene de ext/locale/overrides/ext-locale-[idioma]
             }
             
             

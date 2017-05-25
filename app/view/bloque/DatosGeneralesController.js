@@ -24,8 +24,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     paso2 = 'Definiendo comportamiento de bloque de datos generales';
                     me.custom();
                     
-                    paso2 = 'Cargando bloque de datos generales';
-                    me.cargar();
+                    //paso2 = 'Cargando bloque de datos generales';
+                    //me.cargar();
                 } catch (e) {
                     Ice.manejaExcepcion(e, paso2);
                 }
@@ -41,32 +41,113 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             view = me.getView(),
             paso = 'Configurando comportamiento de bloque de datos generales';
         try {
-            var refs = view.getReferences() || {},
-                feefecto = refs.feefecto,
-                feproren = refs.feproren,
-                cdramo = refs.cdramo;
+            var refs = view.getReferences() || {};
             Ice.log('Ice.view.bloque.DatosGeneralesController refs:', refs);
             
+            
             // al seleccionar fecha de inicio poner fecha de fin
-            if (feefecto && feproren) {
-                feefecto.on({
+            if (refs.feefecto && refs.feproren) {
+                refs.feefecto.on({
                     change: function (me, value) {
                         var paso = 'Calculando fin de vigencia';
                         try {
-                            feproren.setValue(Ext.Date.add(value, Ext.Date.YEAR, 1));
+                            refs.feproren.setValue(Ext.Date.add(value, Ext.Date.YEAR, 1));
                         } catch (e) {
                             Ice.logWarn(paso, e);
                         }
                     }
                 });
             }
-            if (feefecto) {
-                feefecto.setValue(new Date());
+            if (refs.feefecto) {
+                refs.feefecto.setValue(new Date());
+            }
+            
+            
+            // agregar disparadores valores defecto fijos
+            for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
+                var name = view.getCamposDisparanValoresDefectoFijos()[i];
+                if (refs[name]) {
+                    refs[name].setFieldStyle('border-left: 3px solid yellow;');
+                    refs[name].on({
+                        blur: function () {
+                            me.cargarValoresDefectoFijos();
+                        }
+                    });
+                }
+            }
+            
+            
+            // agregar disparadores valores defecto variables
+            for (var i = 0; i < view.getCamposDisparanValoresDefectoVariables().length; i++) {
+                var name = view.getCamposDisparanValoresDefectoVariables()[i];
+                if (refs[name]) {
+                    refs[name].setFieldStyle('border-right: 3px solid blue;');
+                    refs[name].on({
+                        blur: function () {
+                            me.cargarValoresDefectoVariables();
+                        }
+                    });
+                }
             }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
-        Ice.log('/Ice.view.bloque.DatosGeneralesController.custom');
+    },
+    
+    cargarValoresDefectoFijos: function () {
+        Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos');
+        var me = this,
+            view = me.getView(),
+            refs = view.getReferences();
+        var paso = 'Cargando valores por defecto fijos de datos generales';
+        try {
+            if (view.getDatosFijosNuevos() !== true) {
+                Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos los datos fijos no son nuevos');
+                return;
+            }
+            
+            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData();
+            
+            for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
+                var name = view.getCamposDisparanValoresDefectoFijos()[i];
+                if (refs[name] && errores[name] !== true) {
+                    Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos invalido <', name, ':', errores[name], '>');
+                    return;
+                }
+            }
+            Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos valores cargados ok');
+            view.setDatosFijosNuevos(false);
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
+    },
+    
+    cargarValoresDefectoVariables: function () {
+        Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables');
+        var me = this,
+            view = me.getView(),
+            refs = view.getReferences();
+        var paso = 'Cargando valores por defecto variables de datos generales';
+        try {
+            if (view.getDatosVariablesNuevos() !== true) {
+                Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables los datos variables no son nuevos');
+                return;
+            }
+            
+            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData();
+            
+            for (var i = 0; i < view.getCamposDisparanValoresDefectoVariables().length; i++) {
+                var name = view.getCamposDisparanValoresDefectoVariables()[i];
+                if (refs[name] && errores[name] !== true) {
+                    Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables invalido <', name, ':', errores[name], '>');
+                    return;
+                }
+            }
+            Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables valores cargados ok');
+            view.setDatosVariablesNuevos(false);
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
     },
     
     onCargarClic: function (button) {
@@ -88,7 +169,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     'params.cdramo': view.cdramo || '',
                     'params.estado': view.estado || '',
                     'params.nmpoliza': view.nmpoliza || '',
-                    'params.nmsuplem': view.nmsuplem || 0
+                    'params.nmsuplem': view.nmsuplem || 0,
+                    'params.swcolind': view.swcolind || 'I'
                 },
                 success: function (json) {
                     var paso2 = 'Seteando valores';
