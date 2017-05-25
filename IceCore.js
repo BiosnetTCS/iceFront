@@ -44,9 +44,11 @@ var Ice = Object.assign(Ice || {}, {
                 guardar: 'emision/datosGenerales/guardar.action'
             },
             listaSituaciones: {
-            	cargar: 'jsonLocal/bloqueDatosSituacionCargar.json',
-            	agregar: 'jsonLocal/bloqueSituacionCargar.json',
-            	borrar: 'jsonLocal/bloqueSituacionBorrar.json'
+                cargar: 'jsonLocal/bloqueDatosSituacionCargar.json'             
+            },
+            situacionesRiesgo: {
+                agregar: 'jsonLocal/bloqueSituacionCargar.json',
+                borrar: 'jsonLocal/bloqueSituacionBorrar.json'
             }
          }
      },

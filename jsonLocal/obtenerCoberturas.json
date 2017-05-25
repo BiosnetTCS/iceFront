@@ -1,0 +1,20 @@
+[
+	{
+		amparada: "true",
+		cdgarant:"123",
+		cobertura:"EXPLOSIVOS",
+		suma_asegurada: "1234543"
+	},
+	{
+		amparada: "true",
+		cdgarant:"1253",
+		cobertura:"EXPLOSIVOS",
+		suma_asegurada: "1234543"
+	},
+	{
+		amparada: "true",
+		cdgarant:"1323",
+		cobertura:"EXPLOSIVOS",
+		suma_asegurada: "1234543"
+	}
+]
