@@ -83,13 +83,13 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                fields:true
 	            });
 	            Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);
-	            paso="creando checkcolumns";
-	            var chk=Ext.Array.findBy(comps.COBERTURAS.COBERTURAS.columns,function(it,idx){
-	            	if(it.dataIndex=='amparada'){
-	            		return true;
-	            	}
-	            })
-	            chk.xtype='checkcolumn'
+//	            paso="creando checkcolumns";
+//	            var chk=Ext.Array.findBy(comps.COBERTURAS.COBERTURAS.columns,function(it,idx){
+//	            	if(it.dataIndex=='amparada'){
+//	            		return true;
+//	            	}
+//	            })
+//	            chk.xtype='checkcolumn'
 	            paso=" creando grid coberturas";
 	            var store={
 	                	fields: comps.COBERTURAS.COBERTURAS.fields,
@@ -99,24 +99,85 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                         url: Ice.url.bloque.coberturas.datosCoberturas,
 	                         reader: {
 	                             type: 'json',
-	                             //rootProperty: 'roles',
+	                             rootProperty: 'slist1',
 	                             successProperty: 'success',
 	                             messageProperty: 'message'
 	                         }
-	                     }
+	                      
+	                     },
+	                     listeners:{
+	                    	  load:
+	                    		  function(st){
+	                    		  
+	                    		  if(st.count()>0){
+	                    			  
+	                    			  Ext.ComponentQuery.query("#btnAgregar").forEach(function(it,idx){
+	                    				  
+	                    				  it.setDisabled(false)
+	                    			  })
+	                    		  }
+	                    	  }
+	                      }
 	                };
 	            Ext.apply(me, {
 	                items: [{
 	    	    		xtype:'bloquelistasituaciones',
     	    			cdtipsit:this.config.cdtipsit,
-    	    			cdramo:		this.config.cdramo
+    	    			cdramo:		this.config.cdramo,
+    	    			actionColumns:[ {
+
+    		                xtype:'actioncolumn',
+
+    		                items: [{
+
+    		                    iconCls: 'x-fa fa-edit',
+
+    		                    tooltip: 'Editar',
+
+    		                    handler: function(grid, rowIndex, colIndex) {
+
+    		                        
+
+    		                        
+    		                        try{
+    		            	    		paso='consultanco coberturas'
+    		            	    		var record = grid.getStore().getAt(rowIndex);
+    		            	    		var paso="Evento selecciona cobertura "
+    		            	    		// aqui mandar los datos de a deveras
+    		            	    		
+    		            	    		var gridCoberturas=me.down('#gridCoberturas')
+    		            	    		gridCoberturas.store.proxy.extraParams={
+    		            	    			'params.pv_cdunieco_i':record.get('cdunieco'),
+    		            	    			'params.pv_cdramo_i':record.get('cdramo'),
+    		            	    			'params.pv_estado_i':record.get('estado'),
+    		            	    			'params.pv_nmpoliza_i':record.get('nmpoliza'),
+    		            	    			'params.pv_nmsuplem_i':record.get('nmsuplem'),
+    		            	    			'params.pv_nmsituac_i':record.get('nmsituac')
+    		            	    			
+    		            	    		}
+    		            	    		gridCoberturas.store.load()
+    		            	    		gridCoberturas.store.filter('amparada', 'S')
+    		            	    		
+    		            	    	}catch(e){
+    		            	    		Ice.generaExcepcion(e, paso);
+    		            	    	}
+
+    		                    }
+
+    		                }]
+    	    			}]
 	    	    		
 	    	    	},
 	    	    	{
 	    	    		xtype	:		'gridpanel',
+	    	    		itemId	:		'gridCoberturas',
+	    	    		title	:		'Coberturas',
 	    	    		tbar	:		 [
 				    	    			  	{ 
 				    	    			  		xtype: 'button', 
+
+				    	    			    	itemId  : 'btnAgregar',
+				    	    			    	disabled: true,
 				    	    			  		text: 'Agregar',
 				    	    			  		handler: 'agregarCobertura'
 				    	    			  	}
@@ -127,22 +188,19 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                        items: [{
 	                            iconCls: 'x-fa fa-edit',
 	                            tooltip: 'Edit',
-	                            handler: function(grid, rowIndex, colIndex) {
-	                                alert()
-	                            }
+	                            handler: 'editarCobertura'
 	                        },{ 
 	                        	iconCls: 'x-fa fa-remove',
 	                            tooltip: 'Delete',
-	                            handler: function(grid, rowIndex, colIndex) {
-	                               grid.store.removeAt(rowIndex)
-	                            }
+	                            handler: 'borraCobertura',
+	                            isDisabled:'coberturaObligatoria'
 	                        }]
 	                    })
 																    	            ,
 	    	    		 bbar	:		Ext.create('Ext.PagingToolbar', {
 				    	    	            store: store,
 				    	    	            displayInfo: true,
-				    	    	            displayMsg: 'Displaying topics {0} - {1} of {2}',
+				    	    	            displayMsg: 'Coberturas {0} - {1} of {2}',
 				    	    	            emptyMsg: "NO HAY COBERTURAS",
 				    	    	            inputItemWidth: 35
 			    	    	        	}),
@@ -152,6 +210,10 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    	},
 	    	    	{
 	    	    		xtype	:		'form',
+	    	    		layout	:       {type:'anchor'},
+	    	    		defaults:		{
+	    	    			bodyStyle:"padding:5px 50px 100px"
+	    	    		}
 	    	    		
 	    	    	}
 	    	    	]
@@ -183,6 +245,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	        	//var me = this,
 	           // view = me.getView(),
 	    		me.down("[xtype=bloquelistasituaciones]").store.load();
+	    		//alert()
 	        	
 	    	}
 	    }

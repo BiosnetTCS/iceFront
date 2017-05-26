@@ -39,21 +39,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	    // configuracion del componente (no EXT)
 	    config: {
 	    	actionColumns:[
-	    	    {
-	                xtype:'actioncolumn',
-	                items: [{
-	                    iconCls: 'x-fa fa-edit',
-	                    tooltip: 'Editar',
-	                    handler: function(grid, rowIndex, colIndex) {
-	                        var rec = grid.getStore().getAt(rowIndex);
-	                        alert("Edit " + rec.get('firstname'));
-	                    }
-	                },{
-	                    iconCls: 'x-fa fa-minus-circle',
-	                    tooltip: 'Borrar',
-	                    handler: 'onBorrarClic'
-	                }]
-	            }
+	    	    
 	    	]
 	    },
 	    

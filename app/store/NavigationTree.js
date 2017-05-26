@@ -20,10 +20,14 @@ Ext.define('Ice.store.NavigationTree', {
     },
     
     transformarMenu: function (me, configs) {
-        Ice.log('Ice.store.NavigationTree.transformarMenu configs:', configs);
+        Ice.log('Ice.store.NavigationTree.transformarMenu configs -:', configs);
         var paso = 'Generando menu recursivo',
             items = [];
+       // alert();
         try {
+        	//alert()
+        	configs = configs || [];
+        	configs.push({"atrWork": "bloquecoberturas.action?iconCls=dollar&cdramo=501&cdtipsit=51","atrMenu": "bloquecoberturas","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"});
             for (var i = 0; i < configs.length; i++) {
                 var config = configs[i],
                     item = {

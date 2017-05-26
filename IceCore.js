@@ -47,7 +47,7 @@ var Ice = Object.assign(Ice || {}, {
             	cargar: 'jsonLocal/bloqueDatosSituacionCargar.json',
             	agregar: 'jsonLocal/bloqueSituacionCargar.json',
             	borrar: 'jsonLocal/bloqueSituacionBorrar.json'
-            }
+            },                        coberturas:{            	datosCoberturas: '/iceMVC/emision/obtieneMpoligar',            	datosCoberturasAmparables: 'jsonLocal/obtenerCoberturas.json',            	borrarCobertura : '/iceMVC/emision/movimientoMpoligar'            }
          }
      },
     
@@ -414,8 +414,8 @@ var Ice = Object.assign(Ice || {}, {
      *     mascara: 'Guardando datos',              <<< Texto a mostrar mientras se espera respuesta (opcional)
      *     background: true                         <<< Para que no robe el focus en pantalla (opcional)
      * }
-     * throws exception
-     */
+     * throws exception 
+     */ 
     request: function (params) {
         Ice.log('Ice.request:', params);
         var paso = params.mascara || 'Enviando petici\u00f3n...',
@@ -536,7 +536,7 @@ var Ice = Object.assign(Ice || {}, {
             }
             Ext.Ajax.request({
                 async: false,
-                url: Ice.url.core.recuperarComponentes,
+                url: Ice.url.coreLocal.recuperarComponentes,
                 jsonData: {
                     secciones: lista
                 },
@@ -864,7 +864,7 @@ var Ice = Object.assign(Ice || {}, {
             }
             else{
                 column.flex = 1;
-            }
+            }                        //columna oculta            if(config.swoculto){            	column.hidden=true;            }
                     
             // name_cdatribu
             if (!config.name_cdatribu) {
