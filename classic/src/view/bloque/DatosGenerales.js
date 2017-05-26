@@ -37,12 +37,19 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     
     
     // configuracion del componente (no EXT)
-    config: {},
+    config: {
+        datosFijosNuevos: true,
+        datosVariablesNuevos: true,
+        camposDisparanValoresDefectoFijos: [
+            'cdunieco', 'feproren'
+        ],
+        camposDisparanValoresDefectoVariables: [
+            'cdunieco', 'feefecto', 'feproren', 'nmpoliza'
+        ]
+    },
     
     
     // configuracion ext
-    title: 'Datos generales',
-    
     // para el responsive small-(%) big-(%)
     layout: 'responsivecolumn',
     
@@ -97,11 +104,19 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
             Ice.log('items con bind:', comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items);
 
             
-            // agregar items, y agregar fields y validators para viewmodel
+            // creando modelo para validaciones
+            var modelName = Ext.id();
+            Ext.define(modelName, {
+                extend: 'Ext.data.Model',
+                fields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
+                validators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
+            });
+            
+            
+            // agregar items, y agregar modelo para el modelValidation
             Ext.apply(me, {
                 items: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items,
-                modelFields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
-                modelValidators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
+                modelo: modelName
             });
             
             

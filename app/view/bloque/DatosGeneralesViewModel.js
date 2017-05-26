@@ -17,16 +17,9 @@ Ext.define('Ice.view.bloque.DatosGeneralesViewModel', {
         try {
             me.callParent(arguments);
             
-            var modelName = Ext.id();
-            Ext.define(modelName, {
-                extend: 'Ext.data.Model',
-                fields: view.modelFields,
-                validators: view.modelValidators
-            });
-            
             me.setLinks({
                 datos: {
-                    type: modelName,
+                    type: view.modelo, // en el initComponente del view se crea
                     create: true
                 }
             });
