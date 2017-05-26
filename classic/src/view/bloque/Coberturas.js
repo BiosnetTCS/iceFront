@@ -12,7 +12,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    
 	    layout: "anchor",
 	    defaults:{
-	    	columnWidth:1
+	    	//columnWidth:1
 	    },
 	    
 	    
@@ -124,6 +124,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    		xtype:'bloquelistasituaciones',
     	    			cdtipsit:this.config.cdtipsit,
     	    			cdramo:		this.config.cdramo,
+    	    			width	: "100%",
     	    			actionColumns:[ {
 
     		                xtype:'actioncolumn',
@@ -172,6 +173,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    		xtype	:		'gridpanel',
 	    	    		itemId	:		'gridCoberturas',
 	    	    		title	:		'Coberturas',
+	    	    		width	: "100%",
 	    	    		tbar	:		 [
 				    	    			  	{ 
 				    	    			  		xtype: 'button', 
@@ -210,9 +212,12 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    	},
 	    	    	{
 	    	    		xtype	:		'form',
-	    	    		layout	:       {type:'anchor'},
+	    	    		width	: "100%",
+	    	    		layout	:       {type:'column'},
 	    	    		defaults:		{
-	    	    			bodyStyle:"padding:5px 50px 100px"
+	    	    			//bodyStyle:"padding:5px 50px 100px"
+	    	    			labelStyle: 'padding-left:100px;'
+	    	    			//columnWidth:.3
 	    	    		}
 	    	    		
 	    	    	}

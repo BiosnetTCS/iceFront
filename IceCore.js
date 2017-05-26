@@ -49,7 +49,7 @@ var Ice = Object.assign(Ice || {}, {
             situacionesRiesgo: {
                 agregar: 'jsonLocal/bloqueSituacionCargar.json',
                 borrar: 'jsonLocal/bloqueSituacionBorrar.json'
-            }
+            },            coberturas:{            	            	datosCoberturas: '/iceMVC/emision/obtieneMpoligar',            	            	datosCoberturasAmparables: 'jsonLocal/obtenerCoberturas.json',            	            	borrarCobertura : '/iceMVC/emision/movimientoMpoligar',            	            	recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar'            }
          }
      },
     
@@ -495,7 +495,7 @@ var Ice = Object.assign(Ice || {}, {
      *         buttons: false,
      *         listeners: true,
      *         fields: true,
-     *         validators: true
+     *         validators: true                   *                            *         mapperAttr: function   funcion que mapea los atributos de tatri a los de tconfscr  (opcional)                   *         url:    url a donde hara la petición, el servicio debe regresar los datos en el mismo formato que recuperarComponentes.action (opcional)                   *         rootRequestData:  atributo del action donde recibiras los datos de la peticion (opcional)
      *     }, {
      *         pantalla: 'MESA_CONTROL',
      *         seccion: 'FORMULARIO',
@@ -535,13 +535,11 @@ var Ice = Object.assign(Ice || {}, {
                 lista.push(secciones);
             } else {
                 lista = secciones;
-            }
+            }                        var data = {                    secciones: lista                }                        if(secciones.rootRequestData){            	            	data[secciones.rootRequestData]=lista;            	            }
             Ext.Ajax.request({
                 async: false,
-                url: Ice.url.core.recuperarComponentes,
-                jsonData: {
-                    secciones: lista
-                },
+                url: secciones.url ? secciones.url :Ice.url.coreLocal.recuperarComponentes,
+                jsonData: data,
                 success: function (response) {
                     paso = 'Decodificando respuesta al recuperar componentes';
                     var json = Ext.JSON.decode(response.responseText);
@@ -570,7 +568,7 @@ var Ice = Object.assign(Ice || {}, {
                     if (lista.length > 0 && lista[0].pantalla !== 'LOGIN' && lista[0].pantalla !== 'ROLTREE') {
                         paso = 'Construyendo componentes';
                         for (var i = 0; i < lista.length; i++) {
-                            comps[lista[i].pantalla] = comps[lista[i].pantalla] || {};
+                            comps[lista[i].pantalla] = comps[lista[i].pantalla] || {};                                                                                    //mapper                            if(secciones.mapperAttr){                            	paso="Mapeando campos"                            	                            	if(Ext.isArray(json.componentes[lista[i].seccion])){                            		                            		json.componentes[lista[i].seccion].forEach(function(it,idx){                            			secciones.mapperAttr(it);                            		                            		})                            	                            	}                            	                            	                            }                            
                             comps[lista[i].pantalla][lista[i].seccion] = Ice.generaSeccion(json.componentes[lista[i].seccion],
                                 {
                                     items: lista[i].items === true,
@@ -804,7 +802,7 @@ var Ice = Object.assign(Ice || {}, {
                 F: 'datefieldice',
                 T: 'textareaice',
                 S: 'switchice'
-            }[config.tipocampo];
+            }[config.tipocampo];            Ice.log("",config.tipocampo," ",config);
             if (!item.xtype) {
                 throw 'Tipocampo incorrecto para item';
             }
@@ -876,7 +874,7 @@ var Ice = Object.assign(Ice || {}, {
                 }
             } else {
                 column.flex = 1;
-            }
+            }                        //hidden            if(config.swoculto==='S'){            	column.hidden=true;            }
             
             
             // dataIndex

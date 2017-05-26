@@ -286,22 +286,33 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     		var paso="Evento selecciona cobertura "
     		var record = grid.getStore().getAt(rowIndex);
     		Ice.log("record:", record);	
-    		var comps = Ice.generaComponentes({
-                pantalla: 'COBERTURAS',
-                seccion: 'GARANTIAS',
-                modulo: me.modulo || '',
-                estatus: (me.flujo && me.flujo.estatus) || '',
-                cdramo: me.cdramo || '',
-                cdtipsit: me.cdtipsit ||'',
-                auxKey: me.auxkey || '',	                
-                items: true 
-//                columns: true,
-//                fields:true
-            });
+    		 var comps = Ice.generaComponentes({
+	                pantalla: 'TATRIGAR',
+	                seccion: 'TATRIGAR',
+	                modulo: me.modulo || '',
+	                estatus: (me.flujo && me.flujo.estatus) || '',
+	                cdramo: me.cdramo || '',
+	                cdtipsit: me.cdtipsit ||'',
+	                auxKey: me.auxkey || '',
+	                cdgarant:record.get('cdgarant') || '',
+	                items: true,
+//	                columns: true,
+//	                fields:true,
+	                mapperAttr:function(obj){
+	                	
+	                	obj.label=obj.dsatribu;
+	                	obj.tipocampo=obj.swformat
+	                	obj.name_cdatribu=obj.cdatribu
+	                	obj.maxvalue=obj.nmlmax
+	                	obj.minvalue=obj.nmlmin
+	                },
+	                url:Ice.url.bloque.coberturas.recuperarTatrigar,
+	                rootRequestData:"slist1"
+	            });
             Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);	
             var form=me.down('[xtype=form]');
             form.removeAll();
-            form.add(comps.COBERTURAS.GARANTIAS.items)
+            form.add(comps.TATRIGAR.TATRIGAR.items)
                
     		
     	}catch(e){
