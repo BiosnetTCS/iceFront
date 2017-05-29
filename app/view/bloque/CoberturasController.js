@@ -133,7 +133,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			        columns: [
 			            { text: 'Clave', dataIndex: 'cdgarant'  },
 			            { text: 'Cobertura', dataIndex: 'dsgarant',flex: 2 },
-			            { xtype: 'checkcolumn', text: 'Amparada', dataIndex: 'amparada'
+			            { xtype: 'checkcolumn', text: 'Amparar', dataIndex: 'amparada'
 			            }],          
 			            
 			        store: {
@@ -281,10 +281,15 @@ Ext.define('Ice.view.bloque.CoberturasController', {
       },
       
       editarCobertura:function(grid, rowIndex, colIndex) {
-      	try{
-      		me = this.getView()
-    		var paso="Evento selecciona cobertura "
+    	  var paso="Evento selecciona cobertura "
+    	  try{
+      		me = this.getView();
+      		var form=me.down('[xtype=form]');
+      		form.removeAll();
     		var record = grid.getStore().getAt(rowIndex);
+      		paso="estableciendo cdgarant";
+      		me.cdgarant=record.get('cdgarant');
+      		me.cdcapita=record.get('cdcapita');
     		Ice.log("record:", record);	
     		 var comps = Ice.generaComponentes({
 	                pantalla: 'TATRIGAR',
@@ -296,8 +301,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	                auxKey: me.auxkey || '',
 	                cdgarant:record.get('cdgarant') || '',
 	                items: true,
-//	                columns: true,
-//	                fields:true,
+	                
 	                mapperAttr:function(obj){
 	                	
 	                	obj.label=obj.dsatribu;
@@ -308,16 +312,140 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	                },
 	                url:Ice.url.bloque.coberturas.recuperarTatrigar,
 	                rootRequestData:"slist1"
+	                	
 	            });
-            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);	
-            var form=me.down('[xtype=form]');
-            form.removeAll();
-            form.add(comps.TATRIGAR.TATRIGAR.items)
+    		 
+    		 
+            Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);	
+            var mpolicap=Ice.generaComponentes({
+                pantalla: 'BLOQUE_COBERTURAS',
+                seccion: 'MPOLICAP',
+                modulo: me.modulo || '',
+                estatus: (me.flujo && me.flujo.estatus) || '',
+                cdramo: me.cdramo || '',
+                cdtipsit: me.cdtipsit ||'',
+                auxKey: me.auxkey || '',
+                items: true
                
+            });
+            mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items.forEach(function(it,idx){
+            	it.tabla="MPOLICAP"
+            })
+            
+            form.setTitle(record.get('cdgarant')+" - "+record.get('dsgarant'))
+            form.removeAll();
+            form.add(mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items);
+            form.add(comps.TATRIGAR.TATRIGAR.items);
+            
+            this.cargarValores(form);   
     		
     	}catch(e){
     		Ice.generaExcepcion(e, paso);
     	}
+    },
+    
+    cargarValores: function(form){
+    	//me.coberturasItems={}
+    	var view = this.getView();
+    	Ice.request({
+    		url:Ice.url.bloque.coberturas.obtieneTvalogar,
+    		params:{
+    			'params.cdunieco':view.cdunieco,
+    			'params.cdramo':view.cdramo,
+    			'params.estado':view.estado,
+    			'params.nmpoliza':view.nmpoliza,
+    			'params.nmsuplem':view.nmsuplem,
+    			'params.nmsituac':view.nmsituac,
+    			'params.cdgarant':view.cdgarant,
+    			'params.cdcapita':view.cdcapita
+    		},
+    		success:function(json){
+    			
+    			try{
+    				Ice.request({
+    					url:Ice.url.bloque.coberturas.obtieneMpolicap,
+    					params:{
+    						'params.cdunieco':view.cdunieco,
+    		    			'params.cdramo':view.cdramo,
+    		    			'params.estado':view.estado,
+    		    			'params.nmpoliza':view.nmpoliza,
+    		    			'params.nmsuplem':view.nmsuplem,
+    		    			'params.nmsituac':view.nmsituac,
+    		    			'params.cdgarant':view.cdgarant,
+    		    			'params.cdcapita':view.cdcapita
+    					},
+    					success:function(response){
+    						try{
+    							var valores=json.slist1?json.slist1[0] || {}:{};
+    							
+    							
+    							form.items.items.forEach(function(it,idx){
+    					    		
+    					    		it.setValue(valores[it.name]);
+    					    		it.valorOriginal=it.getValue();
+    					    	})
+    					    	//suma asegurada
+    					    	var sa=form.items.items.find(function(e){
+    					    		return e.name=='suma_asegurada';
+    					    		
+    					    	})
+    					    	
+    					    	//sa.setValue(valores[sa.name])
+    					    	
+    						}catch(e){
+    							Ice.manejaExcepcion(e,paso);
+    						}
+    					}
+    				});
+    			}catch(e){
+    				Ice.manejaExcepcion(e,paso);
+    			}
+    			
+    		}
+    		
+    	});
+    	
+    	
+    	
+    },
+    
+    guardarCobertura:function(me){
+    	var view = this.getView();
+    	var form = me.up('form');
+    	var elementos=[]
+    	form.items.items.forEach(function(it,idx){
+    		elementos.push({
+    			valor:it.getValue(),
+    			valorOriginal:it.valorOriginal,
+    			name:it.name,
+    			tabla:it.tabla
+    		})
+    	});
+    	Ice.request({
+    		url:Ice.url.bloque.coberturas.guardarCoberturas,
+    		jsonData:{
+    			slist1:elementos,
+    			params:{
+    				'cdunieco':view.cdunieco,
+	    			'cdramo':view.cdramo,
+	    			'estado':view.estado,
+	    			'nmpoliza':view.nmpoliza,
+	    			'nmsuplem':view.nmsuplem,
+	    			'nmsituac':view.nmsituac,
+	    			'cdgarant':view.cdgarant,
+	    			'cdcapita':view.cdcapita
+    			}
+    		},
+    		success:function(){
+    			
+    			
+    			Ice.mensajeCorrecto({
+    				titulo:'Correcto',
+    				mensaje:"Datos guardados correctamente"
+    			})
+    		}
+    	});
+    	
     }
     
     

@@ -49,7 +49,7 @@ var Ice = Object.assign(Ice || {}, {
             situacionesRiesgo: {
                 agregar: 'jsonLocal/bloqueSituacionCargar.json',
                 borrar: 'jsonLocal/bloqueSituacionBorrar.json'
-            },            coberturas:{            	            	datosCoberturas: '/iceMVC/emision/obtieneMpoligar',            	            	datosCoberturasAmparables: 'jsonLocal/obtenerCoberturas.json',            	            	borrarCobertura : '/iceMVC/emision/movimientoMpoligar',            	            	recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar'            }
+            },            coberturas:{            	            	datosCoberturas: '/iceMVC/emision/obtieneMpoligar',            	            	datosCoberturasAmparables: 'jsonLocal/obtenerCoberturas.json',            	            	borrarCobertura : '/iceMVC/emision/movimientoMpoligar',            	            	recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar',            	            	guardarCoberturas:	'/iceMVC/emision/guardarCoberturas',            	            	obtieneTvalogar: '/iceMVC/emision/obtieneTvalogar',            	            	obtieneMpolicap: '/iceMVC/emision/obtieneMpolicap'            }
          }
      },
     
