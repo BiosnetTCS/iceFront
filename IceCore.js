@@ -44,11 +44,11 @@ var Ice = Object.assign(Ice || {}, {
                 guardar: 'emision/datosGenerales/guardar.action'
             },
             listaSituaciones: {
-                cargar: 'jsonLocal/bloqueDatosSituacionCargar.json'             
+                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueDatosSituacionCargar.json'             
             },
             situacionesRiesgo: {
-                agregar: 'jsonLocal/bloqueSituacionCargar.json',
-                borrar: 'jsonLocal/bloqueSituacionBorrar.json'
+                agregar: 'jsonLocal/bloqueSituacionCargar.json',                                editar: 'jsonLocal/bloqueSituacionCargar.json',
+                borrar: 'jsonLocal/bloqueSituacionBorrar.json',                                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
             },            coberturas:{            	            	datosCoberturas: '/iceMVC/emision/obtieneMpoligar',            	            	datosCoberturasAmparables: 'jsonLocal/obtenerCoberturas.json',            	            	borrarCobertura : '/iceMVC/emision/movimientoMpoligar',            	            	recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar'            }
          }
      },
@@ -538,7 +538,7 @@ var Ice = Object.assign(Ice || {}, {
             }                        var data = {                    secciones: lista                }                        if(secciones.rootRequestData){            	            	data[secciones.rootRequestData]=lista;            	            }
             Ext.Ajax.request({
                 async: false,
-                url: secciones.url ? secciones.url :Ice.url.coreLocal.recuperarComponentes,
+                url: secciones.url ? secciones.url :Ice.url.core.recuperarComponentes,
                 jsonData: data,
                 success: function (response) {
                     paso = 'Decodificando respuesta al recuperar componentes';
@@ -838,7 +838,7 @@ var Ice = Object.assign(Ice || {}, {
             if (config.label) {
                 item.label = config.label
             }
-            
+                        //hidden            Ice.log('swoculto',config.swoculto);            if(config.swoculto === 'S'){                item.hidden = true;            }
             
             // readOnly
             if (config.swlectura === 'S') {
