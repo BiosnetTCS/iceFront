@@ -30,10 +30,10 @@ var Ice = Object.assign(Ice || {}, {
              logout:               'authentication/logout.action',
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
              recuperarMenus:       'authentication/obtenerMenu.action',
-			 recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar',
-			 recuperarTatrisit:		'/iceMVC/emision/obtieneTatrisit',
-			 recuperarTatripol:		'/iceMVC/emision/obtieneTatripol',
-             obtenerCatalogo:      'catalogos/obtenerCatalogo.action'
+             obtenerCatalogo:      'catalogos/obtenerCatalogo.action',
+			 recuperarTatrigar:		'/iceMVC/coberturas/obtieneTatrigar',
+//			 recuperarTatrisit:		'/iceMVC/emision/obtieneTatrisit',
+//			 recuperarTatripol:		'/iceMVC/emision/obtieneTatripol'
          },
          
          // URLs de cotizacion
@@ -61,14 +61,13 @@ var Ice = Object.assign(Ice || {}, {
                 cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
             },
             coberturas:{
-            	datosCoberturas: '/iceMVC/emision/obtieneMpoligar',
-            	datosCoberturasAmparables: 'jsonLocal/obtenerCoberturas.json',
-            	borrarCobertura : '/iceMVC/emision/movimientoMpoligar',
-            	recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar',
-            	guardarCoberturas:	'/iceMVC/emision/guardarCoberturas',
-            	obtieneTvalogar: '/iceMVC/emision/obtieneTvalogar',
-            	obtieneMpolicap: '/iceMVC/emision/obtieneMpolicap',
-            	agregarCobertura: '/iceMVC/emision/agregarCobertura'
+            	datosCoberturas: 			'/iceMVC/coberturas/obtieneMpoligar',
+            	borrarCobertura : 			'/iceMVC/coberturas/movimientoMpoligar',//
+            	recuperarTatrigar:			'/iceMVC/coberturas/obtieneTatrigar',
+            	guardarCoberturas:			'/iceMVC/coberturas/guardarCoberturas',
+            	obtieneTvalogar: 			'/iceMVC/coberturas/obtieneTvalogar',
+            	obtieneMpolicap: 			'/iceMVC/coberturas/obtieneMpolicap',
+            	agregarCobertura: 			'/iceMVC/coberturas/agregarCobertura'
             }
          }
      },
