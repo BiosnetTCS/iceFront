@@ -103,6 +103,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                validators: comps.BLOQUE_LISTA_SITUACIONES.LISTA.validators
 	            });
 	            
+	            Ice.log('items',comps.BLOQUE_LISTA_SITUACIONES.LISTA.items);
 	            Ext.apply(me, {
 	                items: [
 	                    {

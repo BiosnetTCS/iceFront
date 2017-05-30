@@ -77,6 +77,7 @@ Ext.define('Ice.store.NavigationTree', {
                 Ice.log('Ice.store.NavigationTree menu original:', json);
                 if (json && json.lstChildNodes && json.lstChildNodes.length > 0) {
                     json.children = me.transformarMenu(me, json.lstChildNodes);
+                    Ice.log('Ice.store.NavigationTree menu transformado:', json);
                     me.getRoot().removeAll();
                     me.setRoot(Ext.create('Ext.data.TreeModel', {
                         children: json.children
@@ -272,3 +273,4 @@ Ext.define('Ice.store.NavigationTree', {
         ]
     }*/
 });
+

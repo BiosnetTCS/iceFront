@@ -45,7 +45,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
   },
   
   onActualizar: function (grid, rowIndex, colIndex) {
-      this.actualizar();
+      this.actualizar(grid, rowIndex, colIndex);
   },
   
   agregar: function(){
@@ -99,21 +99,32 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
           paso = "Antes de editar situacion de riesgo";
           Ice.suspendEvents(view);
           var store = view.down('grid').getStore(),
-              form = view.down('form');
+              form = view.down('form'),
+              data = store.getAt(rowIndex).data;
+          Ice.log('Data ',data);
           Ice.request({
               mascara: 'Editando situacion de riesgo',
               url: Ice.url.bloque.situacionesRiesgo.cargar,
-              params: {},
+              params: {
+                  'params.cdunieco': data.cdunieco,
+                  'params.cdramo': data.cdramo,
+                  'params.estado': data.estado,
+                  'params.nmpoliza': data.nmpoliza,
+                  'params.nmsituac': data.nmsituac,
+                  'params.nmsuplem': data.nmsuplem
+              },
               success: function (json) {
                   var paso2 = 'LLenando store';
                   try {
-                      Ice.log("situacion",json.situacion);                        
-                      if(json.situacion){
+                      Ice.log('json',json);
+                      if(json.slist1){
+                          var situacion = json.slist1[0]; 
+                          Ice.log("situacion",situacion);
 //                          store.add(json.situacion);
                           var refs = view.getReferences();
-                          for (var att in json.situacion) {
+                          for (var att in situacion) {
                               if (refs[att]) {
-                                  refs[att].setValue(json.situacion[att]);
+                                  refs[att].setValue(situacion[att]);
                               }
                           }
                       }
