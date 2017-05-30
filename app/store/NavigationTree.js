@@ -27,7 +27,7 @@ Ext.define('Ice.store.NavigationTree', {
         try {
         	//alert()
         	configs = configs || [];
-        	configs.push({"atrWork": "bloquecoberturas.action?iconCls=dollar&cdramo=501&cdtipsit=51","atrMenu": "bloquecoberturas","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"});
+        	configs.push({"atrWork": "bloquecoberturas.action?iconCls=dollar&cdramo=501&cdtipsit=51","atrMenu": "bloquecoberturas","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"},{"atrWork": "bloquelistasituaciones.action?iconCls=dollar&cdramo=501&cdtipsit=51","atrMenu": "Situaciones","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"},{"atrWork": "bloquesituacionesriesgo.action?iconCls=dollar&cdramo=501&cdtipsit=51","atrMenu": "Situaciones de Riesgo","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"});
             for (var i = 0; i < configs.length; i++) {
                 var config = configs[i],
                     item = {
