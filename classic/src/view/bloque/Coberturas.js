@@ -6,17 +6,13 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    xtype: 'bloquecoberturas',
 	    
 	    controller: 'bloquecoberturas',
+	    //viewModel: 'bloquedatosgenerales',
 	    
 	    requires: [],
 	    
-	    userCls: 'big-100 shadow',
-	    layout: "responsivecolumn",
+	    layout: "anchor",
 	    defaults:{
-	    	anchor: '100%',
-            userCls: 'big-50 small-100',
-            labelWidth: 90,
-            labelAlign: 'top',
-            labelSeparator: '',
+	    	//columnWidth:1
 	    },
 	    
 	    
@@ -24,18 +20,14 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    constructor: function (config) {
 	        Ice.log('Ice.view.bloque.Coberturas.constructor config:', config);
 	        var me = this,
-	            paso = 'Validando construcci\u00f3n de bloque de coberturas';
+	            paso = 'Validando construcci\u00f3n de bloque lista situaciones';
 	            try {
 	                if (!config) {
 	                    throw 'No hay datos para bloque coberturas';
 	                }
 	                
 	                if (!config.cdramo || !config.cdtipsit) {
-	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
-	                }
-	                
-	                if (!config.cdunieco || !config.estado || !config.nmpoliza || !config.nmsuplem){
-	                	throw 'Faltan datos de la poliza para el bloque de coberturas'
+	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de datos generales';
 	                }
 	                
 	                config.modulo = config.modulo || 'COTIZACION';
@@ -51,8 +43,6 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    config: {
 //	    	buttons:[],
 //	    	actionColumns:[]
-	    	nmsituac:'',
-	    	cdgarant:''
 	    },
 	    
 	    
@@ -151,24 +141,23 @@ Ext.define('Ice.view.bloque.Coberturas', {
 
     		                        
     		                        try{
-    		            	    		paso='consultando coberturas'
+    		            	    		paso='consultanco coberturas'
     		            	    		var record = grid.getStore().getAt(rowIndex);
     		            	    		var paso="Evento selecciona cobertura "
     		            	    		// aqui mandar los datos de a deveras
-    		            	    			
+    		            	    		
     		            	    		var gridCoberturas=me.down('#gridCoberturas')
     		            	    		gridCoberturas.store.proxy.extraParams={
-    		            	    			'params.pv_cdunieco_i':me.cdunieco,
-    		            	    			'params.pv_cdramo_i':me.cdramo,
-    		            	    			'params.pv_estado_i':me.estado,
-    		            	    			'params.pv_nmpoliza_i':me.nmpoliza,
-    		            	    			'params.pv_nmsuplem_i':me.nmsuplem,
+    		            	    			'params.pv_cdunieco_i':record.get('cdunieco'),
+    		            	    			'params.pv_cdramo_i':record.get('cdramo'),
+    		            	    			'params.pv_estado_i':record.get('estado'),
+    		            	    			'params.pv_nmpoliza_i':record.get('nmpoliza'),
+    		            	    			'params.pv_nmsuplem_i':record.get('nmsuplem'),
     		            	    			'params.pv_nmsituac_i':record.get('nmsituac')
     		            	    			
     		            	    		}
     		            	    		gridCoberturas.store.load()
     		            	    		gridCoberturas.store.filter('amparada', 'S')
-    		            	    		gridCoberturas.up('[xtype=bloquecoberturas]').nmsituac=record.get('nmsituac')
     		            	    		
     		            	    	}catch(e){
     		            	    		Ice.generaExcepcion(e, paso);
@@ -185,7 +174,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    		itemId	:		'gridCoberturas',
 	    	    		title	:		'Coberturas',
 	    	    		width	: "100%",
-	    	    		tbar	:		 [{xtype: 'tbfill'},
+	    	    		tbar	:		 [
 				    	    			  	{ 
 				    	    			  		xtype: 'button', 
 
@@ -214,7 +203,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 				    	    	            store: store,
 				    	    	            displayInfo: true,
 				    	    	            displayMsg: 'Coberturas {0} - {1} of {2}',
-				    	    	            emptyMsg: "",
+				    	    	            emptyMsg: "NO HAY COBERTURAS",
 				    	    	            inputItemWidth: 35
 			    	    	        	}),
 			    	    store	:	store	
@@ -223,20 +212,13 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    	},
 	    	    	{
 	    	    		xtype	:		'form',
-	    	    		
 	    	    		width	: "100%",
 	    	    		layout	:       {type:'column'},
 	    	    		defaults:		{
-	    	    			
-	    	    		},
-	    	    		buttons:[
-		    	    			{
-		    	    				text: 'Guardar',
-		    	    		        formBind: true, //only enabled once the form is valid
-		    	    		        disabled: true,
-		    	    		        handler: 'guardarCobertura'
-		    	    			}
-	    	    			]
+	    	    			//bodyStyle:"padding:5px 50px 100px"
+	    	    			labelStyle: 'padding-left:100px;'
+	    	    			//columnWidth:.3
+	    	    		}
 	    	    		
 	    	    	}
 	    	    	]

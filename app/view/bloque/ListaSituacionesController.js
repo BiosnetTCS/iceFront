@@ -12,10 +12,10 @@ Ext.define('Ice.view.bloque.ListaSituacionesController', {
         try {
             var store = view.getStore();
             Ice.log('store: ',store)
-            store.on({
-                load: function(){                    Ice.log('recargando store');
-                }
-            });
+//            store.on({
+//                load: function(){//                    Ice.log('recargando store');
+//                }
+//            });
             
         } catch (e) {
             Ice.generaExcepcion(e, paso);
@@ -39,7 +39,12 @@ Ext.define('Ice.view.bloque.ListaSituacionesController', {
             Ice.request({
                 mascara: 'Recuperando datos generales',
                 url: Ice.url.bloque.listaSituaciones.cargar,
-                params: {},
+                params: {
+                    'params.cdunieco' : '1',
+                    'params.cdramo': '501',
+                    'params.estado': 'W',
+                    'params.nmpoliza': '11075'
+                },
                 success: function (json) {
                     var paso2 = 'LLenando store';
                     try {

@@ -113,6 +113,6 @@
                 label: 'Fin de vigencia',
                 name_cdatribu: 'feproren'
             }
-        ]  ,        MPOLICAP:[        	{                tipocampo: 'N',                label: 'Suma asegurada',                name_cdatribu: 'suma_asegurada'            }        ]    
+        ]      
     }
 }

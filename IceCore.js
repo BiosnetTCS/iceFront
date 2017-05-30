@@ -44,11 +44,11 @@ var Ice = Object.assign(Ice || {}, {
                 guardar: 'emision/datosGenerales/guardar.action'
             },
             listaSituaciones: {
-                cargar: 'jsonLocal/bloqueDatosSituacionCargar.json'             
+                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueDatosSituacionCargar.json'             
             },
             situacionesRiesgo: {
-                agregar: 'jsonLocal/bloqueSituacionCargar.json',
-                borrar: 'jsonLocal/bloqueSituacionBorrar.json'
+                agregar: 'jsonLocal/bloqueSituacionCargar.json',                                editar: 'jsonLocal/bloqueSituacionCargar.json',
+                borrar: 'jsonLocal/bloqueSituacionBorrar.json',                                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
             },            coberturas:{            	            	datosCoberturas: '/iceMVC/emision/obtieneMpoligar',            	            	datosCoberturasAmparables: 'jsonLocal/obtenerCoberturas.json',            	            	borrarCobertura : '/iceMVC/emision/movimientoMpoligar',            	            	recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar',            	            	guardarCoberturas:	'/iceMVC/emision/guardarCoberturas',            	            	obtieneTvalogar: '/iceMVC/emision/obtieneTvalogar',            	            	obtieneMpolicap: '/iceMVC/emision/obtieneMpolicap'            }
          }
      },
@@ -838,7 +838,7 @@ var Ice = Object.assign(Ice || {}, {
             if (config.label) {
                 item.label = config.label
             }
-            
+                        //hidden            Ice.log('swoculto',config.swoculto);            if(config.swoculto === 'S'){                item.hidden = true;            }
             
             // readOnly
             if (config.swlectura === 'S') {

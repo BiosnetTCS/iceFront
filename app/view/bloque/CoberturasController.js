@@ -133,7 +133,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			        columns: [
 			            { text: 'Clave', dataIndex: 'cdgarant'  },
 			            { text: 'Cobertura', dataIndex: 'dsgarant',flex: 2 },
-			            { xtype: 'checkcolumn', text: 'Amparar', dataIndex: 'amparada'
+			            { xtype: 'checkcolumn', text: 'Amparada', dataIndex: 'amparada'
 			            }],          
 			            
 			        store: {
@@ -281,15 +281,10 @@ Ext.define('Ice.view.bloque.CoberturasController', {
       },
       
       editarCobertura:function(grid, rowIndex, colIndex) {
-    	  var paso="Evento selecciona cobertura "
-    	  try{
-      		me = this.getView();
-      		var form=me.down('[xtype=form]');
-      		form.removeAll();
+      	try{
+      		me = this.getView()
+    		var paso="Evento selecciona cobertura "
     		var record = grid.getStore().getAt(rowIndex);
-      		paso="estableciendo cdgarant";
-      		me.cdgarant=record.get('cdgarant');
-      		me.cdcapita=record.get('cdcapita');
     		Ice.log("record:", record);	
     		 var comps = Ice.generaComponentes({
 	                pantalla: 'TATRIGAR',
@@ -301,7 +296,8 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	                auxKey: me.auxkey || '',
 	                cdgarant:record.get('cdgarant') || '',
 	                items: true,
-	                
+//	                columns: true,
+//	                fields:true,
 	                mapperAttr:function(obj){
 	                	
 	                	obj.label=obj.dsatribu;
@@ -312,32 +308,12 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	                },
 	                url:Ice.url.bloque.coberturas.recuperarTatrigar,
 	                rootRequestData:"list"
-	                	
 	            });
-    		 
-    		 
-            Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);	
-            var mpolicap=Ice.generaComponentes({
-                pantalla: 'BLOQUE_COBERTURAS',
-                seccion: 'MPOLICAP',
-                modulo: me.modulo || '',
-                estatus: (me.flujo && me.flujo.estatus) || '',
-                cdramo: me.cdramo || '',
-                cdtipsit: me.cdtipsit ||'',
-                auxKey: me.auxkey || '',
-                items: true
-               
-            });
-            mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items.forEach(function(it,idx){
-            	it.tabla="MPOLICAP"
-            })
-            
-            form.setTitle(record.get('cdgarant')+" - "+record.get('dsgarant'))
+            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);	
+            var form=me.down('[xtype=form]');
             form.removeAll();
-            form.add(mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items);
-            form.add(comps.TATRIGAR.TATRIGAR.items);
-            
-            this.cargarValores(form);   
+            form.add(comps.TATRIGAR.TATRIGAR.items)
+               
     		
     	}catch(e){
     		Ice.generaExcepcion(e, paso);
