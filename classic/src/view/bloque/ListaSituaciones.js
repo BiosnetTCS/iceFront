@@ -62,7 +62,7 @@
 	                            type: 'json',
 	                            successProperty: 'success',
 	                            messageProperty: 'message',
-	                            rootProperty: 'slist1'
+	                            rootProperty: 'lista'
 	                         }	                     }	                },
 	                buttons:me.config.buttons,
 	            });

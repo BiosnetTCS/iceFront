@@ -11,67 +11,10 @@ Ext.define('Ice.view.bloque.CoberturasController', {
             view = me.getView(),
             paso = 'Configurando comportamiento de bloque lista de situaciones';
         
-        
-        
         try {
         	
         	
-//        	view.down('[xtype=bloquelistasituaciones]').on({
-//        		select:function(grid,record){
-//        	    		paso='consultanco coberturas'
-//        	    		Ice.log("-->",record,"view",view)
-//        	    		var paso="Evento selecciona cobertura "
-//        	    		var nmsituac=record.get('nmsituac')
-//        	    		Ice.log("nmsituac: ",nmsituac)
-//        	    		// aqui mandar los datos de a deveras
-//        	    		
-//        	    		var gridCoberturas=view.down('#gridCoberturas')
-//        	    		gridCoberturas.store.proxy.extraParams={
-//        	    			'params.cdunieco':record.get('cdunieco'),
-//        	    			'params.cdramo':record.get('cdramo'),
-//        	    			'params.estado':record.get('estado'),
-//        	    			'params.nmpoliza':record.get('nmpoliza'),
-//        	    			'params.nmsuplem':record.get('nmsuplem'),
-//        	    			'params.nmsituac':record.get('nmsituac')
-//        	    			
-//        	    		}
-//        	    		gridCoberturas.store.load()
-//        	    		gridCoberturas.store.filter('amparada', 'S')
-//        	    		
-//        	    	}catch(e){
-//        	    		Ice.generaExcepcion(e, paso);
-//        	    	}
-//        	    }
-//        	})
-        	
-//        	view.down('#gridCoberturas').on({
-//        		select:function(grid,record){
-//        	    	try{
-//        	    		var paso="Evento selecciona cobertura "
-//        	    		Ice.log("record:", record);	
-//        	    		var comps = Ice.generaComponentes({
-//        	                pantalla: 'COBERTURAS',
-//        	                seccion: 'GARANTIAS',
-//        	                modulo: me.modulo || '',
-//        	                estatus: (me.flujo && me.flujo.estatus) || '',
-//        	                cdramo: me.cdramo || '',
-//        	                cdtipsit: me.cdtipsit ||'',
-//        	                auxKey: me.auxkey || '',	                
-//        	                items: true
-////        	                columns: true,
-////        	                fields:true
-//        	            });
-//        	            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);	
-//        	            var form=view.down('[xtype=form]');
-//        	            form.removeAll();
-//        	            form.add(comps.COBERTURAS.GARANTIAS.items)
-//        	               
-//        	    		
-//        	    	}catch(e){
-//        	    		Ice.generaExcepcion(e, paso);
-//        	    	}
-//        	    }
-//        	})
+
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -102,30 +45,21 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	            cdramo: view.config.cdramo || '',
 	            cdtipsit: view.cdtipsit ||'',
 	            auxKey: view.auxkey || '',	                
-	//		                items: true,
 	            columns: true,
 	            fields:true
 	        });
 	        Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);
 	        
-			//var store= new Ext.data.Store();
-			
-			var chk=Ext.Array.findBy(comps.COBERTURAS.COBERTURAS_AGREGABLES.columns,function(it,idx){
-            	if(it.dataIndex=='amparada'){
-            		return true;
-            	}
-            })
-           //alert();
-            chk.xtype='checkcolumn'
 			paso='recuperando datos de situacion'
 				var gridCoberturas=view.down('#gridCoberturas')
 	    		var record=gridCoberturas.store.getAt(0);
             	//Ice.log("store- :",store)
 			Ext.create('Ext.window.Window', {
 			    title: 'Añadir cobertura',
-			   // height: 450,
+			    height: 550,
 			    width: 450,
 			    layout: 'fit',
+			    scrollable:true,
 			    items: [{ 
 			        xtype: 'grid',
 			        border: false,
@@ -133,7 +67,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			        columns: [
 			            { text: 'Clave', dataIndex: 'cdgarant'  },
 			            { text: 'Cobertura', dataIndex: 'dsgarant',flex: 2 },
-			            { xtype: 'checkcolumn', text: 'Amparada', dataIndex: 'amparada'
+			            { xtype: 'checkcolumn', text: 'Amparar', dataIndex: 'amparada'
 			            }],          
 			            
 			        store: {
@@ -192,6 +126,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    	handler : function(me){
 			    		Ext.ComponentQuery.query("#gridAgrega").forEach(function(it,idx){
 			    			Ice.log("Data: ",it.store.getData())
+			    			var list=[];
 			    			it.store.data.items.forEach(function(e,i){
 			    				Ice.log("item..:",e)
 			    				if(e.data.amparada){
@@ -205,10 +140,25 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    							amparada:e.data.amparada?"S":"N"
 			    						}
 			    					Ice.log("p-",obj)
-			    					i
+			    					list.push(obj);
 			    					gridCoberturas.store.add(obj);
 			    				}
 			    			})
+			    			
+			    			Ice.request({
+			    	    		url:Ice.url.bloque.coberturas.agregarCoberturas,
+			    	    		jsonData:{
+			    	    			list:list
+			    	    		},
+			    	    		success:function(){
+			    	    			
+			    	    			
+			    	    			Ice.mensajeCorrecto({
+			    	    				titulo:'Correcto',
+			    	    				mensaje:"Datos guardados correctamente"
+			    	    			})
+			    	    		}
+			    	    	});
 			    		})
 			    		me.up("[xtype=window]").close();
 			    	}
@@ -281,10 +231,15 @@ Ext.define('Ice.view.bloque.CoberturasController', {
       },
       
       editarCobertura:function(grid, rowIndex, colIndex) {
-      	try{
-      		me = this.getView()
-    		var paso="Evento selecciona cobertura "
+    	  var paso="Evento selecciona cobertura "
+    	  try{
+      		me = this.getView();
+      		var form=me.down('[xtype=form]');
+      		form.removeAll();
     		var record = grid.getStore().getAt(rowIndex);
+      		paso="estableciendo cdgarant";
+      		me.cdgarant=record.get('cdgarant');
+      		me.cdcapita=record.get('cdcapita');
     		Ice.log("record:", record);	
     		 var comps = Ice.generaComponentes({
 	                pantalla: 'TATRIGAR',
@@ -298,22 +253,32 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	                items: true,
 //	                columns: true,
 //	                fields:true,
-	                mapperAttr:function(obj){
-	                	
-	                	obj.label=obj.dsatribu;
-	                	obj.tipocampo=obj.swformat
-	                	obj.name_cdatribu=obj.cdatribu
-	                	obj.maxvalue=obj.nmlmax
-	                	obj.minvalue=obj.nmlmin
-	                },
-	                url:Ice.url.bloque.coberturas.recuperarTatrigar,
-	                rootRequestData:"list"
+	               
 	            });
-            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);	
-            var form=me.down('[xtype=form]');
-            form.removeAll();
-            form.add(comps.TATRIGAR.TATRIGAR.items)
+    		 
+    		 
+            Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);	
+            var mpolicap=Ice.generaComponentes({
+                pantalla: 'BLOQUE_COBERTURAS',
+                seccion: 'MPOLICAP',
+                modulo: me.modulo || '',
+                estatus: (me.flujo && me.flujo.estatus) || '',
+                cdramo: me.cdramo || '',
+                cdtipsit: me.cdtipsit ||'',
+                auxKey: me.auxkey || '',
+                items: true
                
+            });
+            mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items.forEach(function(it,idx){
+            	it.tabla="MPOLICAP"
+            })
+            
+            form.setTitle(record.get('cdgarant')+" - "+record.get('dsgarant'))
+            form.removeAll();
+            form.add(mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items);
+            form.add(comps.TATRIGAR.TATRIGAR.items);
+            
+            this.cargarValores(form);   
     		
     	}catch(e){
     		Ice.generaExcepcion(e, paso);

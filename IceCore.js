@@ -31,6 +31,8 @@ var Ice = Object.assign(Ice || {}, {
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
              recuperarMenus:       'authentication/obtenerMenu.action',
 			 recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar',
+			 recuperarTatrisit:		'/iceMVC/emision/obtieneTatrisit',
+			 recuperarTatripol:		'/iceMVC/emision/obtieneTatripol',
              obtenerCatalogo:      'catalogos/obtenerCatalogo.action'
          },
          
@@ -50,7 +52,7 @@ var Ice = Object.assign(Ice || {}, {
                 valoresDefectoVariables: 'emision/datosGenerales/valoresDefectoVariables.action'
             },
             listaSituaciones: {
-                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueDatosSituacionCargar.json'
+                cargar: 'emision/obtieneMpolisit.action'//'jsonLocal/bloqueDatosSituacionCargar.json'
             },
             situacionesRiesgo: {
                 agregar: 'jsonLocal/bloqueSituacionCargar.json',                
@@ -701,43 +703,50 @@ var Ice = Object.assign(Ice || {}, {
         var paso = 'Recuperando componentes',
             comps = {};
 
-        try {       	
-        	if("TATRIGAR"==secciones.pantalla || "TATRIGAR"==secciones.pantalla){
-        		
-        		 secciones.mapperAttr=function(obj){
+        
+        try { 
+        	if(secciones){
+        		Ice.log("sec ",secciones)
+	        	if("TATRIGAR"==secciones.pantalla && "TATRIGAR"==secciones.seccion){
+	        		
+	        		 secciones.mapperAttr=function(obj){
+		                	
+		                	obj.label=obj.dsatribu;
+		                	obj.tipocampo=obj.swformat
+		                	obj.name_cdatribu=obj.cdatribu
+		                	obj.maxlengthe=obj.nmlmax
+		                	obj.minlength=obj.nmlmin
+		                	obj.catalogo=obj.ottabval
+		                };
+		              secciones.url=Ice.url.core.recuperarTatrigar;
+		              secciones.rootRequestData="list"
+		            	  
+	        	}else if("TATRISIT"==secciones.pantalla && "TATRISIT"==secciones.seccion){
+	        		secciones.mapperAttr=function(obj){
 	                	
 	                	obj.label=obj.dsatribu;
 	                	obj.tipocampo=obj.swformat
 	                	obj.name_cdatribu=obj.cdatribu
 	                	obj.maxlengthe=obj.nmlmax
 	                	obj.minlength=obj.nmlmin
+	                	obj.catalogo=obj.ottabval
 	                };
-	              secciones.url=Ice.url.core.recuperarTatrigar;
+	              secciones.url=Ice.url.core.recuperarTatrisit;
 	              secciones.rootRequestData="list"
-	            	  
-        	}else if("TATRISIT"==secciones.pantalla || "TATRISIT"==secciones.pantalla){
-        		secciones.mapperAttr=function(obj){
-                	
-                	obj.label=obj.dsatribu;
-                	obj.tipocampo=obj.swformat
-                	obj.name_cdatribu=obj.cdatribu
-                	obj.maxlengthe=obj.nmlmax
-                	obj.minlength=obj.nmlmin
-                };
-              secciones.url=Ice.url.core.recuperarTatripol;
-              secciones.rootRequestData="list"
-        		
-        	}else if("TATRIPOL"==secciones.pantalla || "TATRIPOL"==secciones.pantalla){
-        		secciones.mapperAttr=function(obj){
-                	
-                	obj.label=obj.dsatribu;
-                	obj.tipocampo=obj.swformat
-                	obj.name_cdatribu=obj.cdatribu
-                	obj.maxlengthe=obj.nmlmax
-                	obj.minlength=obj.nmlmin
-                };
-              secciones.url=Ice.url.core.recuperarTatrigar;
-              secciones.rootRequestData="list"
+	        		
+	        	}else if("TATRIPOL"==secciones.pantalla && "TATRIPOL"==secciones.seccion){
+	        		secciones.mapperAttr=function(obj){
+	                	
+	                	obj.label=obj.dsatribu;
+	                	obj.tipocampo=obj.swformat
+	                	obj.name_cdatribu=obj.cdatribu
+	                	obj.maxlengthe=obj.nmlmax
+	                	obj.minlength=obj.nmlmin
+	                	obj.catalogo=obj.ottabval
+	                };
+	              secciones.url=Ice.url.core.recuperarTatripol;
+	              secciones.rootRequestData="list"
+	        	}
         	}
             var lista,
                 secciones = secciones || [];
@@ -756,13 +765,21 @@ var Ice = Object.assign(Ice || {}, {
 
 
             }
+            var data = {
+
+                    secciones: lista
+
+                }
+            if(secciones.rootRequestData){
+                
+                data[secciones.rootRequestData]=lista;
+                
+              }
+
             Ext.Ajax.request({
                 async: false,
-                url: Ice.url.core.recuperarComponentes,
-
-                jsonData: {
-                    secciones: lista
-                },
+                url: secciones.url ? secciones.url :Ice.url.core.recuperarComponentes,
+                jsonData: data,
                 success: function (response) {
                     paso = 'Decodificando respuesta al recuperar componentes';
                     var json = Ext.JSON.decode(response.responseText);
@@ -799,7 +816,21 @@ var Ice = Object.assign(Ice || {}, {
 
 
 
-
+                          //mapper
+                            if(secciones.mapperAttr){
+                            	paso="Mapeando campos"
+                            	
+                            	if(Ext.isArray(json.componentes[lista[i].seccion])){
+                            		
+                            		json.componentes[lista[i].seccion].forEach(function(it,idx){
+                            			secciones.mapperAttr(it);
+                            		
+                            		})
+                            	
+                            	}
+                            	
+                            	
+                            }
 
 
 
@@ -1278,6 +1309,10 @@ var Ice = Object.assign(Ice || {}, {
                 }
             } else {
                 column.flex = 1;
+            }
+            
+            if(config.swoculto){
+            	column.hidden=true
             }
             
             
