@@ -1,7 +1,6 @@
 /**
  * Created by DCACORDE on 5/22/2017.
  */Ext.define('Ice.view.bloque.ListaSituaciones', {
-	
 	    extend: 'Ext.grid.Panel',
 	    xtype: 'bloquelistasituaciones',	    
 	    controller: 'bloquelistasituaciones',
@@ -21,23 +20,7 @@
 	                }               	                config.modulo = config.modulo || 'COTIZACION';               	            } catch (e) {	                Ice.generaExcepcion(e, paso);	            }	        me.callParent(arguments);	    },
 	       	    // configuracion del componente (no EXT)
 	    config: {
-	    	actionColumns:[
-//              {
-//              xtype:'actioncolumn',
-//              items: [{
-//                  iconCls: 'x-fa fa-edit',
-//                  tooltip: 'Editar',
-//                  handler: function(grid, rowIndex, colIndex) {
-//                      var rec = grid.getStore().getAt(rowIndex);
-//                      alert("Edit " + rec.get('firstname'));
-//                  }
-//              },{
-//                  iconCls: 'x-fa fa-minus-circle',
-//                  tooltip: 'Borrar',
-//                  handler: 'onBorrarClic'
-//              }]
-//          }
-	    	]
+	    	actionColumns:[]
 	    },    	    
 	    // configuracio ext
 	    title: 'Lista Situaciones',	    	    
@@ -68,18 +51,26 @@
 	                	proxy: {
 	                        type: 'ajax',
 	                        url: Ice.url.bloque.listaSituaciones.cargar,
+	                        extraParams: {
+	                            'params.cdunieco' : '1',
+	                            'params.cdramo': '501',
+	                            'params.estado': 'W',
+	                            'params.nmpoliza': '11075',
+	                            'params.nmsuplem': '0'
+	                        },
 	                        reader: {
 	                            type: 'json',
 	                            successProperty: 'success',
 	                            messageProperty: 'message',
-	                            rootProperty: 'lista'
-	                         }            					                     }	                },
+	                            rootProperty: 'slist1'
+	                         }	                     }	                },
 	                buttons:me.config.buttons,
 	            });
 	        } catch (e) {
 	            Ice.generaExcepcion(e, paso);
 	        }             
 	        // construir componente
+	        Ice.log('Antes de llamar padre');
 	        me.callParent(arguments);       
 	        
 	        // comportamiento	        paso = '';	        try {	            me.getController().custom();	        } catch (e) {	            Ice.generaExcepcion(e, paso);	        }	    }	
