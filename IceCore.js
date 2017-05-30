@@ -9,15 +9,7 @@ var Ice = Object.assign(Ice || {}, {
      url: {
          
          // coreLocal
-         coreLocal: {
-             recuperarComponentes: 'jsonLocal/recuperarComponentes.json',
-             login:                'jsonLocal/login.json',
-             recuperarRoles:       'jsonLocal/getRoles.json',
-             seleccionaRol:        'jsonLocal/seleccionaRol.json',
-             logout:               'jsonLocal/logout.json',
-             recuperarDatosSesion: 'jsonLocal/recuperarDatosSesion.json',
-             recuperarMenus:       'jsonLocal/getMenus.json',
-         },
+         coreLocal: {             recuperarComponentes: 'jsonLocal/recuperarComponentes.json',             login:                'jsonLocal/login.json',             recuperarRoles:       'jsonLocal/getRoles.json',             seleccionaRol:        'jsonLocal/seleccionaRol.json',             logout:               'jsonLocal/logout.json',             recuperarDatosSesion: 'jsonLocal/recuperarDatosSesion.json',             recuperarMenus:       'jsonLocal/getMenus.json'         },
          
          // URLs del core
          core: {
@@ -27,7 +19,7 @@ var Ice = Object.assign(Ice || {}, {
              seleccionaRol:        'authentication/seleccionarRol.action',
              logout:               'authentication/logout.action',
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
-             recuperarMenus:       'authentication/obtenerMenu.action'
+             recuperarMenus:       'authentication/obtenerMenu.action',                          recuperarTatrigar:		'/iceMVC/emision/obtieneTatrigar'
          },
          
          // URLs de cotizacion
@@ -526,8 +518,8 @@ var Ice = Object.assign(Ice || {}, {
     generaComponentes: function (secciones) {
         Ice.log('Ice.generaComponentes args:', arguments);
         var paso = 'Recuperando componentes',
-            comps = {};
-        try {
+            comps = {};                
+        try {        	        	if("TATRIGAR"==secciones.pantalla || "TATRIGAR"==secciones.pantalla){        		        		 secciones.mapperAttr=function(obj){	                		                	obj.label=obj.dsatribu;	                	obj.tipocampo=obj.swformat	                	obj.name_cdatribu=obj.cdatribu	                	obj.maxlengthe=obj.nmlmax	                	obj.minlength=obj.nmlmin	                };	              secciones.url=Ice.url.core.recuperarTatrigar;	              secciones.rootRequestData="list"	            	          	}else if("TATRISIT"==secciones.pantalla || "TATRISIT"==secciones.pantalla){        		secciones.mapperAttr=function(obj){                	                	obj.label=obj.dsatribu;                	obj.tipocampo=obj.swformat                	obj.name_cdatribu=obj.cdatribu                	obj.maxlengthe=obj.nmlmax                	obj.minlength=obj.nmlmin                };              secciones.url=Ice.url.core.recuperarTatripol;              secciones.rootRequestData="list"        		        	}else if("TATRIPOL"==secciones.pantalla || "TATRIPOL"==secciones.pantalla){        		secciones.mapperAttr=function(obj){                	                	obj.label=obj.dsatribu;                	obj.tipocampo=obj.swformat                	obj.name_cdatribu=obj.cdatribu                	obj.maxlengthe=obj.nmlmax                	obj.minlength=obj.nmlmin                };              secciones.url=Ice.url.core.recuperarTatrigar;              secciones.rootRequestData="list"        	}
             var lista,
                 secciones = secciones || [];
             if (secciones.pantalla) { // cuando se recibe un solo elemento
