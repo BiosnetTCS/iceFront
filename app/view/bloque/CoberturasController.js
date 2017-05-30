@@ -159,7 +159,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		                    url: Ice.url.bloque.coberturas.datosCoberturas,
 		                    reader: {
 		                        type: 'json',
-		                        rootProperty: 'slist1',
+		                        rootProperty: 'list',
 		                        successProperty: 'success',
 		                        messageProperty: 'message'
 		                    }
@@ -311,7 +311,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	                	obj.minvalue=obj.nmlmin
 	                },
 	                url:Ice.url.bloque.coberturas.recuperarTatrigar,
-	                rootRequestData:"slist1"
+	                rootRequestData:"list"
 	                	
 	            });
     		 
@@ -376,7 +376,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     					},
     					success:function(response){
     						try{
-    							var valores=json.slist1?json.slist1[0] || {}:{};
+    							var valores=json.list?json.list[0] || {}:{};
     							
     							
     							form.items.items.forEach(function(it,idx){
@@ -424,7 +424,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     	Ice.request({
     		url:Ice.url.bloque.coberturas.guardarCoberturas,
     		jsonData:{
-    			slist1:elementos,
+    			list:elementos,
     			params:{
     				'cdunieco':view.cdunieco,
 	    			'cdramo':view.cdramo,
