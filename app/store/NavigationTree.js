@@ -27,7 +27,7 @@ Ext.define('Ice.store.NavigationTree', {
         try {
         	//alert()
         	configs = configs || [];
-        	configs.push({"atrWork": "bloquecoberturas.action?iconCls=dollar&cdramo=501&cdtipsit=51","atrMenu": "bloquecoberturas","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"});
+        	configs.push({"atrWork": "bloquecoberturas.action?iconCls=dollar&cdramo=902&cdtipsit=92&cdunieco=5&estado=M&nmpoliza=50000016&nmsuplem=245379912000000000","atrMenu": "bloquecoberturas","atrFinish": true,"atrCdfunci": "00305","atrTarget": "C"});
             for (var i = 0; i < configs.length; i++) {
                 var config = configs[i],
                     item = {
@@ -77,7 +77,6 @@ Ext.define('Ice.store.NavigationTree', {
                 Ice.log('Ice.store.NavigationTree menu original:', json);
                 if (json && json.lstChildNodes && json.lstChildNodes.length > 0) {
                     json.children = me.transformarMenu(me, json.lstChildNodes);
-                    Ice.log('Ice.store.NavigationTree menu transformado:', json);
                     me.getRoot().removeAll();
                     me.setRoot(Ext.create('Ext.data.TreeModel', {
                         children: json.children
