@@ -2,7 +2,7 @@
  * Created by DCACORDE on 5/22/2017.
  */
 Ext.define('Ice.view.bloque.SituacionesRiesgo', {	
-	    extend: 'Ext.Panel',
+	    extend: 'Ext.panel.Panel',
 	    xtype: 'bloquesituacionesriesgo',
 	    
 	    controller: 'bloquesituacionesriesgo',

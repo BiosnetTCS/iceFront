@@ -27,8 +27,6 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
                     throw 'Falta ramo y tipo de situaci\u00f3n para bloque de datos generales';
                 }
                 
-                config.modulo = config.modulo || 'COTIZACION';
-                
                 config.b1_cdunieco = config.cdunieco || '';
                 config.b1_cdramo   = config.cdramo || '';
                 config.b1_estado   = config.estado || '';

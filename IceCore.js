@@ -28,7 +28,6 @@ var Ice = Object.assign(Ice || {}, {
              logout:               'authentication/logout.action',
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
              recuperarMenus:       'authentication/obtenerMenu.action',
-             obtenerCatalogo:      'catalogos/obtenerCatalogo.action'
              obtenerCatalogo:      'catalogos/obtenerCatalogo.action',
 			 recuperarTatrigar:    'coberturas/obtieneTatrigar.action',
 			 recuperarTatrisit:    'emision/obtieneTatrisit.action',
@@ -1250,9 +1249,9 @@ var Ice = Object.assign(Ice || {}, {
             }
             
             
-            // hiden
+            // hidden
             if (config.swoculto === 'S') {
-                if (Ice.logActivo === true) {
+                if (false && Ice.logActivo === true) {
                     item.style = 'border-bottom: 1px solid red;';
                 } else {
                     item.hidden = true;
