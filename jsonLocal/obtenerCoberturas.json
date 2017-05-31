@@ -1,20 +1,26 @@
 [
 	{
-		amparada: "true",
-		cdgarant:"123",
-		cobertura:"EXPLOSIVOS",
-		suma_asegurada: "1234543"
-	},
-	{
-		amparada: "true",
+		opcional: "S",
 		cdgarant:"1253",
-		cobertura:"EXPLOSIVOS",
-		suma_asegurada: "1234543"
+		dsgarant:"ORIENTACION MEDICA",
+		deducible:"5%",
+		suma_asegurada: "1234543",
+		amparada:"S"
 	},
 	{
-		amparada: "true",
-		cdgarant:"1323",
-		cobertura:"EXPLOSIVOS",
-		suma_asegurada: "1234543"
-	}
+		opcional: "N",
+		cdgarant:"12",
+		dsgarant:"MEDICA",
+		deducible:"5%",
+		suma_asegurada: "1234543",
+		amparada:"S"
+	},
+	{
+		opcional: "S",
+		cdgarant:"98",
+		dsgarant:"ORIENTACION",
+		deducible:"5%",
+		suma_asegurada: "1234543",
+		amparada:"N"
+	},
 ]

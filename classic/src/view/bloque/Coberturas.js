@@ -6,13 +6,17 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    xtype: 'bloquecoberturas',
 	    
 	    controller: 'bloquecoberturas',
-	    //viewModel: 'bloquedatosgenerales',
 	    
 	    requires: [],
 	    
-	    layout: "anchor",
+	    userCls: 'big-100 shadow',
+	    layout: "responsivecolumn",
 	    defaults:{
-	    	columnWidth:1
+	    	anchor: '100%',
+            userCls: 'big-50 small-100',
+            labelWidth: 90,
+            labelAlign: 'top',
+            labelSeparator: '',
 	    },
 	    
 	    
@@ -20,14 +24,18 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    constructor: function (config) {
 	        Ice.log('Ice.view.bloque.Coberturas.constructor config:', config);
 	        var me = this,
-	            paso = 'Validando construcci\u00f3n de bloque lista situaciones';
+	            paso = 'Validando construcci\u00f3n de bloque de coberturas';
 	            try {
 	                if (!config) {
 	                    throw 'No hay datos para bloque coberturas';
 	                }
 	                
 	                if (!config.cdramo || !config.cdtipsit) {
-	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de datos generales';
+	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
+	                }
+	                
+	                if (!config.cdunieco || !config.estado || !config.nmpoliza || !config.nmsuplem){
+	                	throw 'Faltan datos de la poliza para el bloque de coberturas'
 	                }
 	                
 	                config.modulo = config.modulo || 'COTIZACION';
@@ -43,6 +51,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    config: {
 //	    	buttons:[],
 //	    	actionColumns:[]
+	    	nmsituac:'',
+	    	cdgarant:''
 	    },
 	    
 	    
@@ -83,13 +93,13 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                fields:true
 	            });
 	            Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);
-	            paso="creando checkcolumns";
-	            var chk=Ext.Array.findBy(comps.COBERTURAS.COBERTURAS.columns,function(it,idx){
-	            	if(it.dataIndex=='amparada'){
-	            		return true;
-	            	}
-	            })
-	            chk.xtype='checkcolumn'
+//	            paso="creando checkcolumns";
+//	            var chk=Ext.Array.findBy(comps.COBERTURAS.COBERTURAS.columns,function(it,idx){
+//	            	if(it.dataIndex=='amparada'){
+//	            		return true;
+//	            	}
+//	            })
+//	            chk.xtype='checkcolumn'
 	            paso=" creando grid coberturas";
 	            var store={
 	                	fields: comps.COBERTURAS.COBERTURAS.fields,
@@ -99,24 +109,88 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                         url: Ice.url.bloque.coberturas.datosCoberturas,
 	                         reader: {
 	                             type: 'json',
-	                             //rootProperty: 'roles',
+	                             rootProperty: 'list',
 	                             successProperty: 'success',
 	                             messageProperty: 'message'
 	                         }
-	                     }
+	                      
+	                     },
+	                     listeners:{
+	                    	  load:
+	                    		  function(st){
+	                    		  
+	                    		  if(st.count()>0){
+	                    			  
+	                    			  Ext.ComponentQuery.query("#btnAgregar").forEach(function(it,idx){
+	                    				  
+	                    				  it.setDisabled(false)
+	                    			  })
+	                    		  }
+	                    	  }
+	                      }
 	                };
 	            Ext.apply(me, {
 	                items: [{
 	    	    		xtype:'bloquelistasituaciones',
     	    			cdtipsit:this.config.cdtipsit,
-    	    			cdramo:		this.config.cdramo
+    	    			cdramo:		this.config.cdramo,
+    	    			width	: "100%",
+    	    			actionColumns:[ {
+
+    		                xtype:'actioncolumn',
+
+    		                items: [{
+
+    		                    iconCls: 'x-fa fa-edit',
+
+    		                    tooltip: 'Editar',
+
+    		                    handler: function(grid, rowIndex, colIndex) {
+
+    		                        
+
+    		                        
+    		                        try{
+    		            	    		paso='consultando coberturas'
+    		            	    		var record = grid.getStore().getAt(rowIndex);
+    		            	    		var paso="Evento selecciona cobertura "
+    		            	    		// aqui mandar los datos de a deveras
+    		            	    			
+    		            	    		var gridCoberturas=me.down('#gridCoberturas')
+    		            	    		gridCoberturas.store.proxy.extraParams={
+    		            	    			'params.pv_cdunieco_i':me.cdunieco,
+    		            	    			'params.pv_cdramo_i':me.cdramo,
+    		            	    			'params.pv_estado_i':me.estado,
+    		            	    			'params.pv_nmpoliza_i':me.nmpoliza,
+    		            	    			'params.pv_nmsuplem_i':me.nmsuplem,
+    		            	    			'params.pv_nmsituac_i':record.get('nmsituac')
+    		            	    			
+    		            	    		}
+    		            	    		gridCoberturas.store.load()
+    		            	    		gridCoberturas.store.filter('amparada', 'S')
+    		            	    		gridCoberturas.up('[xtype=bloquecoberturas]').nmsituac=record.get('nmsituac')
+    		            	    		
+    		            	    	}catch(e){
+    		            	    		Ice.generaExcepcion(e, paso);
+    		            	    	}
+
+    		                    }
+
+    		                }]
+    	    			}]
 	    	    		
 	    	    	},
 	    	    	{
 	    	    		xtype	:		'gridpanel',
-	    	    		tbar	:		 [
+	    	    		itemId	:		'gridCoberturas',
+	    	    		title	:		'Coberturas',
+	    	    		width	: "100%",
+	    	    		tbar	:		 [{xtype: 'tbfill'},
 				    	    			  	{ 
 				    	    			  		xtype: 'button', 
+
+				    	    			    	itemId  : 'btnAgregar',
+				    	    			    	disabled: true,
 				    	    			  		text: 'Agregar',
 				    	    			  		handler: 'agregarCobertura'
 				    	    			  	}
@@ -127,23 +201,19 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                        items: [{
 	                            iconCls: 'x-fa fa-edit',
 	                            tooltip: 'Edit',
-	                            handler: function(grid, rowIndex, colIndex) {
-	                                alert()
-	                            }
+	                            handler: 'editarCobertura'
 	                        },{ 
 	                        	iconCls: 'x-fa fa-remove',
 	                            tooltip: 'Delete',
-	                            handler: function(grid, rowIndex, colIndex) {
-	                               grid.store.removeAt(rowIndex)
-	                            }
+	                            handler: 'borraCobertura',
+	                            isDisabled:'coberturaObligatoria'
 	                        }]
 	                    })
 																    	            ,
 	    	    		 bbar	:		Ext.create('Ext.PagingToolbar', {
 				    	    	            store: store,
 				    	    	            displayInfo: true,
-				    	    	            displayMsg: 'Displaying topics {0} - {1} of {2}',
-				    	    	            emptyMsg: "NO HAY COBERTURAS",
+				    	    	            displayMsg: 'Coberturas {0} - {1} of {2}',
 				    	    	            inputItemWidth: 35
 			    	    	        	}),
 			    	    store	:	store	
@@ -152,6 +222,20 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    	},
 	    	    	{
 	    	    		xtype	:		'form',
+	    	    		
+	    	    		width	: "100%",
+	    	    		layout	:       {type:'column'},
+	    	    		defaults:		{
+	    	    			
+	    	    		},
+	    	    		buttons:[
+		    	    			{
+		    	    				text: 'Guardar',
+		    	    		        formBind: true, //only enabled once the form is valid
+		    	    		        disabled: true,
+		    	    		        handler: 'guardarCobertura'
+		    	    			}
+	    	    			]
 	    	    		
 	    	    	}
 	    	    	]
@@ -183,6 +267,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	        	//var me = this,
 	           // view = me.getView(),
 	    		me.down("[xtype=bloquelistasituaciones]").store.load();
+	    		//alert()
 	        	
 	    	}
 	    }

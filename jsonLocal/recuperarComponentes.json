@@ -24,7 +24,7 @@
                 name_cdatribu: 'feproren'
             }
         ],
-        LISTA: [
+        LISTA: [			 {				swoculto:'S',                tipocampo: 'A',                label: 'cdunieco',                name_cdatribu: 'cdunieco',                swcolumn:'S',                width: 0            },             {				swoculto:'S',                tipocampo: 'A',                label: 'cdramo',                name_cdatribu: 'cdramo',                swcolumn:'S',                width: 0            }                        ,             {				swoculto:'S',                tipocampo: 'A',                label: 'estado',                name_cdatribu: 'estado',                swcolumn:'S',                width: 0            },             {				swoculto:'S',                tipocampo: 'A',                label: 'nmpoliza',                name_cdatribu: 'nmpoliza',                swcolumn:'S',                width: 0            },             {				swoculto:'S',                tipocampo: 'A',                label: 'nmsuplem',                name_cdatribu: 'nmsuplem',                swcolumn:'S',                width: 0            },
             {
                 tipocampo: 'A',
                 label: 'Situacion',
@@ -64,12 +64,12 @@
             }
         ],
       COBERTURAS: [
-      					 {
+      					 {			                tipocampo: 'A',			                label: 'Amparada',			                name_cdatribu: 'amparada',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },{
 			                tipocampo: 'A',
-			                label: 'Amparada',
-			                name_cdatribu: 'amparada',
+			                label: 'Opcional',
+			                name_cdatribu: 'opcional',
 			                swcolumn:'S',
-			                width: 0
+			                width: 0,			                swoculto:"S"
 			            }, {
 			                tipocampo: 'A',
 			                label: 'Clave',
@@ -79,7 +79,7 @@
 			            }, {
 			                tipocampo: 'A',
 			                label: 'Cobertura',
-			                name_cdatribu: 'cobertura',
+			                name_cdatribu: 'dsgarant',
 			                swcolumn:'S',
 			                width: 0
 			            }, {
@@ -88,9 +88,9 @@
 			                name_cdatribu: 'suma_asegurada',
 			                swcolumn:'S',
 			                width: 0
-			            }
+			            }, {			                tipocampo: 'A',			                label: 'Deducible',			                name_cdatribu: 'deducible',			                swcolumn:'S',			                width: 0			            },			            {			                tipocampo: 'A',			                label: 'cdunieco',			                name_cdatribu: 'cdunieco',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },			            {			                tipocampo: 'A',			                label: 'cdramo',			                name_cdatribu: 'cdramo',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },			            {			                tipocampo: 'A',			                label: 'estado',			                name_cdatribu: 'estado',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },			            {			                tipocampo: 'A',			                label: 'nmpoliza',			                name_cdatribu: 'nmpoliza',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },			            {			                tipocampo: 'A',			                label: 'nmsituac',			                name_cdatribu: 'nmsituac',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },			            {			                tipocampo: 'A',			                label: 'nmsuplem',			                name_cdatribu: 'nmsuplem',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },			            {			                tipocampo: 'A',			                label: 'cdcapita',			                name_cdatribu: 'cdcapita',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },			            {			                tipocampo: 'A',			                label: 'fevencim',			                name_cdatribu: 'fevencim',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            }			            			            			            			            			            			            			            
       
-      ]  ,
+      ]  ,            COBERTURAS_AGREGABLES: [      					 {			                tipocampo: 'A',			                label: 'Amparada',			                name_cdatribu: 'amparada',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            },{			                tipocampo: 'A',			                label: 'Opcional',			                name_cdatribu: 'opcional',			                swcolumn:'S',			                width: 0,			                swoculto:"S"			            }, {			                tipocampo: 'A',			                label: 'Clave',			                name_cdatribu: 'cdgarant',			                swcolumn:'S',			                width: 0			            }, {			                tipocampo: 'A',			                label: 'Cobertura',			                name_cdatribu: 'dsgarant',			                swcolumn:'S',			                width: 0			            }, {			                tipocampo: 'A',			                label: 'Suma asegurada',			                name_cdatribu: 'suma_asegurada',			                swcolumn:'S',			                width: 0			            }, {			                tipocampo: 'A',			                label: 'Deducible',			                name_cdatribu: 'deducible',			                swcolumn:'S',			                width: 0			            }            ]  ,
       GARANTIAS: [
             {
                 tipocampo: 'N',
