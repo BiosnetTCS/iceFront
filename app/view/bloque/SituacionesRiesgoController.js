@@ -1,5 +1,5 @@
 /**
- * Created by jtezva on 5/22/2017.
+ * Created by DEORTIZT on 5/22/2017.
  */
 Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
     extend: 'Ext.app.ViewController',
@@ -104,21 +104,22 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
           Ice.log('Data ',data);
           Ice.request({
               mascara: 'Editando situacion de riesgo',
-              url: Ice.url.bloque.situacionesRiesgo.cargar,
+              url: Ice.url.bloque.situacionesRiesgo.carga,
               params: {
                   'params.cdunieco': data.cdunieco,
                   'params.cdramo': data.cdramo,
                   'params.estado': data.estado,
                   'params.nmpoliza': data.nmpoliza,
                   'params.nmsituac': data.nmsituac,
+                  'params.cdtipsit': data.cdtipsit,
                   'params.nmsuplem': data.nmsuplem
               },
               success: function (json) {
                   var paso2 = 'LLenando store';
                   try {
                       Ice.log('json',json);
-                      if(json.slist1){
-                          var situacion = json.slist1[0]; 
+                      if(json.situacion){
+                          var situacion = json.situacion; 
                           Ice.log("situacion",situacion);
 //                          store.add(json.situacion);
                           var refs = view.getReferences();

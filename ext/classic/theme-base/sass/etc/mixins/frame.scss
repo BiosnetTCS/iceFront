@@ -198,7 +198,7 @@
             @include border-bottom-right-radius(nth($border-radius, 3));
             @include border-bottom-left-radius(nth($border-radius, 4));
         } @else {
-            @include border-radius($border-radius);
+            @include border-radius($border_btn_sm);
         }
 
         padding: $padding-top $padding-right $padding-bottom $padding-left;

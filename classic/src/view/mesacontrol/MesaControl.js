@@ -72,7 +72,8 @@ Ext.define('Ice.view.mesacontrol.MesaControl', {
             buttons: [
                 {
                     text: 'Buscar',
-                    iconCls: 'x-fa fa-search'
+                    iconCls: 'x-fa fa-search',
+                    cls:'btn_clr_sm'
                 }
             ]
         }, {
