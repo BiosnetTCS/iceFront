@@ -135,6 +135,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    		xtype:'bloquelistasituaciones',
     	    			cdtipsit:this.config.cdtipsit,
     	    			cdramo:		this.config.cdramo,
+    	    			maxHeigth: '250px',
     	    			width	: "100%",
     	    			actionColumns:[ {
 
