@@ -1,8 +1,6 @@
 var Ice = Object.assign(Ice || {}, {
 
     logActivo: true,
-
-    prueba: 'mio',
     
     /*
      * Urls del sistema por modulos 
