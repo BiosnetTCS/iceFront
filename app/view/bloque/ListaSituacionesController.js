@@ -43,16 +43,17 @@ Ext.define('Ice.view.bloque.ListaSituacionesController', {
                     'params.cdunieco' : '1',
                     'params.cdramo': '501',
                     'params.estado': 'W',
-                    'params.nmpoliza': '11075'
+                    'params.nmpoliza': '11075',
+                    'params.nmsuplem': '0'
                 },
                 success: function (json) {
                     var paso2 = 'LLenando store';
                     try {
                         var store = view.store;
-                        Ice.log("lista",json.lista);
+                        Ice.log("lista",json.situaciones);
                         Ice.log("vista",view);
-                        if(json.lista){
-                            store.loadData(json.lista);
+                        if(json.situaciones){
+                            store.loadData(json.situaciones);
                         }
                         Ice.resumeEvents(view);
                     } catch (e) {

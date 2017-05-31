@@ -49,25 +49,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	    // configuracio ext
 	    title: 'Situaciones de riesgo',
 	    
-	 // para el responsive small-(%) big-(%)
-//	    layout: 'responsivecolumn',
-	    
-//	    modelValidation: true,
-	    
-//	    bodyPadding: '10px 0px 0px 10px',
-//	    defaults: {
-//	        margin: '0px 10px 10px 0px',
-//	        cls: 'big-50 small-100'
-//	    },
-	    
-//	    buttons: [
-//	        {
-//	            text: 'Agregar',
-//	            iconCls: 'x-fa fa-plus-circle',
-//	            handler: 'onAgregarClic'
-//	        }
-//	    ],
-	    
 	    // contruccion usando metodos ext y parametros de entrada
 	    initComponent: function () {
 	        Ice.log('Ice.view.bloque.SituacionesRiesgo.initComponent');
@@ -91,9 +72,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	            for (var i = 0; i < comps.BLOQUE_LISTA_SITUACIONES.LISTA.items.length; i++) {
 	                var item = comps.BLOQUE_LISTA_SITUACIONES.LISTA.items[i];
 	                item.bind = '{datos.' + item.name + '}';
-	            }
-	            
-	            Ice.log('items con bind:', comps.BLOQUE_LISTA_SITUACIONES.LISTA.items);
+	            }            
 	            
 	            // creando modelo para validaciones
 	            var modelName = Ext.id();
@@ -103,7 +82,21 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                validators: comps.BLOQUE_LISTA_SITUACIONES.LISTA.validators
 	            });
 	            
+	            var compsForm = Ice.generaComponentes({
+                    pantalla: 'BLOQUE_LISTA_SITUACIONES',
+                    seccion: 'FORMULARIO',
+                    modulo: me.modulo || '',
+                    estatus: (me.flujo && me.flujo.estatus) || '',
+                    cdramo: me.cdramo || '',
+                    cdtipsit: me.cdtipsit ||'',
+                    auxKey: me.auxkey || '',
+                    items: true,
+                    fields: true,
+                    validatos: true
+                });
+	            	            
 	            Ice.log('items',comps.BLOQUE_LISTA_SITUACIONES.LISTA.items);
+	            Ice.log('itemsForm ',compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.items);
 	            Ext.apply(me, {
 	                items: [
 	                    {
@@ -141,7 +134,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                    },{
 	                        xtype: 'form',
 	                        title: 'Editar situacion de riesgo',
-	                        items: comps.BLOQUE_LISTA_SITUACIONES.LISTA.items,
+	                        items: comps.BLOQUE_LISTA_SITUACIONES.LISTA.items.concat(compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.items),
 	                        modelo: modelName,
 	                        layout: 'responsivecolumn',
 	                        hidden: true,
