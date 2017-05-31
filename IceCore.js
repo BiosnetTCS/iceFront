@@ -2,7 +2,7 @@ var Ice = Object.assign(Ice || {}, {
 
     logActivo: true, 
 
-    prueba: true,
+    prueba: true, 
     
     /*
      * Urls del sistema por modulos 
