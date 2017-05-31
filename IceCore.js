@@ -1,7 +1,6 @@
 var Ice = Object.assign(Ice || {}, {
 
-    logActivo: true, 
-
+    logActivo: true,
     
     /*
      * Urls del sistema por modulos 
