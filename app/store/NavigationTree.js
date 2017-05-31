@@ -272,5 +272,3 @@ Ext.define('Ice.store.NavigationTree', {
         ]
     }*/
 });
-
-Ext.define('Ice.store.NavigationTree', {
