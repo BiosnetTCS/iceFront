@@ -16,13 +16,12 @@ Ext.define('Ice.view.login.RolTree', {
     // configuracion que no usa config
     controller: 'roltree',
     
-    style: 'padding: 20px 0px 0px 20px;',
+    style: 'padding: 100px 0px 0px 20px; background: url(resources/images/BGEasyAlea.jpg); background-repeat: no-repeat; background-size: cover;background-position: 10% 25%; !important;',
     tpl: new Ext.XTemplate(
         '<tpl for=".">',
-            '<div style="float: left; margin: 0px 20px 20px 0px; padding: 10px; background: white;" class="thumb-wrap shadow">',
-              '<table border="0">',
-                '<tr><td align="center"><img src="resources/images/logo_sura_header.png" /></td></tr>',
-                '<tr><td align="center">{dssisrol}</td></tr>',
+            '<div class="btn_rol_suscriptor">',
+              '<table style="width:100%;" border="0">',
+                '<tr><td></td><td class="txt_btn_rol" style="text-align:left; padding-left:35px; width:100% ">{dssisrol}</td><td class="chev_rol"></td></tr>',
               '</table>',
             '</div>',
         '</tpl>'

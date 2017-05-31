@@ -14,7 +14,7 @@
  * The name of the UI being created. Can not included spaces or special punctuation
  * (used in CSS class names).
  *
- * @param {number} [$border-radius=0px]
+ * @param {number} [$border-radius=2px]
  * The border-radius of the button
  *
  * @param {number} [$border-width=0px]
@@ -316,7 +316,7 @@
 @mixin extjs-button-ui(
     $ui,
 
-    $border-radius: 0px,
+    $border-radius: $border_btn_sm,
 
     $border-width: 0px,
 
@@ -443,7 +443,7 @@
     );
 
     .#{$prefix}btn-#{$ui} {
-        border-color: $border-color;
+        border-color:  $btn_transparent;
         @if not is-null($inner-border-width) and not is-null($inner-border-color) and $inner-border-width != 0 {
             @include inner-border($inner-border-width, $inner-border-color);
         }

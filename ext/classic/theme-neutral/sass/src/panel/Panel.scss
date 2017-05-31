@@ -310,7 +310,7 @@
             // in winXP/IE8 when the image element has a transparent background.
             // to fix this, we give the element the same background-color as the header.
             .#{$prefix}tool-tool-el {
-                background-color: $ui-header-background-color;
+                background-color: transparent;
             }
         }
     }
@@ -410,13 +410,12 @@
                     &:after {
                         font-family: ext-watermark;
                         font-size: ($ui-header-line-height + vertical($ui-header-padding)) * 0.75;
-                        content: 'd';
                         position: absolute;
                         top: 0;
                         right: 0;
                         // since IE8 does not support opacity on pseudo elements we simulate it by
                         // mixing the text color with the background color
-                        color: mix($ui-header-color, $ui-header-background-color, 40%);
+                        color: none;
                     }
 
                     @if $include-rtl {
@@ -679,11 +678,11 @@
     } @else {
         @if not is-null($ui-header-background-color) {
             .#{$prefix}panel-header-#{$ui} {
-                @include background-gradient($ui-header-background-color, $ui-header-background-gradient);
+                @include background-gradient($azulo-s);
             }
 
             .#{$prefix}panel-header-#{$ui}-vertical {
-                @include background-gradient($ui-header-background-color, $ui-header-background-gradient, right);
+                @include background-gradient($azulo-s, $ui-header-background-gradient, right);
             }
 
             @if $include-rtl {
@@ -939,3 +938,38 @@
         $ui-body-background-color: $panel-frame-background-color
     );
 }
+
+
+ /*----------------Estilos Sura 2017*---------------------/
+ 	/*Clases icon Chevron del Panel e  input*/
+
+.x-tool-collapse-top:before {
+    content: "\f106";
+}
+.x-tool-expand-bottom:before{
+	content: "\f107";
+}
+
+.x-form-spinner-default{
+height: 11px !important;
+}
+
+
+.x-form-spinner-up-default:before{
+	content: "\f106" !important;
+	font-family:FontAwesome !important;
+	height: 11px !important;
+}
+
+.x-form-spinner-down-default:before{
+content: "\f107" !important;
+font-family:FontAwesome !important;
+height: 13px !important;
+}
+
+
+.x-column-header-over .x-column-header-trigger:before, .x-column-header-open .x-column-header-trigger:before{
+content: "\f107" !important;
+}
+    
+    
