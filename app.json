@@ -57,7 +57,8 @@
     "requires": [
         "font-awesome",
         "ux",
-        "ext-locale"
+        "ext-locale",
+        "DIN-Regular"
     ],
 
     /**
@@ -148,8 +149,10 @@
          */
         "var": [
             "sass/var/all.scss",
+            "sass/var/global_var.scss",
             "sass/var",
             "${toolkit.name}/sass/var/all.scss",
+            "${toolkit.name}/sass/var/global_var.scss",
             "${toolkit.name}/sass/var"
         ],
 
