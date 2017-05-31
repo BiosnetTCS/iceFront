@@ -114,6 +114,9 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                         modulo: me.modulo || '',
                         flujo: me.flujo || {},
                         cdtipsit: me.cdtipsit || ''
+                    }, {
+                        xtype: 'panel',
+                        title: '.'
                     }
                 ]
             });

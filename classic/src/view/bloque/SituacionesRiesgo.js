@@ -50,7 +50,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	    title: 'Situaciones de riesgo',
 	    
 	    // para el scroll
-	    scrollable : true,
 	    
 	    // contruccion usando metodos ext y parametros de entrada
 	    initComponent: function () {

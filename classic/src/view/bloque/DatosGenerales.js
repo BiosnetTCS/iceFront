@@ -86,6 +86,10 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     
     buttons: [
         {
+            text: 'Limpiar',
+            iconCls: 'x-fa fa-refresh',
+            handler: 'onLimpiarClic'
+        }, {
             text: 'Cargar',
             iconCls: 'x-fa fa-download',
             handler: 'onCargarClic'
