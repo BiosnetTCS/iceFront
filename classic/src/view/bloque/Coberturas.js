@@ -11,6 +11,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    
 	    userCls: 'big-100 shadow',
 	    layout: "responsivecolumn",
+	    scrollable:true,
 	    defaults:{
 	    	anchor: '100%',
             userCls: 'big-50 small-100',
