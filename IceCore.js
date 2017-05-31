@@ -2,7 +2,6 @@ var Ice = Object.assign(Ice || {}, {
 
     logActivo: true, 
 
-    prueba: true, 
     
     /*
      * Urls del sistema por modulos 
@@ -55,9 +54,10 @@ var Ice = Object.assign(Ice || {}, {
                 cargar: 'emision/obtieneMpolisit.action'//'jsonLocal/bloqueDatosSituacionCargar.json'
             },
             situacionesRiesgo: {
-                agregar: 'jsonLocal/bloqueSituacionCargar.json',                
+                agregar: 'jsonLocal/bloqueSituacionCargar.json',
                 editar: 'jsonLocal/bloqueSituacionCargar.json',
-                borrar: 'jsonLocal/bloqueSituacionBorrar.json',                
+                borrar: 'jsonLocal/bloqueSituacionBorrar.json',
+                carga: 'emision/obtenerSituacion',
                 cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
             },
             coberturas:{
