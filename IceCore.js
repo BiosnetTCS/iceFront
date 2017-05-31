@@ -1252,9 +1252,9 @@ var Ice = Object.assign(Ice || {}, {
             }
             
             
-            // hiden
+            // hidden
             if (config.swoculto === 'S') {
-                if (Ice.logActivo === true) {
+                if (false && Ice.logActivo === true) {
                     item.style = 'border-bottom: 1px solid red;';
                 } else {
                     item.hidden = true;

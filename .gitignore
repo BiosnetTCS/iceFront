@@ -8,3 +8,11 @@ classic.jsonp
 modern.json
 modern.jsonp
 sass/example/*
+
+#archivos del proyecto iceMVC
+decorators/*
+WEB-INF/*
+404.jsp
+error.jsp
+index.jsp
+taglibs.jsp

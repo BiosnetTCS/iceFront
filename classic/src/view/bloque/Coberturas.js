@@ -35,7 +35,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
 	                }
 	                
-	                if (!config.cdunieco || !config.estado || !config.nmpoliza || !config.nmsuplem){
+	                if (!config.cdunieco || !config.estado || !config.nmpoliza){
 	                	throw 'Faltan datos de la poliza para el bloque de coberturas'
 	                }
 	                

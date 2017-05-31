@@ -2,8 +2,9 @@
  * Created by DEORTIZT on 5/22/2017.
  */
 Ext.define('Ice.view.bloque.SituacionesRiesgo', {	
-	    extend: 'Ext.Panel',
-	    xtype: 'bloquesituacionesriesgo',	    
+	    extend: 'Ext.panel.Panel',
+	    xtype: 'bloquesituacionesriesgo',
+	    
 	    controller: 'bloquesituacionesriesgo',
 	    viewModel: 'bloquesituacionesriesgo',
 	    
