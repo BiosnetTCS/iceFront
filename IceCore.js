@@ -27,7 +27,8 @@ var Ice = Object.assign(Ice || {}, {
              seleccionaRol:        'authentication/seleccionarRol.action',
              logout:               'authentication/logout.action',
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
-             recuperarMenus:       'authentication/obtenerMenu.action'
+             recuperarMenus:       'authentication/obtenerMenu.action',
+             obtenerCatalogo:      'catalogos/obtenerCatalogo.action'
          },
          
          // URLs de cotizacion
@@ -41,7 +42,9 @@ var Ice = Object.assign(Ice || {}, {
          bloque: {
             datosGenerales: {
                 cargar: 'emision/datosGenerales/cargar.action',
-                guardar: 'emision/datosGenerales/guardar.action'
+                guardar: 'emision/datosGenerales/guardar.action',
+                valoresDefectoFijos: 'emision/datosGenerales/valoresDefectoFijos.action',
+                valoresDefectoVariables: 'emision/datosGenerales/valoresDefectoVariables.action'
             },
             listaSituaciones: {
                 cargar: 'jsonLocal/bloqueDatosSituacionCargar.json'             
@@ -257,7 +260,7 @@ var Ice = Object.assign(Ice || {}, {
                     maskLocal: true,
                     target: mainView,
                     close: function () {
-                        this.destroy();
+                        this.hide();
                     }
                 });
                 mask.show();
@@ -267,7 +270,7 @@ var Ice = Object.assign(Ice || {}, {
                     message: texto || 'Cargando...',
                     maskLocal: true,
                     close: function () {
-                        this.destroy();
+                        this.hide();
                     }
                 });
                 mainView.add(mask);
@@ -811,6 +814,7 @@ var Ice = Object.assign(Ice || {}, {
             
             if (config.catalogo) {
                 item.xtype = 'comboice';
+                item.catalogo = config.catalogo;
             }
             
             
@@ -846,6 +850,29 @@ var Ice = Object.assign(Ice || {}, {
             if (config.swlectura === 'S') {
                 item.readOnly = true;
             }
+            
+            
+            // hiden
+            if (config.swoculto === 'S') {
+                if (Ice.logActivo === true) {
+                    item.style = 'border-bottom: 1px solid red;';
+                } else {
+                    item.hidden = true;
+                }
+            }
+            
+            
+            // param1...5 / value1...5
+            if (config.param1) { item.param1 = config.param1 }
+            if (config.param2) { item.param2 = config.param2 }
+            if (config.param3) { item.param3 = config.param3 }
+            if (config.param4) { item.param4 = config.param4 }
+            if (config.param5) { item.param5 = config.param5 }
+            if (config.value1) { item.value1 = config.value1 }
+            if (config.value2) { item.value2 = config.value2 }
+            if (config.value3) { item.value3 = config.value3 }
+            if (config.value4) { item.value4 = config.value4 }
+            if (config.value5) { item.value5 = config.value5 }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }

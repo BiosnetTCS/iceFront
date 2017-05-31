@@ -34,18 +34,25 @@ Ext.define('Ice.view.login.Login', {
                     xtype: 'textfieldice',
                     label: 'Usuario',
                     name: 'cdusuari',
-                    bind: '{login.cdusuari}'
+                    bind: '{login.cdusuari}',
+                    listeners: {
+                        specialkey: 'onSpecialkeyPress'
+                    }
                 }, {
                     xtype: 'textfieldice',
                     label: 'Contrase\u00f1a',
                     inputType: 'password',
                     name: 'password',
-                    bind: '{login.password}'
+                    bind: '{login.password}',
+                    listeners: {
+                        specialkey: 'onSpecialkeyPress'
+                    }
                 }
             ],
             buttons: [
                 {
                     text: 'Aceptar',
+                    reference: 'loginbutton',
                     iconCls: 'x-fa fa-key',
                     handler: 'onAceptarClic',
                     bind: {

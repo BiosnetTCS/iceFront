@@ -3,7 +3,10 @@
  */
 Ext.define('Ice.view.field.ComboIce', {
     extend: 'Ext.field.Select',
-    xtype: 'comboice'
+    xtype: 'comboice',
+    
+    valueField: 'key',
+    displayField: 'value'
     
     /*initComponent: function () {
         var me = this,

@@ -50,7 +50,11 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                 items: [
                     {
                         xtype: 'bloquedatosgenerales',
+                        
                         title: 'Datos generales',
+                        
+                        maxHeight: 400,
+                        
                         cdunieco: me.config.cdunieco || '',
                         cdramo: me.config.cdramo || '',
                         cdtipsit: me.config.cdtipsit || '',
