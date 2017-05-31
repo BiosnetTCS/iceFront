@@ -14,7 +14,7 @@
 	            try {
 	                if (!config) {
 	                    throw 'No hay datos para bloque lista situaciones';
-	                }	                
+	                }
 	                if (!config.cdramo || !config.cdtipsit) {
 	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de lista de situaciones';
 	                }               	                config.modulo = config.modulo || 'COTIZACION';               	            } catch (e) {	                Ice.generaExcepcion(e, paso);	            }	        me.callParent(arguments);	    },
