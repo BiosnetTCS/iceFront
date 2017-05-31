@@ -58,7 +58,7 @@ var Ice = Object.assign(Ice || {}, {
                 agregar: 'jsonLocal/bloqueSituacionCargar.json',                
                 editar: 'jsonLocal/bloqueSituacionCargar.json',
                 borrar: 'jsonLocal/bloqueSituacionBorrar.json',                
-                cargar: /*'emision/obtieneMpolisit.action'*/'jsonLocal/bloqueSituacionCargar.json',
+                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
             },
             coberturas:{
             	datosCoberturas: 			'/iceMVC/coberturas/obtieneMpoligar',
