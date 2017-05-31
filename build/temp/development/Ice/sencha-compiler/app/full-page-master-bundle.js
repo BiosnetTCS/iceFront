@@ -1,2 +1,2 @@
 // @tag full-page
-// @require /home/jtezva/workspace/iceFront/app.js
+// @require /home/jtezva/workspace/iceMVC/src/main/webapp/app.js

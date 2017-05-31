@@ -24,8 +24,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     paso2 = 'Definiendo comportamiento de bloque de datos generales';
                     me.custom();
                     
-                    //paso2 = 'Cargando bloque de datos generales';
-                    //me.cargar();
+                    paso2 = 'Cargando bloque de datos generales';
+                    me.cargar();
                 } catch (e) {
                     Ice.manejaExcepcion(e, paso2);
                 }
@@ -171,7 +171,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                         }
                         Ice.resumeEvents(view);
                         
-                        me.cargarValoresDefectoVariables();
+                        //me.cargarValoresDefectoVariables();
                     } catch (e) {
                         view.procesandoValoresDefecto = false;
                         Ice.manejaExcepcion(e, paso2);
@@ -190,7 +190,6 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
     },
     
     cargarValoresDefectoVariables: function (ref) {
-        return;
         Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables ref:', ref);
         var me = this,
             view = me.getView(),
@@ -220,10 +219,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             
             var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData(),
                 viewValues = view.getValues(),
-                valores = {
-                    'params.cdramo': view.cdramo,
-                    'params.estado': view.estado
-                };
+                valores = {};
             
             for (var i = 0; i < view.getCamposDisparanValoresDefectoVariables().length; i++) {
                 var name = view.getCamposDisparanValoresDefectoVariables()[i];
@@ -231,14 +227,19 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables invalido <', name, ':', errores[name], '>');
                     return;
                 }
-                valores['params.' + name] = viewValues[name];
             }
+            
+            for (var att in viewValues) {
+                valores['params.' + att] = viewValues[att];
+            }
+            valores['params.b1_cdramo'] = view.b1_cdramo;
+            valores['params.b1_estado'] = view.b1_estado;
             
             view.procesandoValoresDefecto = true;
             accedeProcesar = true;
             
             if (!valores['params.b1_nmpoliza']) {
-                valores['params.b1_nmpoliza'] = view.nmpoliza;
+                valores['params.b1_nmpoliza'] = view.b1_nmpoliza;
             }
             
             Ice.request({
@@ -297,7 +298,6 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             refs = view.getReferences(),
             paso = 'Cargando bloque de datos generales';
         try {
-            Ice.suspendEvents(view);
             Ice.request({
                 mascara: 'Recuperando datos generales',
                 url: Ice.url.bloque.datosGenerales.cargar,
@@ -314,6 +314,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     try {
                         view.datosFijosNuevos = false;
                         view.datosVariablesNuevos = false;
+                        
+                        Ice.suspendEvents(view);
                         
                         view.reset();
                         
@@ -395,6 +397,28 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             });
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
+        }
+    },
+    
+    
+    onLimpiarClic: function () {
+        this.limpiar();
+    },
+    
+    
+    limpiar: function () {
+        Ice.log('Ice.view.bloque.DatosGeneralesController.limpiar');
+        var me = this,
+            view = me.getView(),
+            paso = "Limpiando bloque de datos generales";
+        try {
+            Ice.suspendEvents(view);
+            view.reset();
+            view.datosFijosNuevos = true;
+            view.datosVariablesNuevos = true;
+            Ice.resumeEvents(view);
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
         }
     }
 });
