@@ -1,6 +1,6 @@
 var Ice = Object.assign(Ice || {}, {
 
-    logActivo: true,
+    logActivo: true, 
 
     prueba: true,
     
