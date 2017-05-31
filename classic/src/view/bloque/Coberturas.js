@@ -11,6 +11,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    
 	    userCls: 'big-100 shadow',
 	    layout: "responsivecolumn",
+	    scrollable:true,
 	    defaults:{
 	    	anchor: '100%',
             userCls: 'big-50 small-100',
@@ -134,6 +135,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    		xtype:'bloquelistasituaciones',
     	    			cdtipsit:this.config.cdtipsit,
     	    			cdramo:		this.config.cdramo,
+    	    			maxHeigth: '250px',
     	    			width	: "100%",
     	    			actionColumns:[ {
 
@@ -151,12 +153,16 @@ Ext.define('Ice.view.bloque.Coberturas', {
 
     		                        
     		                        try{
+    		                        	var paso='limpiando grids'
+    		                        	var gridCoberturas=me.down('#gridCoberturas');
+    		                        	gridCoberturas.store.removeAll();
+    		                        	me.down('[xtype=form]').removeAll();
     		            	    		paso='consultando coberturas'
     		            	    		var record = grid.getStore().getAt(rowIndex);
     		            	    		var paso="Evento selecciona cobertura "
     		            	    		// aqui mandar los datos de a deveras
     		            	    			
-    		            	    		var gridCoberturas=me.down('#gridCoberturas')
+    		            	    		
     		            	    		gridCoberturas.store.proxy.extraParams={
     		            	    			'params.pv_cdunieco_i':me.cdunieco,
     		            	    			'params.pv_cdramo_i':me.cdramo,
