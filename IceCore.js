@@ -30,7 +30,7 @@ var Ice = Object.assign(Ice || {}, {
              logout:               'authentication/logout.action',
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
              recuperarMenus:       'authentication/obtenerMenu.action',
-             obtenerCatalogo:      'catalogos/obtenerCatalogo.action'
+             obtenerCatalogo:      'catalogos/obtenerCatalogo.action',
              obtenerCatalogo:      'catalogos/obtenerCatalogo.action',
 			 recuperarTatrigar:    'coberturas/obtieneTatrigar.action',
 			 recuperarTatrisit:    'emision/obtieneTatrisit.action',

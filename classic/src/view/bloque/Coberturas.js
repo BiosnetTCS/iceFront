@@ -151,12 +151,16 @@ Ext.define('Ice.view.bloque.Coberturas', {
 
     		                        
     		                        try{
+    		                        	var paso='limpiando grids'
+    		                        	var gridCoberturas=me.down('#gridCoberturas');
+    		                        	gridCoberturas.store.removeAll();
+    		                        	me.down('[xtype=form]').removeAll();
     		            	    		paso='consultando coberturas'
     		            	    		var record = grid.getStore().getAt(rowIndex);
     		            	    		var paso="Evento selecciona cobertura "
     		            	    		// aqui mandar los datos de a deveras
     		            	    			
-    		            	    		var gridCoberturas=me.down('#gridCoberturas')
+    		            	    		
     		            	    		gridCoberturas.store.proxy.extraParams={
     		            	    			'params.pv_cdunieco_i':me.cdunieco,
     		            	    			'params.pv_cdramo_i':me.cdramo,
