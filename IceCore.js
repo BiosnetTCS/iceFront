@@ -1,8 +1,6 @@
 var Ice = Object.assign(Ice || {}, {
 
     logActivo: true,
-
-    
     
     /*
      * Urls del sistema por modulos 
@@ -31,9 +29,9 @@ var Ice = Object.assign(Ice || {}, {
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
              recuperarMenus:       'authentication/obtenerMenu.action',
              obtenerCatalogo:      'catalogos/obtenerCatalogo.action',
-			 recuperarTatrigar:		'/iceMVC/coberturas/obtieneTatrigar',
-//			 recuperarTatrisit:		'/iceMVC/emision/obtieneTatrisit',
-//			 recuperarTatripol:		'/iceMVC/emision/obtieneTatripol'
+			 recuperarTatrigar:    'coberturas/obtieneTatrigar.action',
+			 recuperarTatrisit:    'emision/obtieneTatrisit.action',
+			 recuperarTatripol:    'emision/obtieneTatripol.action'
          },
          
          // URLs de cotizacion
@@ -55,9 +53,10 @@ var Ice = Object.assign(Ice || {}, {
                 cargar: 'emision/obtieneMpolisit.action'//'jsonLocal/bloqueDatosSituacionCargar.json'
             },
             situacionesRiesgo: {
-                agregar: 'jsonLocal/bloqueSituacionCargar.json',                
+                agregar: 'jsonLocal/bloqueSituacionCargar.json',
                 editar: 'jsonLocal/bloqueSituacionCargar.json',
-                borrar: 'jsonLocal/bloqueSituacionBorrar.json',                
+                borrar: 'jsonLocal/bloqueSituacionBorrar.json',
+                carga: 'emision/obtenerSituacion',
                 cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
             },
             coberturas:{
@@ -329,9 +328,6 @@ var Ice = Object.assign(Ice || {}, {
                     maskLocal: true,
                     target: mainView,
                     close: function () {
-
-
-
                         this.hide();
                     }
                 });
@@ -343,9 +339,6 @@ var Ice = Object.assign(Ice || {}, {
                     message: texto || 'Cargando...',
                     maskLocal: true,
                     close: function () {
-
-
-
                         this.hide();
                     }
                 });
@@ -700,52 +693,46 @@ var Ice = Object.assign(Ice || {}, {
     generaComponentes: function (secciones) {
         Ice.log('Ice.generaComponentes args:', arguments);
         var paso = 'Recuperando componentes',
-            comps = {};
-
-        
+            comps = {};        
         try { 
         	if(secciones){
         		Ice.log("sec ",secciones)
-	        	if("TATRIGAR"==secciones.pantalla && "TATRIGAR"==secciones.seccion){
-	        		
-	        		 secciones.mapperAttr=function(obj){
-		                	
-		                	obj.label=obj.dsatribu;
-		                	obj.tipocampo=obj.swformat
-		                	obj.name_cdatribu=obj.cdatribu
-		                	obj.maxlengthe=obj.nmlmax
-		                	obj.minlength=obj.nmlmin
-		                	obj.catalogo=obj.ottabval
-		                };
-		              secciones.url=Ice.url.core.recuperarTatrigar;
-		              secciones.rootRequestData="list"
-		            	  
-	        	}else if("TATRISIT"==secciones.pantalla && "TATRISIT"==secciones.seccion){
-	        		secciones.mapperAttr=function(obj){
-	                	
-	                	obj.label=obj.dsatribu;
-	                	obj.tipocampo=obj.swformat
-	                	obj.name_cdatribu=obj.cdatribu
-	                	obj.maxlengthe=obj.nmlmax
-	                	obj.minlength=obj.nmlmin
-	                	obj.catalogo=obj.ottabval
-	                };
-	              secciones.url=Ice.url.core.recuperarTatrisit;
-	              secciones.rootRequestData="list"
-	        		
-	        	}else if("TATRIPOL"==secciones.pantalla && "TATRIPOL"==secciones.seccion){
-	        		secciones.mapperAttr=function(obj){
-	                	
-	                	obj.label=obj.dsatribu;
-	                	obj.tipocampo=obj.swformat
-	                	obj.name_cdatribu=obj.cdatribu
-	                	obj.maxlengthe=obj.nmlmax
-	                	obj.minlength=obj.nmlmin
-	                	obj.catalogo=obj.ottabval
-	                };
-	              secciones.url=Ice.url.core.recuperarTatripol;
-	              secciones.rootRequestData="list"
-	        	}
+        		if(secciones.pantalla){
+        		    if("TATRIGAR" == secciones.pantalla && "TATRIGAR" == secciones.seccion){
+                        secciones.mapperAttr = function(obj){
+                            obj.label = obj.dsatribu;
+                            obj.tipocampo = obj.swformat
+                            obj.name_cdatribu = obj.cdatribu
+                            obj.maxlengthe = obj.nmlmax
+                            obj.minlength = obj.nmlmin
+                            obj.catalogo = obj.ottabval
+                        };
+                        secciones.url = Ice.url.core.recuperarTatrigar;
+                        secciones.rootRequestData="list";
+                    }else if("TATRISIT" == secciones.pantalla && "TATRISIT" == secciones.seccion){
+                        secciones.mapperAttr = function(obj){
+                            obj.label = obj.dsatribu;
+                            obj.tipocampo = obj.swformat
+                            obj.name_cdatribu = obj.cdatribu
+                            obj.maxlengthe = obj.nmlmax
+                            obj.minlength = obj.nmlmin
+                            obj.catalogo = obj.ottabval
+                        };
+                        secciones.url = Ice.url.core.recuperarTatrisit;
+                        secciones.rootRequestData = "list";
+                    }else if("TATRIPOL" == secciones.pantalla && "TATRIPOL" == secciones.seccion){
+                        secciones.mapperAttr = function(obj){
+                            obj.label = obj.dsatribu;
+                            obj.tipocampo = obj.swformat
+                            obj.name_cdatribu = obj.cdatribu
+                            obj.maxlengthe = obj.nmlmax
+                            obj.minlength = obj.nmlmin
+                            obj.catalogo = obj.ottabval
+                        };
+                        secciones.url = Ice.url.core.recuperarTatripol;
+                        secciones.rootRequestData = "list";
+                    }
+        	    }	        	
         	}
             var lista,
                 secciones = secciones || [];
@@ -756,13 +743,6 @@ var Ice = Object.assign(Ice || {}, {
 
             } else {
                 lista = secciones;
-
-
-
-
-
-
-
             }
             var data = {
 

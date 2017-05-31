@@ -17,7 +17,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
         try {
             me.callParent(arguments);
             
-            // esperamos a que se cree el modelo antes de invocar custom
+            // esperamos a que se cree el viewmodel antes de invocar custom
             Ext.defer(function () {
                 var paso2;
                 try {
@@ -46,20 +46,20 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             
             
             // al seleccionar fecha de inicio poner fecha de fin
-            if (refs.feefecto && refs.feproren) {
-                refs.feefecto.on({
+            if (refs.b1_feefecto && refs.b1_feproren) {
+                refs.b1_feefecto.on({
                     change: function (me, value) {
                         var paso = 'Calculando fin de vigencia';
                         try {
-                            refs.feproren.setValue(Ext.Date.add(value, Ext.Date.YEAR, 1));
+                            refs.b1_feproren.setValue(Ext.Date.add(value, Ext.Date.YEAR, 1));
                         } catch (e) {
                             Ice.logWarn(paso, e);
                         }
                     }
                 });
             }
-            if (refs.feefecto) {
-                refs.feefecto.setValue(new Date());
+            if (refs.b1_feefecto) {
+                refs.b1_feefecto.setValue(new Date());
             }
             
             
@@ -83,8 +83,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 if (refs[name]) {
                     refs[name].setFieldStyle('border-right: 3px solid blue;');
                     refs[name].on({
-                        blur: function () {
-                            me.cargarValoresDefectoVariables();
+                        blur: function (ref) {
+                            me.cargarValoresDefectoVariables(ref);
                         }
                     });
                 }
@@ -94,11 +94,18 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
         }
     },
     
+    
+    /*
+     * Agrega los valores por defecto de MPOLIZAS al formulario, tambien estado y nmpoliza
+     * Solo lo hace si todos los campos de view.camposDisparanValoresDefectoFijos son validos
+     * y si view.datosFijosNuevos es true
+     */
     cargarValoresDefectoFijos: function () {
         Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos');
         var me = this,
             view = me.getView(),
-            refs = view.getReferences();
+            refs = view.getReferences(),
+            accedeProcesar = false;
         var paso = 'Cargando valores por defecto fijos de datos generales';
         try {
             if (view.getDatosFijosNuevos() !== true) {
@@ -106,7 +113,18 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 return;
             }
             
-            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData();
+            if (view.procesandoValoresDefecto === true) {
+                Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos valores defecto ya en proceso');
+                return;
+            }
+            
+            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData(),
+                viewValues = view.getValues(),
+                valores = {
+                    'params.b1_cdramo': view.b1_cdramo,
+                    'params.b1_nmsuplem': view.b1_nmsuplem || '0',
+                    'params.swcolind': view.swcolind
+                };
             
             for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
                 var name = view.getCamposDisparanValoresDefectoFijos()[i];
@@ -114,19 +132,70 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos invalido <', name, ':', errores[name], '>');
                     return;
                 }
+                valores['params.' + name] = viewValues[name];
             }
-            Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoFijos valores cargados ok');
-            view.setDatosFijosNuevos(false);
+            
+            view.procesandoValoresDefecto = true;
+            accedeProcesar = true;
+            
+            Ice.request({
+                mascara: 'Cargando valores por defecto',
+                url: Ice.url.bloque.datosGenerales.valoresDefectoFijos,
+                params: valores,
+                success: function (action) {
+                    var paso2 = 'Seteando valores por defecto';
+                    try {
+                        view.setDatosFijosNuevos(false);
+                        view.procesandoValoresDefecto = false;
+                        
+                        if (!action.params) {
+                            throw 'No se cargaron datos';
+                        }
+                        
+                        if (!action.params.b1_estado) {
+                            throw 'No se gener\u00f3 el estado';
+                        }
+                        
+                        if (!action.params.b1_nmpoliza) {
+                            throw 'No se gener\u00f3 el n\u00famero cotizaci\u00f3n';
+                        }
+                        
+                        view.b1_estado = action.params.b1_estado;
+                        view.b1_nmpoliza = action.params.b1_nmpoliza;
+                        
+                        Ice.suspendEvents(view);
+                        for (var att in action.params) {
+                            if (refs[att]) {
+                                refs[att].setValue(action.params[att]);
+                            }
+                        }
+                        Ice.resumeEvents(view);
+                        
+                        me.cargarValoresDefectoVariables();
+                    } catch (e) {
+                        view.procesandoValoresDefecto = false;
+                        Ice.manejaExcepcion(e, paso2);
+                    }
+                },
+                failure: function () {
+                    view.procesandoValoresDefecto = false;
+                }
+            });
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
+            if (accedeProcesar === true) {
+                view.procesandoValoresDefecto = false;
+            }
         }
     },
     
-    cargarValoresDefectoVariables: function () {
-        Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables');
+    cargarValoresDefectoVariables: function (ref) {
+        return;
+        Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables ref:', ref);
         var me = this,
             view = me.getView(),
-            refs = view.getReferences();
+            refs = view.getReferences(),
+            accedeProcesar = false;
         var paso = 'Cargando valores por defecto variables de datos generales';
         try {
             if (view.getDatosVariablesNuevos() !== true) {
@@ -134,7 +203,27 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 return;
             }
             
-            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData();
+            if (!view.estado) {
+                Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables view no tiene view.estado');
+                return;
+            }
+            
+            if (!view.nmpoliza) {
+                Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables view no tiene view.nmpoliza');
+                return;
+            }
+            
+            if (view.procesandoValoresDefecto === true) {
+                Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables valores defecto ya en proceso');
+                return;
+            }
+            
+            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData(),
+                viewValues = view.getValues(),
+                valores = {
+                    'params.cdramo': view.cdramo,
+                    'params.estado': view.estado
+                };
             
             for (var i = 0; i < view.getCamposDisparanValoresDefectoVariables().length; i++) {
                 var name = view.getCamposDisparanValoresDefectoVariables()[i];
@@ -142,11 +231,51 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables invalido <', name, ':', errores[name], '>');
                     return;
                 }
+                valores['params.' + name] = viewValues[name];
             }
-            Ice.log('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables valores cargados ok');
-            view.setDatosVariablesNuevos(false);
+            
+            view.procesandoValoresDefecto = true;
+            accedeProcesar = true;
+            
+            if (!valores['params.b1_nmpoliza']) {
+                valores['params.b1_nmpoliza'] = view.nmpoliza;
+            }
+            
+            Ice.request({
+                mascara: 'Cargando valores por defecto',
+                url: Ice.url.bloque.datosGenerales.valoresDefectoVariables,
+                params: valores,
+                success: function (action) {
+                    var paso2 = 'Seteando valores por defecto';
+                    try {
+                        view.setDatosVariablesNuevos(false);
+                        view.procesandoValoresDefecto = false;
+                        
+                        if (!action.params) {
+                            return;
+                        }
+                        
+                        Ice.suspendEvents(view);
+                        for (var att in action.params) {
+                            if (refs[att]) {
+                                refs[att].setValue(action.params[att]);
+                            }
+                        }
+                        Ice.resumeEvents(view);
+                    } catch (e) {
+                        view.procesandoValoresDefecto = false;
+                        Ice.manejaExcepcion(e, paso2);
+                    }
+                },
+                failure: function () {
+                    view.procesandoValoresDefecto = false;
+                }
+            });
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
+            if (accedeProcesar === true) {
+                view.procesandoValoresDefecto = false;
+            }
         }
     },
     
@@ -154,10 +283,18 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
         this.cargar();
     },
     
+    
+    /*
+     * Carga los datos generales
+     * @param config (object, opcional): {
+     *     callback: (function, opcional)
+     * }
+     */
     cargar: function (config) {
         Ice.log('Ice.view.bloque.DatosGeneralesController.cargar config:', config);
         var me = this,
             view = me.getView(),
+            refs = view.getReferences(),
             paso = 'Cargando bloque de datos generales';
         try {
             Ice.suspendEvents(view);
@@ -165,16 +302,21 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 mascara: 'Recuperando datos generales',
                 url: Ice.url.bloque.datosGenerales.cargar,
                 params: {
-                    'params.cdunieco': view.cdunieco || '',
+                    'params.cdunieco': (refs && refs.cdunieco && refs.cdunieco.getValue()) || view.cdunieco || '',
                     'params.cdramo': view.cdramo || '',
                     'params.estado': view.estado || '',
-                    'params.nmpoliza': view.nmpoliza || '',
+                    'params.nmpoliza': (refs && refs.cdramo && refs.cdramo.getValue()) || view.nmpoliza || '',
                     'params.nmsuplem': view.nmsuplem || 0,
                     'params.swcolind': view.swcolind || 'I'
                 },
                 success: function (json) {
                     var paso2 = 'Seteando valores';
                     try {
+                        view.datosFijosNuevos = false;
+                        view.datosVariablesNuevos = false;
+                        
+                        view.reset();
+                        
                         var refs = view.getReferences();
                         for (var att in json.params) {
                             if (refs[att]) {

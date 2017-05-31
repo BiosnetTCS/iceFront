@@ -29,6 +29,12 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
                 
                 config.modulo = config.modulo || 'COTIZACION';
                 
+                config.b1_cdunieco = config.cdunieco || '';
+                config.b1_cdramo   = config.cdramo || '';
+                config.b1_estado   = config.estado || '';
+                config.b1_nmpoliza = config.nmpoliza || '';
+                config.b1_nmsuplem = config.nmsuplem || '';
+                
             } catch (e) {
                 Ice.generaExcepcion(e, paso);
             }
@@ -38,14 +44,31 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     
     // configuracion del componente (no EXT)
     config: {
+        // datos para ubicar uso del componente
+        modulo: null,
+        flujo: null,
+        cdtipsit: null,
+        
+        // llave de BD
+        b1_cdunieco: null,
+        b1_cdramo: null,
+        b1_estado: null,
+        b1_nmpoliza: null,
+        b1_nmsuplem: null,
+        
+        // variables para valores por defecto (fijos y variables)
+        procesandoValoresDefecto: false,
         datosFijosNuevos: true,
         datosVariablesNuevos: true,
         camposDisparanValoresDefectoFijos: [
-            'cdunieco', 'feproren'
+            'b1_cdunieco'
         ],
         camposDisparanValoresDefectoVariables: [
-            'cdunieco', 'feefecto', 'feproren', 'nmpoliza'
-        ]
+            'b1_cdunieco', 'b1_nmpoliza', 'b1_feefecto', 'b1_feproren'
+        ],
+        
+        // otro
+        swcolind: 'I'
     },
     
     
@@ -54,6 +77,8 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     layout: 'responsivecolumn',
     
     modelValidation: true,
+    
+    scrollable: true,
     
     bodyPadding: '10px 0px 0px 10px',
     defaults: {
