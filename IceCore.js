@@ -30,10 +30,11 @@ var Ice = Object.assign(Ice || {}, {
              logout:               'authentication/logout.action',
              recuperarDatosSesion: 'authentication/obtenerDatosSesion.action',
              recuperarMenus:       'authentication/obtenerMenu.action',
+             obtenerCatalogo:      'catalogos/obtenerCatalogo.action'
              obtenerCatalogo:      'catalogos/obtenerCatalogo.action',
-			 recuperarTatrigar:		'/iceMVC/coberturas/obtieneTatrigar',
-//			 recuperarTatrisit:		'/iceMVC/emision/obtieneTatrisit',
-//			 recuperarTatripol:		'/iceMVC/emision/obtieneTatripol'
+			 recuperarTatrigar:    'coberturas/obtieneTatrigar.action',
+			 recuperarTatrisit:    'emision/obtieneTatrisit.action',
+			 recuperarTatripol:    'emision/obtieneTatripol.action'
          },
          
          // URLs de cotizacion
@@ -329,9 +330,6 @@ var Ice = Object.assign(Ice || {}, {
                     maskLocal: true,
                     target: mainView,
                     close: function () {
-
-
-
                         this.hide();
                     }
                 });
@@ -343,9 +341,6 @@ var Ice = Object.assign(Ice || {}, {
                     message: texto || 'Cargando...',
                     maskLocal: true,
                     close: function () {
-
-
-
                         this.hide();
                     }
                 });
