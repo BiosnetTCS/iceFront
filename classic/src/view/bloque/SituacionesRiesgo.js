@@ -1,10 +1,9 @@
 /**
- * Created by DCACORDE on 5/22/2017.
+ * Created by DEORTIZT on 5/22/2017.
  */
 Ext.define('Ice.view.bloque.SituacionesRiesgo', {	
 	    extend: 'Ext.Panel',
-	    xtype: 'bloquesituacionesriesgo',
-	    
+	    xtype: 'bloquesituacionesriesgo',	    
 	    controller: 'bloquesituacionesriesgo',
 	    viewModel: 'bloquesituacionesriesgo',
 	    
@@ -48,6 +47,9 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	    
 	    // configuracio ext
 	    title: 'Situaciones de riesgo',
+	    
+	    // para el scroll
+	    scrollable : true,
 	    
 	    // contruccion usando metodos ext y parametros de entrada
 	    initComponent: function () {
@@ -103,6 +105,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                        xtype: 'bloquelistasituaciones',
 	                        cdramo: '501',
 	                        cdtipsit: '51',
+	                        maxHeigth: '250',
 	                        tbar: [
 	                            {
 	                                text: 'Agregar',
