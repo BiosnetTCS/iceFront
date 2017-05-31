@@ -262,7 +262,6 @@ Ext.define('Ice.store.NavigationTree', {
                 text: 'Forms',
                 iconCls: 'x-fa fa-edit',
                 viewType: 'forms',
-                leaf: true
             },
             {
                 text: 'Charts',
@@ -274,3 +273,4 @@ Ext.define('Ice.store.NavigationTree', {
     }*/
 });
 
+Ext.define('Ice.store.NavigationTree', {
