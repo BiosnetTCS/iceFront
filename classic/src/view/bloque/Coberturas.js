@@ -9,17 +9,11 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    
 	    requires: [],
 	    
-	    userCls: 'big-100 shadow',
 	    layout: "responsivecolumn",
-	    scrollable:true,
+//	    scrollable:true,
 	    defaults:{
-	    	anchor: '100%',
-            userCls: 'big-50 small-100',
-            labelWidth: 90,
-            labelAlign: 'top',
-            labelSeparator: '',
+            userCls: 'big-100 small-100'
 	    },
-	    
 	    
 	    // validacion de parametros de entrada
 	    constructor: function (config) {
@@ -35,11 +29,17 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
 	                }
 	                
-	                if (!config.cdunieco || !config.estado || !config.nmpoliza){
-	                	throw 'Faltan datos de la poliza para el bloque de coberturas'
+	                if (!config.cdramo || !config.cdtipsit || config.modulo) {
+	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
 	                }
 	                
-	                config.modulo = config.modulo || 'COTIZACION';
+	                config.cdunieco = config.cdunieco || '';
+	                config.cdramo   = config.cdramo || '';
+	                config.estado   = config.estado || '';
+	                config.nmpoliza = config.nmpoliza || '';
+	                config.nmsuplem = config.nmsuplem || '';
+	                
+	                config.flujo = config.flujo || {};
 	                
 	            } catch (e) {
 	                Ice.generaExcepcion(e, paso);
@@ -50,8 +50,20 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    
 	    // configuracion del componente (no EXT)
 	    config: {
-//	    	buttons:[],
-//	    	actionColumns:[]
+	    	
+	    	
+	    	 // datos para ubicar uso del componente
+	        modulo: null,
+	        flujo: null,
+	        cdtipsit: null,
+	        
+	        // llave de BD
+	        cdunieco: null,
+	        cdramo: null,
+	        estado: null,
+	        nmpoliza: null,
+	        nmsuplem: null,
+	        
 	    	nmsituac:'',
 	    	cdgarant:''
 	    },
@@ -60,14 +72,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    // configuracio ext
 	    title: 'Coberturas',
 	    
-	    // para el responsive small-(%) big-(%)
-	    layout: 'responsivecolumn',
-	    
 	    bodyPadding: '10px 0px 0px 10px',
-	    defaults: {
-	    	
-			width	: "100%"
-	    },
+	   
 	    
 	    buttons: [],
 	    
@@ -89,18 +95,10 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                cdramo: me.cdramo || '',
 	                cdtipsit: me.cdtipsit ||'',
 	                auxKey: me.auxkey || '',	                
-//	                items: true,
 	                columns: true,
 	                fields:true
 	            });
 	            Ice.log('Ice.view.bloque.Coberturas.initComponent comps:', comps);
-//	            paso="creando checkcolumns";
-//	            var chk=Ext.Array.findBy(comps.COBERTURAS.COBERTURAS.columns,function(it,idx){
-//	            	if(it.dataIndex=='amparada'){
-//	            		return true;
-//	            	}
-//	            })
-//	            chk.xtype='checkcolumn'
 	            paso=" creando grid coberturas";
 	            var store={
 	                	fields: comps.COBERTURAS.COBERTURAS.fields,
@@ -115,20 +113,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                             messageProperty: 'message'
 	                         }
 	                      
-	                     },
-	                     listeners:{
-	                    	  load:
-	                    		  function(st){
-	                    		  
-	                    		  if(st.count()>0){
-	                    			  
-	                    			  Ext.ComponentQuery.query("#btnAgregar").forEach(function(it,idx){
-	                    				  
-	                    				  it.setDisabled(false)
-	                    			  })
-	                    		  }
-	                    	  }
-	                      }
+	                     }
 	                };
 	            Ext.apply(me, {
 	                items: [{
@@ -136,7 +121,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
     	    			cdtipsit:this.config.cdtipsit,
     	    			cdramo:		this.config.cdramo,
     	    			maxHeigth: '250px',
-    	    			width	: "100%",
+//    	    			width	: "100%",
     	    			actionColumns:[ {
 
     		                xtype:'actioncolumn',
@@ -149,9 +134,6 @@ Ext.define('Ice.view.bloque.Coberturas', {
 
     		                    handler: function(grid, rowIndex, colIndex) {
 
-    		                        
-
-    		                        
     		                        try{
     		                        	var paso='limpiando grids'
     		                        	var gridCoberturas=me.down('#gridCoberturas');
@@ -172,6 +154,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
     		            	    			'params.pv_nmsituac_i':record.get('nmsituac')
     		            	    			
     		            	    		}
+    		            	    		paso="estableciendo nmsituac";
+    		            	    		me.nmsituac=record.get('nmsituac');
     		            	    		gridCoberturas.store.load()
     		            	    		gridCoberturas.store.filter('amparada', 'S')
     		            	    		gridCoberturas.up('[xtype=bloquecoberturas]').nmsituac=record.get('nmsituac')
@@ -190,13 +174,12 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    		xtype	:		'gridpanel',
 	    	    		itemId	:		'gridCoberturas',
 	    	    		title	:		'Coberturas',
-	    	    		width	: "100%",
+//	    	    		width	: "700px",
 	    	    		tbar	:		 [{xtype: 'tbfill'},
 				    	    			  	{ 
 				    	    			  		xtype: 'button', 
 
 				    	    			    	itemId  : 'btnAgregar',
-				    	    			    	disabled: true,
 				    	    			  		text: 'Agregar',
 				    	    			  		handler: 'agregarCobertura'
 				    	    			  	}
@@ -206,11 +189,11 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                        width:50,
 	                        items: [{
 	                            iconCls: 'x-fa fa-edit',
-	                            tooltip: 'Edit',
+	                            tooltip: 'Editar',
 	                            handler: 'editarCobertura'
 	                        },{ 
 	                        	iconCls: 'x-fa fa-remove',
-	                            tooltip: 'Delete',
+	                            tooltip: 'Borrar',
 	                            handler: 'borraCobertura',
 	                            isDisabled:'coberturaObligatoria'
 	                        }]
@@ -219,6 +202,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    		 bbar	:		Ext.create('Ext.PagingToolbar', {
 				    	    	            store: store,
 				    	    	            displayInfo: true,
+				    	    	            emptyMsg: "",
 				    	    	            displayMsg: 'Coberturas {0} - {1} of {2}',
 				    	    	            inputItemWidth: 35
 			    	    	        	}),
@@ -229,7 +213,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    	    	{
 	    	    		xtype	:		'form',
 	    	    		
-	    	    		width	: "100%",
+//	    	    		width	: "100%",
 	    	    		layout	:       {type:'column'},
 	    	    		defaults:		{
 	    	    			
@@ -268,13 +252,6 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	    }
 	    ,
 	    listeners: {
-	    	afterrender:function(me){
-	        	
-	        	//var me = this,
-	           // view = me.getView(),
-	    		me.down("[xtype=bloquelistasituaciones]").store.load();
-	    		//alert()
-	        	
-	    	}
+	    	afterrender:'cargarSituaciones'
 	    }
 });
