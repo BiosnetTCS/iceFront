@@ -1132,8 +1132,6 @@ var Ice = Object.assign(Ice || {}, {
         try {
             if (!config) {
                 throw 'No se recibi\u00f3 configuraci\u00f3n de item';
-
-
             }
             
             
@@ -1146,72 +1144,9 @@ var Ice = Object.assign(Ice || {}, {
                 T: 'textareaice',
                 S: 'switchice'
             }[config.tipocampo];
-
             if (!item.xtype) {
                 throw 'Tipocampo incorrecto para item';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
             if (config.catalogo) {
                 item.xtype = 'comboice';
                 item.catalogo = config.catalogo;
@@ -1254,6 +1189,7 @@ var Ice = Object.assign(Ice || {}, {
             
             // hidden
             if (config.swoculto === 'S') {
+                item.oculto = 'S'; // para mostrar / ocultar con boton
                 if (false && Ice.logActivo === true) {
                     item.style = 'border-bottom: 1px solid red;';
                 } else {
@@ -1273,6 +1209,26 @@ var Ice = Object.assign(Ice || {}, {
             if (config.value3) { item.value3 = config.value3 }
             if (config.value4) { item.value4 = config.value4 }
             if (config.value5) { item.value5 = config.value5 }
+            
+            
+            // validaciones
+            if (Ext.manifest.toolkit === 'classic') {
+                if (config.swobliga === 'S') {
+                    item.allowBlank = false;
+                }
+                if (config.minlength && !config.catalogo) {
+                    item.minLength = config.minlength;
+                }
+                if (config.maxlength && !config.catalogo) {
+                    item.maxLength = config.maxlength;
+                }
+                if (config.minvalue && !config.catalogo) {
+                    item.minValue = config.minvalue;
+                }
+                if (config.maxvalue && !config.catalogo) {
+                    item.maxValue = config.maxvalue;
+                }
+            }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -1482,7 +1438,7 @@ var Ice = Object.assign(Ice || {}, {
             
             
             // longitud minima
-            if (config.minlength && /^\d+$/.test(config.minlength)) {
+            if (config.minlength && /^\d+$/.test(config.minlength) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
 
@@ -1500,7 +1456,7 @@ var Ice = Object.assign(Ice || {}, {
             
             
             // longitud maxima
-            if (config.maxlength && /^\d+$/.test(config.maxlength)) {
+            if (config.maxlength && /^\d+$/.test(config.maxlength) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
 
@@ -1518,7 +1474,7 @@ var Ice = Object.assign(Ice || {}, {
             
             
             // valor minimo
-            if (config.minvalue && /^\d+$/.test(config.minvalue)) {
+            if (config.minvalue && /^\d+$/.test(config.minvalue) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
 
@@ -1536,7 +1492,7 @@ var Ice = Object.assign(Ice || {}, {
             
             
             // valor maximo
-            if (config.maxvalue && /^\d+$/.test(config.maxvalue)) {
+            if (config.maxvalue && /^\d+$/.test(config.maxvalue) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
 
@@ -1645,5 +1601,45 @@ var Ice = Object.assign(Ice || {}, {
 
 
         }
+    },
+    
+    
+    toggleOcultos: function (view) {
+        Ice.log('toggleOcultos view:', view);
+        var paso = 'Mostrando/ocultando atributos',
+            estadoOcultos;
+        try {
+            if (view.estadoOcultos === 'show') { // ocultar
+                estadoOcultos = 'hide';
+            } else { // mostrar
+                estadoOcultos = 'show';
+            }
+            view.estadoOcultos = estadoOcultos;
+            var comps = Ice.query('[oculto]', view);
+            Ext.suspendLayouts();
+            for (var i = 0; i < comps.length; i++) {
+                comps[i][estadoOcultos]();
+            }
+            Ext.resumeLayouts();
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
+    },
+    
+    
+    convertirAParams: function (values) {
+        Ice.log('convertirAParams values:', values);
+        var paso = 'Transformando datos',
+            params = {};
+        try {
+            if (values) {
+                for (var att in values) {
+                    params['params.' + att] = values[att];
+                }
+            }
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        return params;
     }
 });

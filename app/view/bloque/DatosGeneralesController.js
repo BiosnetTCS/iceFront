@@ -13,6 +13,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
     init: function (view) {
         Ice.log('Ice.view.bloque.DatosGeneralesController.init view:', view);
         var me = this,
+            view = me.getView(),
             paso = 'Iniciando controlador de bloque de datos generales';
         try {
             me.callParent(arguments);
@@ -24,8 +25,11 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     paso2 = 'Definiendo comportamiento de bloque de datos generales';
                     me.custom();
                     
-                    paso2 = 'Cargando bloque de datos generales';
-                    me.cargar();
+                    if (view.b1_cdunieco && view.b1_cdramo && view.b1_estado && view.b1_nmpoliza
+                        && !Ext.isEmpty(view.b1_nmsuplem) && view.modulo) {
+                        paso2 = 'Cargando bloque de datos generales';
+                        me.cargar();
+                    }
                 } catch (e) {
                     Ice.manejaExcepcion(e, paso2);
                 }
@@ -118,7 +122,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 return;
             }
             
-            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData(),
+            var errores = me.obtenerErrores(),
                 viewValues = view.getValues(),
                 valores = {
                     'params.b1_cdramo': view.b1_cdramo,
@@ -165,7 +169,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                         
                         Ice.suspendEvents(view);
                         for (var att in action.params) {
-                            if (refs[att]) {
+                            if (refs[att] && !refs[att].getValue()) {
                                 refs[att].setValue(action.params[att]);
                             }
                         }
@@ -202,12 +206,12 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 return;
             }
             
-            if (!view.estado) {
+            if (!view.b1_estado) {
                 Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables view no tiene view.estado');
                 return;
             }
             
-            if (!view.nmpoliza) {
+            if (!view.b1_nmpoliza) {
                 Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables view no tiene view.nmpoliza');
                 return;
             }
@@ -217,7 +221,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 return;
             }
             
-            var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData(),
+            var errores = me.obtenerErrores(),
                 viewValues = view.getValues(),
                 valores = {};
             
@@ -258,7 +262,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                         
                         Ice.suspendEvents(view);
                         for (var att in action.params) {
-                            if (refs[att]) {
+                            if (refs[att] && !refs[att].getValue()) {
                                 refs[att].setValue(action.params[att]);
                             }
                         }
@@ -302,11 +306,11 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 mascara: 'Recuperando datos generales',
                 url: Ice.url.bloque.datosGenerales.cargar,
                 params: {
-                    'params.cdunieco': (refs && refs.cdunieco && refs.cdunieco.getValue()) || view.cdunieco || '',
-                    'params.cdramo': view.cdramo || '',
-                    'params.estado': view.estado || '',
-                    'params.nmpoliza': (refs && refs.cdramo && refs.cdramo.getValue()) || view.nmpoliza || '',
-                    'params.nmsuplem': view.nmsuplem || 0,
+                    'params.cdunieco': view.b1_cdunieco || '',
+                    'params.cdramo': view.b1_cdramo || '',
+                    'params.estado': view.b1_estado || '',
+                    'params.nmpoliza': view.b1_nmpoliza || '',
+                    'params.nmsuplem': view.b1_nmsuplem || 0,
                     'params.swcolind': view.swcolind || 'I'
                 },
                 success: function (json) {
@@ -344,32 +348,57 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
         this.guardar();
     },
     
+    
+    /**
+     * Guarda el formulario.
+     * Primero valida contra un modelo, construido con view.modelFields y view.modelValidators.
+     * Solo valida campos visibles.
+     *
+     * @param params (object, opcional):
+     * {
+     *     success (function, opcional) funcion a ejecutar si se guardan bien los datos 
+     * }
+     */
     guardar: function (params) {
         Ice.log('Ice.view.bloque.DatosGeneralesController.guardar args:', arguments);
         var me = this,
             view = me.getView(),
+            refs = view.getReferences(),
             paso = 'Validando datos generales';
         try {
-//            VALIDAR CON UN MODELO DINAMICO
-//            SIN USAR EL DATA BINDING
-//            paso = 'Construyendo modelo de validaci\u00f3n';
-//            var modelName = Ext.id('DatosGeneralesModel');
-//            Ice.log('modelName:', modelName);
-//            
-//            Ext.define(modelName, {
-//                extend: 'Ext.data.Model',
-//                fields: view.modelFields,
-//                validators: view.modelValidators
-//            });
-//            paso = 'Validando datos';
-//            var instancia = Ext.create(modelName, view.getValues());
-//            Ice.log('instancia:', instancia);          
-//            var errores = instancia.getValidation();
-//            Ice.log('errores:', errores);
+            var valido = me.validarDatos();
+            
+            if (valido !== true) {
+                throw 'Favor de revisar los datos';
+            }
+            
             paso = 'Guardando datos generales';
+            Ice.request({
+                url: Ice.url.bloque.datosGenerales.guardar,
+                params: Ice.convertirAParams(view.getValues()),
+                success: function (action) {
+                    var paso2 = 'Ejecutando acci\u00f3n posterior al guardado';
+                    try {
+                        if (action.list && action.list.length > 0) {
+                            Ext.create('Ice.view.bloque.VentanaValidaciones', {
+                                lista: action.list
+                            }).mostrar();
+                        }
+                        if (params && params.success && typeof params.success === 'function') {
+                            params.success();
+                        } else {
+                            Ice.mensajeCorrecto('Datos guardados');
+                        }
+                    } catch (e) {
+                        Ice.manejaExcepcion(e, paso2);
+                    }
+                }
+            });
+            
+            /*
             var mask = Ice.mask(paso);
             view.submit({
-                url: Ice.url.bloque.datosGenerales.guardar,
+                url: ,
                 success: function (form, action) {
                     Ice.log('datosGenerales.guardar success action:', action);
                     mask.close();
@@ -395,6 +424,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     }
                 }
             });
+            */
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
         }
@@ -420,5 +450,72 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
-    }
+    },
+    
+    
+    obtenerErrores: function () {
+        Ice.log('Ice.view.bloque.DatosGeneralesController.obtenerErrores');
+        var me = this,
+            view = me.getView(),
+            refs = view.getReferences(),
+            paso = 'Recuperando errores de formulario',
+            errores = {};
+        try {
+            // validar con un modelo dinamico
+            // sin usar el data binding
+            paso = 'Construyendo modelo de validaci\u00f3n';
+            var validators = {}, ref;
+            for (var att in refs) {
+                ref = refs[att];
+                if (ref.isHidden() !== true && view.modelValidators[ref.name]) { // solo para no ocultos
+                    validators[ref.name] = view.modelValidators[ref.name];
+                }
+            }
+            
+            var modelName = Ext.id();
+            Ext.define(modelName, {
+                extend: 'Ext.data.Model',
+                fields: view.modelFields,
+                validators: validators
+            });
+            
+            paso = 'Validando datos';
+            errores = Ext.create(modelName, view.getValues()).getValidation().getData();
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
+        }
+        return errores;
+    },
+    
+    /**
+     * Valida los datos visibles del formulario
+     * @return boolean valido
+     */
+    validarDatos: function () {
+        Ice.log('Ice.view.bloque.DatosGeneralesController.validarDatos');
+        var me = this,
+            view = me.getView(),
+            refs = view.getReferences(),
+            paso = 'Validando datos generales visibles',
+            valido = false;
+        try {
+            var errores = me.obtenerErrores();
+            
+            var sinErrores = true;
+            Ext.suspendLayouts();
+            for (var name in errores) {
+                if (errores[name] !== true) {
+                    sinErrores = false;
+                    Ice.log('buscando para montar error:', name);
+                    view.down('[name=' + name + ']').setActiveError(errores[name]);
+                }
+            }
+            Ext.resumeLayouts();
+            
+            valido = sinErrores === true;
+        } catch (e) {
+            Utils.generaExcepcion(e, paso);
+        }
+        return valido;
+    },
 });

@@ -84,7 +84,7 @@ Ext.define('Ice.view.field.ComboIce', {
         var valid = 'Favor de seleccionar una opci\u00f3n';
         if (val) {
             var me = this;
-            if (me.findRecordByValue(val) || me.findRecordByDisplay(val)) {
+            if (me.findRecordByValue(val) || me.findRecordByDisplay(val) || (me.oculto === 'S' && me.isHidden())) {
                 valid = true;
             }
         } else {

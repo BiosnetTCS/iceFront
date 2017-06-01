@@ -6,7 +6,7 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     xtype: 'bloquedatosgenerales',
     
     controller: 'bloquedatosgenerales',
-    viewModel: 'bloquedatosgenerales',
+    //viewModel: 'bloquedatosgenerales',
     
     requires: [
         'Ext.ux.layout.ResponsiveColumn'
@@ -19,20 +19,11 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
         var me = this,
             paso = 'Validando construcci\u00f3n de bloque de datos generales';
             try {
-                if (!config) {
-                    throw 'No hay datos para bloque de datos generales';
+                if (!config || !config.b1_cdramo || !config.cdtipsit || !config.modulo) {
+                    throw 'Faltan par\u00e1metros para construir bloque de datos generales';
                 }
                 
-                if (!config.cdramo || !config.cdtipsit) {
-                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de datos generales';
-                }
-                
-                config.b1_cdunieco = config.cdunieco || '';
-                config.b1_cdramo   = config.cdramo || '';
-                config.b1_estado   = config.estado || '';
-                config.b1_nmpoliza = config.nmpoliza || '';
-                config.b1_nmsuplem = config.nmsuplem || '';
-                
+                config.flujo = config.flujo || {};
             } catch (e) {
                 Ice.generaExcepcion(e, paso);
             }
@@ -74,7 +65,7 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     // para el responsive small-(%) big-(%)
     layout: 'responsivecolumn',
     
-    modelValidation: true,
+    //modelValidation: true,
     
     scrollable: true,
     
@@ -83,6 +74,17 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
         margin: '0px 10px 10px 0px',
         cls: 'big-50 small-100'
     },
+    
+    
+    tools: [
+        {
+            iconCls: 'x-fa fa-eye',
+            tooltip: 'Mostrar/ocultar',
+            callback: function (me) {
+                Ice.toggleOcultos(me);
+            }
+        }
+    ],
     
     buttons: [
         {
@@ -124,26 +126,28 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
             
             
             // agregar binding a los componentes
-            for (var i = 0; i < comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items.length; i++) {
-                var item = comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items[i];
-                item.bind = '{datos.' + item.name + '}';
-            }
-            Ice.log('items con bind:', comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items);
+            //for (var i = 0; i < comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items.length; i++) {
+            //    var item = comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items[i];
+            //    item.bind = '{datos.' + item.name + '}';
+            //}
+            //Ice.log('items con bind:', comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items);
 
             
             // creando modelo para validaciones
-            var modelName = Ext.id();
-            Ext.define(modelName, {
-                extend: 'Ext.data.Model',
-                fields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
-                validators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
-            });
+            //var modelName = Ext.id();
+            //Ext.define(modelName, {
+            //    extend: 'Ext.data.Model',
+            //    fields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
+            //    validators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
+            //});
             
             
             // agregar items, y agregar modelo para el modelValidation
             Ext.apply(me, {
                 items: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items,
-                modelo: modelName
+                //modelo: modelName
+                modelFields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
+                modelValidators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
             });
             
             

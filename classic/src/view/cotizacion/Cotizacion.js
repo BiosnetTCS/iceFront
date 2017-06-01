@@ -20,11 +20,11 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             config.modulo = config.modulo || 'COTIZACION';
             config.flujo = config.flujo || {};
             
+            // parche para prueba de carga
             config.cdunieco = 1;
             config.estado = 'W';
             config.nmpoliza = 11075;
-            config.nmsuplem = config.nmsuplem || 0;
-            
+            config.nmsuplem = 0;
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -35,6 +35,26 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
     // configuracion que no usa parametros
     layout: 'responsivecolumn',
     defaultFocus: 'form',
+    /*items: [
+        {
+            xtype: 'tabpanel',
+            reference: 'tabpanel'
+        }
+    ],*/
+    
+    
+    /*buttons: [
+        {
+            text: 'Anterior',
+            iconCls: 'x-fa fa-backward'
+        }, {
+            text: 'Cotizar',
+            iconCls: 'x-fa fa-dollar'
+        }, {
+            text: 'Siguiente',
+            iconCls: 'x-fa fa-forward'
+        }
+    ],*/
     
     
     // propiedades no ext (se generan getters y setters)
@@ -52,7 +72,11 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
         nmsuplem: null,
         
         // etapas
-        nueva: true
+        nueva: true,
+        
+        // contenidos
+        bloques: [],
+        bloqueActual: -1
     },
     
     
@@ -63,8 +87,22 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             paso = 'Construyendo componente de cotizaci\u00f3n';
         try {
             // recuperar componentes
-            var componentes = Ice.generaComponentes();
+            var bloques = Ice.generaComponentes();/*{
+                pantalla: 'COTIZACION',
+                seccion: 'BLOQUES',
+                modulo: me.modulo || '',
+                estatus: (me.flujo && me.flujo.estatus) || '',
+                cdramo: me.cdramo || '',
+                cdtipsit: me.cdtipsit ||'',
+                auxKey: me.auxkey || '',
+                
+                items: true
+            });
             
+            me.bloques = bloques.COTIZACION.BLOQUES;
+            if (!me.bloques || me.bloques.length < 1) {
+                throw 'No hay bloques configurados';
+            }*/
             
             // aplicar componentes
             Ext.apply(me, {
@@ -75,45 +113,45 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                         title: 'Datos generales',
                         maxHeight: 400,
                         
-                        cdunieco: me.cdunieco || '',
-                        cdramo: me.cdramo || '',
-                        estado: me.estado || '',
-                        nmpoliza: me.nmpoliza || '',
-                        nmsuplem: me.nmsuplem || 0,
+                        b1_cdunieco: me.cdunieco,
+                        b1_cdramo: me.cdramo,
+                        b1_estado: me.estado,
+                        b1_nmpoliza: me.nmpoliza,
+                        b1_nmsuplem: me.nmsuplem,
                         
-                        modulo: me.modulo || '',
-                        flujo: me.flujo || {},
-                        cdtipsit: me.cdtipsit || ''
+                        modulo: me.modulo,
+                        flujo: me.flujo,
+                        cdtipsit: me.cdtipsit
                     }, {
                         xtype: 'bloquesituacionesriesgo',
                         
                         title: 'Riesgo',
                         maxHeight: 400,
                         
-                        cdunieco: me.cdunieco || '',
-                        cdramo: me.cdramo || '',
-                        estado: me.estado || '',
-                        nmpoliza: me.nmpoliza || '',
-                        nmsuplem: me.nmsuplem || 0,
+                        cdunieco: me.cdunieco,
+                        cdramo: me.cdramo,
+                        estado: me.estado,
+                        nmpoliza: me.nmpoliza,
+                        nmsuplem: me.nmsuplem,
                         
-                        modulo: me.modulo || '',
-                        flujo: me.flujo || {},
-                        cdtipsit: me.cdtipsit || ''
+                        modulo: me.modulo,
+                        flujo: me.flujo,
+                        cdtipsit: me.cdtipsit
                     }, {
                         xtype: 'bloquecoberturas',
                         
                         title: 'Coberturas',
                         maxHeight: 400,
                         
-                        cdunieco: me.cdunieco || '',
-                        cdramo: me.cdramo || '',
-                        estado: me.estado || '',
-                        nmpoliza: me.nmpoliza || '',
-                        nmsuplem: me.nmsuplem || 0,
+                        cdunieco: me.cdunieco,
+                        cdramo: me.cdramo,
+                        estado: me.estado,
+                        nmpoliza: me.nmpoliza,
+                        nmsuplem: me.nmsuplem,
                         
-                        modulo: me.modulo || '',
-                        flujo: me.flujo || {},
-                        cdtipsit: me.cdtipsit || ''
+                        modulo: me.modulo,
+                        flujo: me.flujo,
+                        cdtipsit: me.cdtipsit
                     }, {
                         xtype: 'panel',
                         title: '.'
