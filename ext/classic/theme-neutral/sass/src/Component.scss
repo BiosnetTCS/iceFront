@@ -9,7 +9,7 @@
     }
     font-family: $font-family;
     @if not is-null($body-background-color) and $body-background-color != transparent {
-        background: $body-background-color;
+        background:$azulbd;
     }
 }
 
@@ -25,3 +25,63 @@
 .#{$prefix}animating-size {
     z-index: 10000;
 }
+
+/*ESTILOS SURA 2017, para la sección de elección rol*/
+
+
+.btn_rol_suscriptor{
+	border-style: solid;
+	border-left-width: 12px;
+	border-top-width:0px;
+	border-right-width: 0px;
+	border-bottom-width:0px;
+	border-left-color:#00B5CB;
+	display:block;
+	width:25%;
+	margin: 20px auto;
+	padding: 10px;
+	background-color: rgba(0, 51, 160, .75);
+	color:#FFF; 
+	font-size:16px;
+	min-height:65px; 
+	line-height: 38px;
+	-webkit-transition: all .25s ease-in-out;
+		&:hover{
+		 -webkit-transform: scale(1.1);
+		 background-color: rgba(0, 51, 160, .90); }
+		 
+}
+
+
+
+.txt_btn_rol {
+    position: relative;
+    &:before {
+   		content: "\f0c0";
+   	 	font-family: FontAwesome;
+    	font-style: normal;
+    	font-weight: normal;
+    	text-decoration: inherit;
+   	 	color: #fff;
+   		font-size: 18px;
+    	padding-right: 0.5em;
+   	 	position: absolute;
+    	top: 10px;
+   		left: 0;
+    	line-height: 25px;}
+}
+ 
+.chev_rol:after {
+    content: "\f105";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #fff;
+    font-size: 18px;
+    padding-right: 0.5em;
+    left: 0;
+    line-height: 25px; 
+}
+
+

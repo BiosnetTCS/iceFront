@@ -66,10 +66,10 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			        itemId:"gridAgrega",
 			        columns: [
 			            { text: 'Clave', dataIndex: 'cdgarant'  },
-			            { text: 'Cobertura', dataIndex: 'dsgarant',flex: 2 },
-			            { xtype: 'checkcolumn', text: 'Amparar', dataIndex: 'amparada'
-			            }],          
-			            
+			            { text: 'Cobertura', dataIndex: 'dsgarant',flex: 2 }
+			          //  { xtype: 'checkcolumn', text: 'Amparar', dataIndex: 'amparada'}
+			            ],          
+			            selModel: Ext.create('Ext.selection.CheckboxModel'),   
 			        store: {
 						fields: ['opcional',
 							'cdgarant',
@@ -112,7 +112,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		            			
 		                		st.data.items.forEach(function(it,idx){
 		                			Ice.log("-->",it)
-		                			it.data.amparada=true;
+		                			it.data.amparada=false;
 		                		});
 		            			
 		            			
@@ -124,29 +124,39 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    	xtype	: 'button',
 			    	text	: 'Agregar',
 			    	handler : function(me){
-			    		Ext.ComponentQuery.query("#gridAgrega").forEach(function(it,idx){
-			    			Ice.log("Data: ",it.store.getData())
-			    			var list=[];
-			    			it.store.data.items.forEach(function(e,i){
-			    				Ice.log("item..:",e)
-			    				if(e.data.amparada){
-			    					
-			    					var obj={
-			    							opcional: e.data.opcional,
-			    							cdgarant:e.data.cdgarant,
-			    							dsgarant:e.data.dsgarant,
-			    							deducible:e.data.deducible,
-			    							suma_asegurada: e.data.suma_asegurada,
-			    							amparada:e.data.amparada?"S":"N"
-			    						}
-			    					Ice.log("p-",obj)
-			    					list.push(obj);
-			    					gridCoberturas.store.add(obj);
-			    				}
-			    			})
+			    		
+			    		var list=[];
+			    		Ext.ComponentQuery.query("#gridAgrega")[0].getSelectionModel().getSelection().forEach(function(it,idx){
 			    			
-			    			Ice.request({
-			    	    		url:Ice.url.bloque.coberturas.agregarCoberturas,
+			    			Ice.log("Data: ",it.data)
+			    			var obj={
+	    							opcional: it.data.opcional,
+	    							cdgarant:it.data.cdgarant,
+	    							dsgarant:it.data.dsgarant,
+	    							deducible:it.data.deducible
+	    							//,
+//	    							suma_asegurada: e.data.suma_asegurada,
+//	    							amparada:e.data.amparada?"S":"N"
+	    						}
+	    					Ice.log("p-",obj)
+	    					list.push(obj);
+//	    					gridCoberturas.store.add(obj);
+			    			
+			    			//Ice.log("Data: ",it.store.getData())
+			    			
+//			    			it.store.data.items.forEach(function(e,i){
+//			    				Ice.log("item..:",e)
+//			    				if(e.data.amparada){
+//			    					
+//			    					
+//			    				}
+//			    			})
+			    			
+			    			
+			    		})
+			    		
+			    		Ice.request({
+			    	    		url:Ice.url.bloque.coberturas.agregarCobertura,
 			    	    		jsonData:{
 			    	    			list:list
 			    	    		},
@@ -159,7 +169,6 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    	    			})
 			    	    		}
 			    	    	});
-			    		})
 			    		me.up("[xtype=window]").close();
 			    	}
 			    }]

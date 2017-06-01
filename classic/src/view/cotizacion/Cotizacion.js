@@ -16,6 +16,15 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             if (!config.cdramo || !config.cdtipsit) {
                 throw 'Falta cdramo o cdtipsit para componente de cotizaci\u00f3n';
             }
+            
+            config.modulo = config.modulo || 'COTIZACION';
+            config.flujo = config.flujo || {};
+            
+            config.cdunieco = 1;
+            config.estado = 'W';
+            config.nmpoliza = 11075;
+            config.nmsuplem = config.nmsuplem || 0;
+            
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -30,8 +39,20 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
     
     // propiedades no ext (se generan getters y setters)
     config: {
+        // uso o funcionamiento
+        modulo: null,
+        flujo: null,
+        cdtipsit: null,
+    
+        // llave
+        cdunieco: null,
         cdramo: null,
-        cdtipsit: null
+        estado: null,
+        nmpoliza: null,
+        nmsuplem: null,
+        
+        // etapas
+        nueva: true
     },
     
     
@@ -52,16 +73,50 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                         xtype: 'bloquedatosgenerales',
                         
                         title: 'Datos generales',
-                        
                         maxHeight: 400,
                         
-                        cdunieco: me.config.cdunieco || '',
-                        cdramo: me.config.cdramo || '',
-                        cdtipsit: me.config.cdtipsit || '',
-                        estado: me.config.estado || '',
-                        nmpoliza: me.config.nmpoliza || '',
-                        nmsuplem: me.config.nmsuplem || 0,
-                        flujo: me.config.flujo || {}
+                        cdunieco: me.cdunieco || '',
+                        cdramo: me.cdramo || '',
+                        estado: me.estado || '',
+                        nmpoliza: me.nmpoliza || '',
+                        nmsuplem: me.nmsuplem || 0,
+                        
+                        modulo: me.modulo || '',
+                        flujo: me.flujo || {},
+                        cdtipsit: me.cdtipsit || ''
+                    }, {
+                        xtype: 'bloquesituacionesriesgo',
+                        
+                        title: 'Riesgo',
+                        maxHeight: 400,
+                        
+                        cdunieco: me.cdunieco || '',
+                        cdramo: me.cdramo || '',
+                        estado: me.estado || '',
+                        nmpoliza: me.nmpoliza || '',
+                        nmsuplem: me.nmsuplem || 0,
+                        
+                        modulo: me.modulo || '',
+                        flujo: me.flujo || {},
+                        cdtipsit: me.cdtipsit || ''
+                    }, {
+                        xtype: 'bloquecoberturas',
+                        
+                        title: 'Coberturas',
+                        maxHeight: 400,
+                        
+                        cdunieco: me.cdunieco || '',
+                        cdramo: me.cdramo || '',
+                        estado: me.estado || '',
+                        nmpoliza: me.nmpoliza || '',
+                        nmsuplem: me.nmsuplem || 0,
+                        
+                        modulo: me.modulo || '',
+                        flujo: me.flujo || {},
+                        cdtipsit: me.cdtipsit || ''
+                    }, {
+                        xtype: 'panel',
+                        title: '.'
                     }
                 ]
             });

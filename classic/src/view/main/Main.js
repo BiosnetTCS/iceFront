@@ -25,15 +25,13 @@ Ext.define('Ice.view.main.Main', {
         {
             xtype: 'toolbar',
             cls: 'sencha-dash-dash-headerbar shadow',
-            height: 64,
+            height: 103,
             itemId: 'headerBar',
             items: [
                 {
                     xtype: 'component',
                     reference: 'senchaLogo',
-                    cls: 'sencha-logo',
-                    html: '<div class="main-logo"><img src="resources/images/ICE5.png">Cotizadores</div>',
-                    width: 250
+                    width: 50
                 }, {
                     margin: '0 0 0 8',
                     ui: 'header',
@@ -55,7 +53,7 @@ Ext.define('Ice.view.main.Main', {
                         text: '{dsusuari} - {dssisrol}',
                         hidden: '{!rolOUsuario}'
                     },
-                    cls: 'top-user-name'
+                    cls: 'dinR'
                 }, {
                     iconCls: 'x-fa fa-user',
                     ui: 'header',
