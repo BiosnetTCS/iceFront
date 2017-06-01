@@ -58,8 +58,7 @@
         "font-awesome",
         "DIN-Regular",
         "ux",
-        "ext-locale",
-        "DIN-Regular"
+        "ext-locale"
     ],
 
     /**
