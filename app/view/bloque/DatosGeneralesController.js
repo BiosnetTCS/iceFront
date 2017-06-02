@@ -164,8 +164,16 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                             throw 'No se gener\u00f3 el n\u00famero cotizaci\u00f3n';
                         }
                         
+                        view.cdunieco = view.getValues().b1_cdunieco;
                         view.estado = action.params.b1_estado;
                         view.nmpoliza = action.params.b1_nmpoliza;
+                        view.nmsuplem = view.getValues().b1_nmsuplem || '0';
+                        
+                        if (!view.cdunieco || !view.cdramo || !view.estado || !view.nmpoliza || Ext.isEmpty(view.nmsuplem)) {
+                            throw 'No se gener\u00f3 la llave de p\u00f3liza';
+                        }
+                        
+                        view.fireEvent('llaveGenerada', view, view.cdunieco, view.cdramo, view.estado, view.nmpoliza, view.nmsuplem);
                         
                         Ice.suspendEvents(view);
                         for (var att in action.params) {
@@ -404,7 +412,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                             var error = false;
                             for (var i = 0; i < action.list.length; i++) {
                                 if (action.list[i].tipo.toLowerCase() === 'error') {
-                                    //error = true;
+                                    //error = true; para que no avance si hay validaciones tipo "error"
                                     break;
                                 }
                             }
@@ -412,6 +420,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                                 throw 'Favor de revisar las validaciones';
                             }
                         }
+                        
+                        
                         if (params && params.success) {
                             paso2 = 'Ejecutando proceso posterior al guardado de datos generales';
                             params.success();

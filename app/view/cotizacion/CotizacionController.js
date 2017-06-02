@@ -13,7 +13,11 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
         try {
             me.callParent(arguments);
             
-            me.siguiente();
+            if (view.cdunieco && view.cdramo && view.estado && view.nmpoliza && !Ext.isEmpty(view.nmsuplem)) {
+                me.cargar();
+            } else {
+                me.irBloqueSiguiente();
+            }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -23,8 +27,8 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
     /**
      *
      */
-    siguiente: function () {
-        Ice.log('Ice.view.cotizacion.CotizacionController.siguiente');
+    irBloqueSiguiente: function () {
+        Ice.log('Ice.view.cotizacion.CotizacionController.irBloqueSiguiente');
         var me = this,
             view = me.getView(),
             refs = view.getReferences(),
@@ -57,6 +61,25 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
                     flujo: view.flujo,
                     cdtipsit: view.cdtipsit
                 });
+                
+                if (view.nuevaCotizacion === true && index === 0 && bloqueExistente.xtype === 'bloquedatosgenerales') {
+                    bloqueExistente.on({
+                        llaveGenerada: function (bloqueDatosGen, cdunieco, cdramo, estado, nmpoliza, nmsuplem) {
+                            Ice.log('Ice.view.cotizacion.CotizacionController bloquedatosgenerales.llaveGenerada args:', arguments);
+                            if (!cdunieco || !cdramo || !estado || !nmpoliza || Ext.isEmpty(nmsuplem)) {
+                                throw 'No se pudo recuperar la llave de datos generales';
+                            }
+                            
+                            view.cdunieco = cdunieco;
+                            view.cdramo = cdramo;
+                            view.estado = estado;
+                            view.nmpoliza = nmpoliza;
+                            view.nmsuplem = nmsuplem;
+                            Ice.log('Ice.view.cotizacion.CotizacionController bloquedatosgenerales.llaveGenerada viewCotizacion:', view);
+                        }
+                    });
+                }
+                
                 tabpanel.add(bloqueExistente);
             }
             tabpanel.setActiveTab(bloqueExistente);
@@ -69,8 +92,8 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
     /**
      *
      */
-    anterior: function () {
-        Ice.log('Ice.view.cotizacion.CotizacionController.anterior');
+    irBloqueAnterior: function () {
+        Ice.log('Ice.view.cotizacion.CotizacionController.irBloqueAnterior');
         var me = this,
             view = me.getView(),
             refs = view.getReferences(),
@@ -112,7 +135,7 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
                     : 'hide']();
             }
             if (refs.cotizarbutton) {
-                refs.cotizarbutton[refs['ref' + view.bloques.length]
+                refs.cotizarbutton[refs['ref' + (view.bloques.length - 1)]
                     ? 'show'
                     : 'hide']();
             }
@@ -148,5 +171,92 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
         }
+    },
+    
+    cargar: function () {
+        Ice.log('Ice.view.cotizacion.CotizacionController cargar');
+        var me = this,
+            view = me.getView(),
+            refs = view.getReferences(),
+            paso = 'Cargando cotizaci\u00f3n';
+        try {
+            if (!view.cdunieco || !view.cdramo || !view.estado || !view.nmpoliza || Ext.isEmpty(view.nmpoliza)) {
+                throw 'Faltan datos para cargar cotizaci\u00f3n';
+            }
+            
+            var comps = [];
+            
+            for (var i = 0; i < view.bloques.length; i++) {
+                var bloque = view.bloques[i];
+                
+                comps.push(Ext.create({
+                    xtype: bloque.name,
+                    title: bloque.label,
+                    reference: 'ref' + i,
+                    indice: i,
+                    
+                    cdunieco: view.cdunieco,
+                    cdramo: view.cdramo,
+                    estado: view.estado,
+                    nmpoliza: view.nmpoliza,
+                    nmsuplem: view.nmsuplem,
+                    
+                    modulo: view.modulo,
+                    flujo: view.flujo,
+                    cdtipsit: view.cdtipsit
+                }));
+            }
+            
+            refs.tabpanel.add(comps);
+            
+            me.mostrarPrimas();
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
+    },
+    
+    
+    onAnteriorclic: function () {
+        this.irBloqueAnterior();
+    },
+    
+    
+    onSiguienteClic: function () {
+        this.irBloqueSiguiente();
+    },
+    
+    
+    onCotizarClic: function () {
+        var me = this,
+            view = me.getView(),
+            refs = view.getReferences(),
+            paso = 'Tarificando';
+        try {
+            var callbackSuccess = function() {
+                var paso2 = 'Recuperando primas';
+                try {
+                    me.mostrarPrimas();
+                } catch (e) {
+                    Ice.manejaExcepcion(e, paso2);
+                }
+            };
+            
+            var activeTab = refs.tabpanel.getActiveTab();
+            if (activeTab && activeTab.getController && activeTab.getController().guardar) {
+                activeTab.getController().guardar({
+                    success: callbackSuccess
+                });
+            } else {
+                callbackSuccess();
+            }
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
+    },
+    
+    
+    mostrarPrimas: function () {
+        Ice.log('Ice.view.cotizacion.CotizacionController.mostrarPrimas');
+        alert('Prima total: $10,000.00');
     }
 });

@@ -59,18 +59,19 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             items: [
                 '->', {
                     text: 'Anterior',
+                    reference: 'anteriorbutton',
                     iconCls: 'x-fa fa-backward',
-                    handler: 'anterior',
-                    reference: 'anteriorbutton'
+                    handler: 'onAnteriorclic'
                 }, {
                     text: 'Cotizar',
+                    reference: 'cotizarbutton',
                     iconCls: 'x-fa fa-dollar',
-                    reference: 'cotizarbutton'
+                    handler: 'onCotizarClic'
                 }, {
                     text: 'Siguiente',
+                    reference: 'siguientebutton',
                     iconCls: 'x-fa fa-forward',
-                    handler: 'siguiente',
-                    reference: 'siguientebutton'
+                    handler: 'onSiguienteClic'
                 }
             ]
         }, {
@@ -95,7 +96,7 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
         nmsuplem: null,
         
         // etapas
-        nueva: true,
+        nuevaCotizacion: true,
         
         // contenidos
         bloques: [],
