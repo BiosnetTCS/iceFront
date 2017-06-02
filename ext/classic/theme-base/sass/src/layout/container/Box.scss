@@ -30,7 +30,7 @@
 }
 
 .#{$prefix}box-inner {
-    overflow:hidden;
+    overflow:visible !important;
     position:relative;
     left:0;
     top:0;
