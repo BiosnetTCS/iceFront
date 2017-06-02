@@ -377,41 +377,73 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     },
     
     guardarCobertura:function(me){
-    	var view = this.getView();
-    	var form = me.up('form');
-    	var elementos=[]
-    	form.items.items.forEach(function(it,idx){
-    		elementos.push({
-    			valor:it.getValue(),
-    			valorOriginal:it.valorOriginal,
-    			name:it.name,
-    			tabla:it.tabla
-    		})
-    	});
-    	Ice.request({
-    		url:Ice.url.bloque.coberturas.guardarCoberturas,
-    		jsonData:{
-    			list:elementos,
-    			params:{
-    				'cdunieco':view.cdunieco,
-	    			'cdramo':view.cdramo,
-	    			'estado':view.estado,
-	    			'nmpoliza':view.nmpoliza,
-	    			'nmsuplem':view.nmsuplem,
-	    			'nmsituac':view.nmsituac,
-	    			'cdgarant':view.cdgarant,
-	    			'cdcapita':view.cdcapita
-    			}
-    		},
-    		success:function(){
-    			
-    			
-    			Ice.mensajeCorrecto({
-    				titulo:'Correcto',
-    				mensaje:"Datos guardados correctamente"
-    			})
-    		}
-    	});
+    	
+    	var paso=""
+    	try{
+	    	var view = this.getView();
+	    	var form = me.up('form');
+	    	var elementos=[]
+	    	form.items.items.forEach(function(it,idx){
+	    		elementos.push({
+	    			valor:it.getValue(),
+	    			valorOriginal:it.valorOriginal,
+	    			name:it.name,
+	    			tabla:it.tabla
+	    		})
+	    	});
+	    	Ice.request({
+	    		url:Ice.url.bloque.coberturas.guardarCoberturas,
+	    		jsonData:{
+	    			list:elementos,
+	    			params:{
+	    				'cdunieco':view.cdunieco,
+		    			'cdramo':view.cdramo,
+		    			'estado':view.estado,
+		    			'nmpoliza':view.nmpoliza,
+		    			'nmsuplem':view.nmsuplem,
+		    			'nmsituac':view.nmsituac,
+		    			'cdgarant':view.cdgarant,
+		    			'cdcapita':view.cdcapita
+	    			}
+	    		},
+	    		success:function(json){
+	    			
+	    			
+	    			var paso="";
+	    			try{
+	    				var list=json.list || [];
+		    			
+		    			if(list.length!=0){
+		    				
+		    				
+		    				Ice.log("--",list)
+		    				var win=view.windows.find(function(w){
+		    					return w.windowName=='conflictos'
+		    				})
+		    				Ice.log("-Window->",win)
+		    				win.down('[tipo=grid]').store.removeAll();
+		    				win.down('[tipo=grid]').store.add(list);
+		    				win.show();
+		    			}else{
+		    				Ice.mensajeCorrecto({
+			    				titulo:'Correcto',
+			    				mensaje:"Datos guardados correctamente"
+			    			});
+		    			}
+		    			
+		    			
+		    			view.down("#gridCoberturas").store.load();
+	    			}catch(e){
+	    				Ice.generaExcepcion(e,paso);
+	    			}
+	    			
+	    		}
+	    	});
+	    	
+	    	this.guardar()
+    	}catch(e){
+    		Ice.generaExcepcion(e,paso)
+    	}
     	
     },
     cargarSituaciones:function(me){
@@ -422,6 +454,38 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			view.down("[xtype=bloquelistasituaciones]").store.load();
 		}
 		
+	},
+	
+	guardar:function(){
+		var paso="";
+		try{
+			var view=this.getView();
+			Ice.request({
+				url:Ice.url.bloque.ejecutarValidacion,
+				params:{
+					'params.cdunieco':view.cdunieco,
+					'params.nmpoliza':view.nmpoliza ,
+					'params.cdramo':view.cdramo ,
+					'params.estado':view.estado ,
+					'params.nmsituac':view.nmsituac ,
+					'params.nmsuplem':view.nmsuplem,
+					bloques:["B18","B19","B19B"]
+				},
+				success:function(json){
+					var list = json.list || [];
+					
+					Ice.log(json)
+					return;
+					if(list.length){
+						view.success();
+					}else{
+						view.success();
+					}
+				}
+			});
+		}catch(e){
+			Ice.generaExcepcion(e,paso);
+		}
 	}
     
     

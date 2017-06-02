@@ -62,14 +62,16 @@ var Ice = Object.assign(Ice || {}, {
                 cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
             },
             coberturas:{
-            	datosCoberturas: 			'/iceMVC/coberturas/obtieneMpoligar',
-            	borrarCobertura : 			'/iceMVC/coberturas/movimientoMpoligar',//
-            	recuperarTatrigar:			'/iceMVC/coberturas/obtieneTatrigar',
-            	guardarCoberturas:			'/iceMVC/coberturas/guardarCoberturas',
-            	obtieneTvalogar: 			'/iceMVC/coberturas/obtieneTvalogar',
-            	obtieneMpolicap: 			'/iceMVC/coberturas/obtieneMpolicap',
-            	agregarCobertura: 			'/iceMVC/coberturas/agregarCobertura'
-            }
+            	datosCoberturas: 			'/iceMVC/coberturas/obtieneMpoligar.action',
+            	borrarCobertura : 			'/iceMVC/coberturas/movimientoMpoligar.action',//
+            	recuperarTatrigar:			'/iceMVC/coberturas/obtieneTatrigar.action',
+            	guardarCoberturas:			'/iceMVC/coberturas/guardarCoberturas.action',
+            	obtieneTvalogar: 			'/iceMVC/coberturas/obtieneTvalogar.action',
+            	obtieneMpolicap: 			'/iceMVC/coberturas/obtieneMpolicap.action',
+            	agregarCobertura: 			'/iceMVC/coberturas/agregarCobertura.action'
+            },
+            ejecutarValidacion:			'/iceMVC/emision/validaciones.action'
+            
          }
      },
 
