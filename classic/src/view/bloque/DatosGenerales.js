@@ -19,7 +19,7 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
         var me = this,
             paso = 'Validando construcci\u00f3n de bloque de datos generales';
             try {
-                if (!config || !config.b1_cdramo || !config.cdtipsit || !config.modulo) {
+                if (!config || !config.cdramo || !config.cdtipsit || !config.modulo) {
                     throw 'Faltan par\u00e1metros para construir bloque de datos generales';
                 }
                 
@@ -39,11 +39,11 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
         cdtipsit: null,
         
         // llave de BD
-        b1_cdunieco: null,
-        b1_cdramo: null,
-        b1_estado: null,
-        b1_nmpoliza: null,
-        b1_nmsuplem: null,
+        cdunieco: null,
+        cdramo: null,
+        estado: null,
+        nmpoliza: null,
+        nmsuplem: null,
         
         // variables para valores por defecto (fijos y variables)
         procesandoValoresDefecto: false,
@@ -76,12 +76,13 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     },
     
     
-    tools: [
+    tbar: [
+        '->',
         {
             iconCls: 'x-fa fa-eye',
             tooltip: 'Mostrar/ocultar',
-            callback: function (me) {
-                Ice.toggleOcultos(me);
+            handler: function (me) {
+                Ice.toggleOcultos(me.up('form'));
             }
         }
     ],

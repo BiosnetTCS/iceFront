@@ -1361,6 +1361,10 @@ var Ice = Object.assign(Ice || {}, {
 
             }
             
+            if (config.catalogo) {
+                field.type = 'string';
+            }
+            
             
             // dateFormat
             if (field.type === 'date') {

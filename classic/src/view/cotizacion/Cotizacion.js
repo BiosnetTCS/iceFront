@@ -3,8 +3,12 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
     xtype: 'cotizacion',
     
     requires: [
-        'Ext.ux.layout.ResponsiveColumn'
+        //'Ext.ux.layout.ResponsiveColumn'
+        'Ext.toolbar.Toolbar'
     ],
+    
+    
+    controller: 'cotizacion',
     
     
     // validacion y modificacion de parametros (config)
@@ -33,28 +37,47 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
     
     
     // configuracion que no usa parametros
-    layout: 'responsivecolumn',
-    defaultFocus: 'form',
-    /*items: [
+    layout: 'auto',
+    padding: 0,
+    //defaultFocus: 'form',
+    items: [
         {
-            xtype: 'tabpanel',
-            reference: 'tabpanel'
-        }
-    ],*/
-    
-    
-    /*buttons: [
-        {
-            text: 'Anterior',
-            iconCls: 'x-fa fa-backward'
+            xtype: 'container',
+            padding: '20px 0px 0px 20px',
+            items: [{
+                xtype: 'tabpanel',
+                reference: 'tabpanel',
+                style: 'margin: 0px 20px 20px 0px;',
+                cls: 'shadow',
+                listeners: {
+                    tabchange: 'onTabchangeEvent'
+                }
+            }],
         }, {
-            text: 'Cotizar',
-            iconCls: 'x-fa fa-dollar'
+            xtype: 'toolbar',
+            ui: 'footer',
+            items: [
+                '->', {
+                    text: 'Anterior',
+                    iconCls: 'x-fa fa-backward',
+                    handler: 'anterior',
+                    reference: 'anteriorbutton'
+                }, {
+                    text: 'Cotizar',
+                    iconCls: 'x-fa fa-dollar',
+                    reference: 'cotizarbutton'
+                }, {
+                    text: 'Siguiente',
+                    iconCls: 'x-fa fa-forward',
+                    handler: 'siguiente',
+                    reference: 'siguientebutton'
+                }
+            ]
         }, {
-            text: 'Siguiente',
-            iconCls: 'x-fa fa-forward'
+            xtype: 'panel',
+            title: '.'
         }
-    ],*/
+    ],
     
     
     // propiedades no ext (se generan getters y setters)
@@ -87,7 +110,7 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             paso = 'Construyendo componente de cotizaci\u00f3n';
         try {
             // recuperar componentes
-            var bloques = Ice.generaComponentes();/*{
+            var bloques = Ice.generaComponentes({
                 pantalla: 'COTIZACION',
                 seccion: 'BLOQUES',
                 modulo: me.modulo || '',
@@ -99,12 +122,13 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                 items: true
             });
             
-            me.bloques = bloques.COTIZACION.BLOQUES;
+            me.bloques = bloques.COTIZACION.BLOQUES.items;
             if (!me.bloques || me.bloques.length < 1) {
                 throw 'No hay bloques configurados';
-            }*/
+            }
             
             // aplicar componentes
+            /*
             Ext.apply(me, {
                 items: [
                     {
@@ -158,6 +182,7 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                     }
                 ]
             });
+            */
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
