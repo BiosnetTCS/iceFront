@@ -29,7 +29,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
 	                }
 	                
-	                if (!config.cdramo || !config.cdtipsit || config.modulo) {
+	                if (!config.cdramo || !config.cdtipsit || !config.modulo) {
 	                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
 	                }
 	                
