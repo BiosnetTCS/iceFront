@@ -52,11 +52,11 @@
 	                        type: 'ajax',
 	                        url: Ice.url.bloque.listaSituaciones.cargar,
 	                        extraParams: {
-	                            'params.cdunieco' : '1',
-	                            'params.cdramo': '501',
-	                            'params.estado': 'W',
-	                            'params.nmpoliza': '11075',
-	                            'params.nmsuplem': '0'
+	                            'params.cdunieco' : me.cdunieco,
+	                            'params.cdramo': me.cdramo,
+	                            'params.estado': me.estado,
+	                            'params.nmpoliza': me.nmpoliza,
+	                            'params.nmsuplem': me.nmsuplem
 	                        },
 	                        reader: {
 	                            type: 'json',
