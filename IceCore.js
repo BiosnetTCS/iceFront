@@ -712,7 +712,21 @@ var Ice = Object.assign(Ice || {}, {
 		                	obj.name_cdatribu=obj.cdatribu
 		                	obj.maxlengthe=obj.nmlmax
 		                	obj.minlength=obj.nmlmin
-		                	obj.catalogo=obj.ottabval
+		                	obj.catalogo=Ext.isEmpty((""+obj.ottabval).trim())?false:obj.ottabval
+		                	Ice.log("******",obj.catalogo)
+		                	if(obj.catalogo){
+		                		obj.catalogo='TATRIGAR';
+		                	}
+		                	
+		                	obj.param1 = 'params.cdramo';
+		                	obj.value1 = secciones.cdramo;
+		                	
+		                	obj.param2 = 'params.cdgarant';
+		                	obj.value2 = secciones.cdgarant;
+		                	
+		                	obj.param3 = 'params.cdatribu';
+		                	obj.value3 = obj.cdatribu;
+		                	
 		                };
 		              secciones.url=Ice.url.core.recuperarTatrigar;
 		              secciones.rootRequestData="list"
@@ -738,6 +752,8 @@ var Ice = Object.assign(Ice || {}, {
 	                	obj.name_cdatribu=obj.cdatribu
 	                	obj.maxlengthe=obj.nmlmax
 	                	obj.minlength=obj.nmlmin
+	                	
+	                	
 	                	obj.catalogo=obj.ottabval
 	                };
 	              secciones.url=Ice.url.core.recuperarTatripol;
