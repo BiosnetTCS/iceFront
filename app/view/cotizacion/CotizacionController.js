@@ -209,6 +209,8 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
             
             refs.tabpanel.add(comps);
             
+            refs.tabpanel.setActiveTab(comps[0]);
+            
             me.mostrarPrimas();
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
