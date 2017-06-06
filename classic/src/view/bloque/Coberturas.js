@@ -27,9 +27,9 @@
  							if (!config.failure || !config.success) {
  								//throw 'Falta funciones success y failure  para bloque de coberturas';
  							}
- 							if (config.cdramo || config.cdtipsit
- 									|| config.modulo) {
- 								throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
+ 							if (!config.cdramo || !config.cdtipsit
+ 									|| !config.modulo) {
+ 								//throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
  							}
  							config.cdunieco = config.cdunieco || '';
  							config.cdramo = config.cdramo || '';
@@ -80,10 +80,8 @@
  								columns : true,
  								fields : true
  							});
- 							Ice
- 									.log(
- 											'Ice.view.bloque.Coberturas.initComponent comps:',
- 											comps);
+ 							Ice.log('Ice.view.bloque.Coberturas.initComponent comps:',comps);
+ 							
  							paso = " creando grid coberturas";
  							var store = {
  								fields : comps.COBERTURAS.COBERTURAS.fields,
@@ -138,7 +136,7 @@
  																					.getStore()
  																					.getAt(
  																							rowIndex);
- 																			var paso = "Evento selecciona cobertura "
+ 																			 paso = "Evento selecciona cobertura "
  																			// aqui
  																			// mandar
  																			// los
@@ -151,18 +149,15 @@
  																				'params.pv_estado_i' : me.estado,
  																				'params.pv_nmpoliza_i' : me.nmpoliza,
  																				'params.pv_nmsuplem_i' : me.nmsuplem,
- 																				'params.pv_nmsituac_i' : record
- 																						.get('nmsituac')
+ 																				'params.pv_nmsituac_i' : record.get('nmsituac')
  																			}
  																			paso = "estableciendo nmsituac";
- 																			me.nmsituac = record
- 																					.get('nmsituac');
+ 																			me.config.nmsituac = record.get('nmsituac');
+ 																			
+ 																			Ext.ComponentQuery.query("[xtype=bloquelistasituaciones]")[0].nmsitac=record.get('nmsituac')
  																			gridCoberturas.store
  																					.load()
- 																			gridCoberturas.store
- 																					.filter(
- 																							'amparada',
- 																							'S')
+ 																			gridCoberturas.store.filter('amparada','S')
  																			gridCoberturas
  																					.up('[xtype=bloquecoberturas]').nmsituac = record
  																					.get('nmsituac')
