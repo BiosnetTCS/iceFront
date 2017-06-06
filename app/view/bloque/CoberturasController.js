@@ -489,9 +489,17 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 					var paso2 = 'Evaluando validaciones';
 					try {
     					var list = json.list || [];
-    					if (list.length) {
-    					   alert('validaciones');
-    					   alert('Si una validacion es tipo "error" hay que hacer throw "Favor de revisar las validaciones"');
+    					if (list.length>0) { 
+    					   
+    					   
+    					   Ext.create('Ice.view.bloque.VentanaValidaciones', {
+                               lista: list
+                           }).mostrar();
+    					   
+    					   list.forEach(function(it){
+    						   if((it.tipo+'').toLowerCase()=='error')
+    							   throw "Favor de revisar las validaciones"
+    					   })
     					}
     					
     					if (params && params.success) {
