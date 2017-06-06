@@ -24,12 +24,12 @@
  							if (!config) {
  								throw 'No hay datos para bloque coberturas';
  							}
- 							if (!config.failure || !config.success) {
- 								//throw 'Falta funciones success y failure  para bloque de coberturas';
- 							}
+// 							if (!config.failure || !config.success) {
+// 								throw 'Falta funciones success y failure  para bloque de coberturas';
+// 							}
  							if (!config.cdramo || !config.cdtipsit
  									|| !config.modulo) {
- 								//throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
+ 								throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
  							}
  							config.cdunieco = config.cdunieco || '';
  							config.cdramo = config.cdramo || '';
