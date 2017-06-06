@@ -53,13 +53,17 @@ var Ice = Object.assign(Ice || {}, {
                 valoresDefectoVariables: 'emision/datosGenerales/valoresDefectoVariables.action'
             },
             listaSituaciones: {
-                cargar: 'emision/obtieneMpolisit.action'//'jsonLocal/bloqueDatosSituacionCargar.json'
+                cargar: 'emision/obteneListaSituaciones.action'//'jsonLocal/bloqueDatosSituacionCargar.json'
             },
             situacionesRiesgo: {
-                agregar: 'jsonLocal/bloqueSituacionCargar.json',                
+                obtener: 'emision/obtenerSituacion.action',                
                 editar: 'jsonLocal/bloqueSituacionCargar.json',
-                borrar: 'jsonLocal/bloqueSituacionBorrar.json',                
-                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
+                borrar: 'emision/eliminarSituacion.action',                
+                cargar: 'emision/obteneListaSituaciones.action',
+                actualizar: 'emision/actualizaSituacion.action',
+                valoresDefectoFijos: 'emision/valoresDefectoFijos.action',
+                valoresDefectoVariables: 'emision/valoresDefectoVariables.action',
+                validaciones: 'emision/validaBloqueSituacion.action'
             },
             coberturas:{
             	datosCoberturas: 			'/iceMVC/coberturas/obtieneMpoligar.action',
@@ -438,8 +442,7 @@ var Ice = Object.assign(Ice || {}, {
                 }).show();
 
             } else {
-                Ext.create('Ext.Panel', {
-                    title: titulo,
+                Ext.create('Ext.Container', {
                     floated: true,
                     centered: true,
 
@@ -447,39 +450,53 @@ var Ice = Object.assign(Ice || {}, {
                     showAnimation: 'pop',
                     hideAnimation: 'popOut',
                     hideOnMaskTap: true,
-                    padding: '10px',
-                    html: mensaje,
+                    
                     closable: false,
                     closeAction: 'destroy',
+                    
+                    layout: 'default',
+                    
+                    mensajeIce: true,
+                    
+                    items: [
+                        {
+                            xtype: 'toolbar',
+                            docked: 'top',
+                            ui: 'header',
+                            items: [
+                                {
+                                    xtype: 'label',
+                                    html: titulo
+                                }, '->', {
+                                    iconCls: 'x-fa fa-close',
+                                    handler: function (me) {
+                                        me.up('[mensajeIce=true]').hide();
+                                    }
+                                }
+                            ]
+                        }, {
+                            xtype: 'container',
+                            padding: '10px',
+                            html: mensaje
+                        }
+                    ],
 
                     listeners: {
-                        close: function () {
-
+                        hide: function () {
                             if (callback) {
                                 var paso2 = 'Ejecutando callback despues de mensaje';
-
-
-
                                 try {
                                     callback();
                                 } catch (e) {
                                     Ice.manejaExcepcion(e, paso2);
-
-
-
-
                                 }
                             }
                         }
                     }
                 }).show();
-
             }
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
-
-
-
         }
     },
     
@@ -752,8 +769,6 @@ var Ice = Object.assign(Ice || {}, {
 	                	obj.name_cdatribu=obj.cdatribu
 	                	obj.maxlengthe=obj.nmlmax
 	                	obj.minlength=obj.nmlmin
-	                	
-	                	
 	                	obj.catalogo=obj.ottabval
 	                };
 	              secciones.url=Ice.url.core.recuperarTatripol;
@@ -1143,7 +1158,7 @@ var Ice = Object.assign(Ice || {}, {
      *
      */
     generaItem: function (config) {
-        Ice.log('Ice.generaItem args:', arguments);
+        //Ice.log('Ice.generaItem args:', arguments);
         var paso = 'Construyendo item',
             item = {};
 
@@ -1347,7 +1362,7 @@ var Ice = Object.assign(Ice || {}, {
      *
      */
     generaField: function (config) {
-        Ice.log('Ice.generaField args:', arguments);
+        //Ice.log('Ice.generaField args:', arguments);
         var paso = 'Construyendo field',
             field = {};
 
@@ -1422,23 +1437,20 @@ var Ice = Object.assign(Ice || {}, {
      *
      */
     generaValidator: function (config) {
-        Ice.log('Ice.generaValidator args:', arguments);
+        //Ice.log('Ice.generaValidator args:', arguments);
         var paso = 'Construyendo validator',
             validator;
 
         try {
             if (!config || !config.name_cdatribu) {
                 throw 'Falta name para validator';
-
             }
             
             var name;
             if (/^\d+$/.test(config.name_cdatribu)) {
                 name = 'otvalor' + (('x000' + config.name_cdatribu).slice(Number(config.name_cdatribu) < 100 ? -2 : -3));
-
             } else {
                 name = config.name_cdatribu;
-
             }
             
             
@@ -1446,15 +1458,12 @@ var Ice = Object.assign(Ice || {}, {
             if (config.swobliga === 'S') {
                 validator = validator || {
                     nombre: name,
-
-
                     arreglo: []
                 };
                 
                 validator.arreglo.push({
-                    type: 'presence'
-
-
+                    type: 'presence',
+                    message: 'Este campo es obligatorio'
                 });
             }
             
@@ -1463,16 +1472,15 @@ var Ice = Object.assign(Ice || {}, {
             if (config.minlength && /^\d+$/.test(config.minlength) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
-
-
                     arreglo: []
                 };
                 
-                validator.arreglo.push({
-                    type: 'length',
-                    min: Number(config.minlength)
-
-
+                validator.arreglo.push(function (val) {
+                    var result = 'El tama\u00f1o m\u00ednimo para este campo es de ' + config.minlength;
+                    if (Ext.isEmpty(val) || String(val).length >= Number(config.minlength)) {
+                        result = true;
+                    }
+                    return result;
                 });
             }
             
@@ -1481,16 +1489,15 @@ var Ice = Object.assign(Ice || {}, {
             if (config.maxlength && /^\d+$/.test(config.maxlength) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
-
-
                     arreglo: []
                 };
                 
-                validator.arreglo.push({
-                    type: 'length',
-                    max: Number(config.maxlength)
-
-
+                validator.arreglo.push(function (val) {
+                    var result = 'El tama\u00f1o m\u00e1ximo para este campo es de ' + config.maxlength;
+                    if (Ext.isEmpty(val) || String(val).length <= Number(config.maxlength)) {
+                        result = true;
+                    }
+                    return result;
                 });
             }
             
@@ -1499,16 +1506,15 @@ var Ice = Object.assign(Ice || {}, {
             if (config.minvalue && /^\d+$/.test(config.minvalue) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
-
-
                     arreglo: []
                 };
                 
-                validator.arreglo.push({
-                    type: 'range',
-                    min: Number(config.minvalue)
-
-
+                validator.arreglo.push(function (val) {
+                    var result = 'El valor m\u00ednimo para este campo es de ' + config.minvalue;
+                    if (Ext.isEmpty(val) || Number(val) >= Number(config.minvalue)) {
+                        result = true;
+                    }
+                    return result;
                 });
             }
             
@@ -1517,24 +1523,21 @@ var Ice = Object.assign(Ice || {}, {
             if (config.maxvalue && /^\d+$/.test(config.maxvalue) && !config.catalogo) {
                 validator = validator || {
                     nombre: name,
-
-
                     arreglo: []
                 };
                 
-                validator.arreglo.push({
-                    type: 'range',
-                    max: Number(config.maxvalue)
-
-
+                validator.arreglo.push(function (val) {
+                    var result = 'El valor m\u00e1ximo para este campo es de ' + config.maxvalue;
+                    if (Ext.isEmpty(val) || Number(val) <= Number(config.maxvalue)) {
+                        result = true;
+                    }
+                    return result;
                 });
             }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
-
         }
         return validator;
-
     },
     
     
@@ -1627,7 +1630,7 @@ var Ice = Object.assign(Ice || {}, {
     
     
     toggleOcultos: function (view) {
-        Ice.log('toggleOcultos view:', view);
+        Ice.log('Ice.toggleOcultos view:', view);
         var paso = 'Mostrando/ocultando atributos',
             estadoOcultos;
         try {

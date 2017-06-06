@@ -12,7 +12,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	        'Ext.ux.layout.ResponsiveColumn'
 	    ],
 	    
-	    
 	    // validacion de parametros de entrada
 	    constructor: function (config) {
 	        Ice.log('Ice.view.bloque.SituacionesRiesgo.constructor config:', config);
@@ -35,14 +34,26 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	        me.callParent(arguments);
 	    },
 	    
-	    
 	    // configuracion del componente (no EXT)
 	    config: {
-	        datosFijosNuevos: true,
 	        datosVariablesNuevos: true,
 	        camposDisparanValoresDefectoFijos: [
 	            'cdtipsit'
-	        ]
+	        ],
+	        modulo: null,
+	        flujo: null,
+	        cdunieco: null, //1,
+	        cdramo: null, //501,
+	        estado: null, //'W',
+	        nmpoliza: null, //17196,
+	        nmsuplem: null, //0,
+	        nmsituac: null,
+	        cdbloque: null,
+	        procesandoValoresDefecto: false,
+	        datosVariablesNuevos: true,
+	        camposDisparanValoresDefectoVariables: [
+	            'cdunieco', 'cdramo', 'estado', 'nmpoliza', 'nmsituac', 'status', 'nmsuplem', 'cdtipsit'
+	        ],
 	    },
 	    
 	    
@@ -70,20 +81,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	            });
 	            Ice.log('Ice.view.bloque.SituacionesRiesgo.initComponent comps:', comps);
 	            
-	         // agregar binding a los componentes
-	            for (var i = 0; i < comps.BLOQUE_LISTA_SITUACIONES.LISTA.items.length; i++) {
-	                var item = comps.BLOQUE_LISTA_SITUACIONES.LISTA.items[i];
-	                item.bind = '{datos.' + item.name + '}';
-	            }            
-	            
-	            // creando modelo para validaciones
-	            var modelName = Ext.id();
-	            Ext.define(modelName, {
-	                extend: 'Ext.data.Model',
-	                fields: comps.BLOQUE_LISTA_SITUACIONES.LISTA.fields,
-	                validators: comps.BLOQUE_LISTA_SITUACIONES.LISTA.validators
-	            });
-	            
 	            var compsForm = Ice.generaComponentes({
                     pantalla: 'BLOQUE_LISTA_SITUACIONES',
                     seccion: 'FORMULARIO',
@@ -98,13 +95,41 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
                 });
 	            	            
 	            Ice.log('items',comps.BLOQUE_LISTA_SITUACIONES.LISTA.items);
-	            Ice.log('itemsForm ',compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.items);
+	            Ice.log('itemsForm ',compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO);
+	            
+	         // agregar binding a los componentes
+                for (var i = 0; i < compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.items.length; i++) {
+                    var item = compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.items[i];
+                    item.bind = '{datos.' + item.name + '}';
+                }
+	            
+//	         // creando modelo para validaciones
+                var modelName = Ext.id();
+//                Ext.define(modelName, {
+//                    extend: 'Ext.data.Model',
+//                    fields: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.fields,
+//                    validators: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators
+//                });
+//	            
+//	         // creando modelo para validaciones
+//                var modelName = Ext.id();
+//                Ext.define(modelName, {
+//                    extend: 'Ext.data.Model',
+//                    fields: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.fields,
+//                    validators: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators
+//                });
+	            
 	            Ext.apply(me, {
 	                items: [
 	                    {
 	                        xtype: 'bloquelistasituaciones',
-	                        cdramo: '501',
-	                        cdtipsit: '51',
+	                        reference: 'grid',
+	                        cdunieco: this.config.cdunieco,
+	                        cdramo: this.config.cdramo,
+	                        estado: this.config.estado,
+	                        nmpoliza: this.config.nmpoliza,
+	                        nmsuplem: this.config.nmsuplem,
+	                        cdtipsit: this.config.cdtipsit,
 	                        maxHeigth: '250',
 	                        tbar: [
 	                            {
@@ -136,16 +161,20 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                        ]
 	                    },{
 	                        xtype: 'form',
+	                        reference: 'form',
 	                        title: 'Editar situacion de riesgo',
 	                        items: comps.BLOQUE_LISTA_SITUACIONES.LISTA.items.concat(compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.items),
 	                        modelo: modelName,
+	                        modelFields: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.fields,
+                            modelValidators: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators,
 	                        layout: 'responsivecolumn',
 	                        hidden: true,
 	                        buttons: [
 	                            {
 	                                xtype: 'button',
+	                                reference: 'btnGuardar',
 	                                text: 'Guardar',
-	                                handler: 'onGuardar'
+	                                handler: 'onGuardarBloque'
 	                            },{
 	                                xtype: 'button',
 	                                text: 'Cancelar',
@@ -160,10 +189,13 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                                }
 	                            }
 	                        ],
-                            defaults: {
-                                margin: '10px 10px 10px 0px',
-                                cls: 'big-50 small-100'
-                            }
+	                        bodyPadding: '10px 0px 0px 10px',
+	                        defaults: {
+	                            margin: '0px 10px 10px 0px',
+	                            cls: 'big-50 small-100'
+	                        }
+	                    },{
+	                        xtype: 'form'
 	                    }
 	                ]
 	            });

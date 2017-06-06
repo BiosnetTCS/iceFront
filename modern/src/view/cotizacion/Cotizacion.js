@@ -1,13 +1,14 @@
-/**
- * Created by jtezva on 5/10/2017.
- */
 Ext.define('Ice.view.cotizacion.Cotizacion', {
     extend: 'Ext.Container',
     xtype: 'cotizacion',
     
     requires: [
-        'Ext.field.Text'
+        //'Ext.ux.layout.ResponsiveColumn'
+        'Ext.Toolbar'
     ],
+    
+    
+    controller: 'cotizacion',
     
     
     // validacion y modificacion de parametros (config)
@@ -19,6 +20,19 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             if (!config.cdramo || !config.cdtipsit) {
                 throw 'Falta cdramo o cdtipsit para componente de cotizaci\u00f3n';
             }
+            
+            config.modulo = config.modulo || 'COTIZACION';
+            config.flujo = config.flujo || {};
+            
+            if (config.estado === 'w') {
+                config.estado = 'W';
+            }
+            
+            // parche para prueba de carga
+            // config.cdunieco = 1;
+            // config.estado = 'W';
+            // config.nmpoliza = 17196;
+            // config.nmsuplem = 0;
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -27,14 +41,76 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
     
     
     // configuracion que no usa parametros
-    cls: 'dashboard',
-    scrollable: true,
+    layout: 'fit',
+    padding: 0,
+    
+    
+    
+    //defaultFocus: 'form',
+    items: [
+        {
+            xtype: 'tabpanel',
+            reference: 'tabpanel',
+            style: 'margin: 0px 20px 20px 0px;',
+            cls: 'shadow',
+            listeners: {
+                activeItemchange: 'onTabchangeEvent'
+            }
+        }, {
+            xtype: 'toolbar',
+            docked: 'bottom',
+            ui: 'footer',
+            items: [
+                '->', {
+                    text: 'Cargar',
+                    reference: 'cargarbutton',
+                    iconCls: 'x-fa fa-cloud-download',
+                    handler: 'onCargarClic'
+                }, {
+                    text: 'Anterior',
+                    reference: 'anteriorbutton',
+                    iconCls: 'x-fa fa-backward',
+                    handler: 'onAnteriorclic'
+                }, {
+                    text: 'Cotizar',
+                    reference: 'cotizarbutton',
+                    iconCls: 'x-fa fa-dollar',
+                    handler: 'onCotizarClic'
+                }, {
+                    text: 'Siguiente',
+                    reference: 'siguientebutton',
+                    iconCls: 'x-fa fa-forward',
+                    handler: 'onSiguienteClic'
+                }
+            ]
+        }
+    ],
     
     
     // propiedades no ext (se generan getters y setters)
     config: {
+        // uso o funcionamiento
+        modulo: null,
+        flujo: null,
+        cdtipsit: null,
+        auxkey: null,
+    
+        // llave
+        cdunieco: null,
         cdramo: null,
-        cdtipsit: null
+        estado: null,
+        nmpoliza: null,
+        nmsuplem: null,
+        
+        // etapas
+        nuevaCotizacion: true,
+        
+        // contenidos
+        bloques: [],
+        bloqueActual: -1,
+        
+        // comportamiento
+        guardadoAutomaticoSuspendido: false
     },
     
     
@@ -42,38 +118,25 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
     initialize: function () {
         Ice.log('Ice.view.cotizacion.Cotizacion.initialize');
         var me = this,
-            paso = 'Configurando componente de cotizaci\u00f3n';
+            paso = 'Construyendo componente de cotizaci\u00f3n';
         try {
             // recuperar componentes
-            var componentes = Ice.generaComponentes();
-            
-            
-            // aplicar componentes
-            me.add({
-                xtype: 'mpolizas',
+            var bloques = Ice.generaComponentes({
+                pantalla: 'COTIZACION',
+                seccion: 'BLOQUES',
+                modulo: me.getModulo() || '',
+                estatus: (me.getFlujo() && me.getFlujo().estatus) || '',
+                cdramo: me.getCdramo() || '',
+                cdtipsit: me.getCdtipsit() ||'',
+                auxkey: me.getAuxkey() || '',
                 
-                cdunieco: me.config.cdunieco || '',
-                cdramo: me.config.cdramo || '',
-                cdtipsit: me.config.cdtipsit || '',
-                estado: me.config.estado || '',
-                nmpoliza: me.config.nmpoliza || '',
-                nmsuplem: me.config.nmsuplem || 0,
-                flujo: me.config.flujo || {},
-                
-                userCls: 'big-100 small-100 dashboard-item shadow',
-                
-                items: [
-                    {
-                        xtype: 'toolbar',
-                        docked: 'bottom',
-                        items: [{
-                            text: 'Log values',
-                            iconCls: 'x-fa fa-bug',
-                            handler: 'logValues'
-                        }]
-                    }
-                ]
+                items: true
             });
+            
+            me.setBloques(bloques.COTIZACION.BLOQUES.items);
+            if (!me.getBloques() || me.getBloques().length < 1) {
+                throw 'No hay bloques configurados';
+            }
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
