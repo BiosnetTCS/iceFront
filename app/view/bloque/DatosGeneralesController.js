@@ -438,7 +438,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                             var error = false;
                             for (var i = 0; i < action.list.length; i++) {
                                 if (action.list[i].tipo.toLowerCase() === 'error') {
-                                    //error = true; para que no avance si hay validaciones tipo "error"
+                                    error = true; // para que no avance si hay validaciones tipo "error"
                                     break;
                                 }
                             }
