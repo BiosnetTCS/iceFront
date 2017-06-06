@@ -259,6 +259,13 @@ Ext.define('Ice.view.bloque.CoberturasController', {
       		paso="estableciendo cdgarant";
       		me.cdgarant=record.get('cdgarant');
       		me.cdcapita=record.get('cdcapita');
+      		
+
+      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].cdgarant=record.get('cdgarant')
+      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].cdcapita=record.get('cdcapita')
+      		
+      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdgarant=record.get('cdgarant')
+      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdcapita=record.get('cdcapita')
     		Ice.log("record:", record);	
     		 var comps = Ice.generaComponentes({
 	                pantalla: 'TATRIGAR',
@@ -303,7 +310,9 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     
     cargarValores: function(form){
     	//me.coberturasItems={}
+    	
     	var view = form.up("bloquecoberturas");
+    	Ice.log("->" ,view)
     	Ice.request({
     		url:Ice.url.bloque.coberturas.obtieneTvalogar,
     		params:{
@@ -313,8 +322,8 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     			'params.nmpoliza':view.config.nmpoliza,
     			'params.nmsuplem':view.config.nmsuplem,
     			'params.nmsituac':view.config.nmsituac,
-    			'params.cdgarant':view.config.cdgarant,
-    			'params.cdcapita':view.config.cdcapita
+    			'params.cdgarant':Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdgarant,
+    			'params.cdcapita':Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdcapita
     		},
     		success:function(json){
     			
@@ -328,8 +337,8 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     		    			'params.nmpoliza':view.config.nmpoliza,
     		    			'params.nmsuplem':view.config.nmsuplem,
     		    			'params.nmsituac':view.config.nmsituac,
-    		    			'params.cdgarant':view.config.cdgarant,
-    		    			'params.cdcapita':view.config.cdcapita
+    		    			'params.cdgarant':Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdgarant?Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdgarant:view.cdgarant,
+    		    			'params.cdcapita':Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdcapita?Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdcapita:view.cdcapita
     					},
     					success:function(response){
     						var paso="";
@@ -462,6 +471,8 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		var paso="";
 		try{
 			var view=this.getView();
+			
+			
 			Ice.request({
 				url:Ice.url.bloque.ejecutarValidacion,
 				params:{
@@ -477,11 +488,11 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 					var list = json.list || [];
 					
 					Ice.log(json)
-					return;
-					if(list.length){
+					
+					if(list.length && view.success){
 						view.success();
-					}else{
-						view.success();
+					}else if(view.failure){
+						view.failure();
 					}
 				}
 			});
