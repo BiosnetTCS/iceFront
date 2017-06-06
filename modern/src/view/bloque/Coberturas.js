@@ -3,11 +3,12 @@ Ext.define('Ice.view.bloque.Coberturas', {
 		extend  :       'Ext.Panel',
 		xtype	:		'bloquecoberturas',
 		controller : 'bloquecoberturas',
+		scrollable:true,
 		
 		//layout: 'fit',
 		//cls: 'big-100 small-100',
 	     width: '900px',
-	     heigth: '900px',
+	     //heigth: '900px',
 		// validacion de parametros de entrada
 		constructor : function(config) {
 			Ice.log(
@@ -78,6 +79,18 @@ Ext.define('Ice.view.bloque.Coberturas', {
 		            var columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns || [];
 					
 					var it={
+							
+					    listeners:{
+					    	itemtap:function(grid,idx,target,record){
+					    		
+	                            me.config.nmsituac=record.get("nmsituac");
+	                            grid.up("bloquecoberturas").down("#gridCoberturas").getStore().proxy.extraParams['params.pv_nmsituac_i']=me.config.nmsituac
+	                            grid.up("bloquecoberturas").down("#gridCoberturas").getStore().load()
+	                            grid.up("bloquecoberturas").down("#gridCoberturas").getStore().filter('amparada','S')
+					    		
+			                    Ice.log(me.config.nmsituac)
+					    	}
+					    },
 						xtype : 'bloquelistasituaciones',
 						cdtipsit : me.config.cdtipsit,
 						cdramo : me.config.cdramo,
@@ -87,32 +100,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
                         nmpoliza: me.config.nmpoliza,
                         nmsuplem: me.config.nmsuplem,
 						//maxHeigth : '250px',
-						columns: columns,
-						items:[
-							{
-					            xtype : 'toolbar',
-					            docked: 'top',
-					            items:[
-					            	{
-			                        	
-			                        	xtype: 'button',
-			                            text: 'Editar',
-			                            handler: function(btn) {
-			                            	try{
-			                            		var sel =Ext.ComponentQuery.query("[xtype=bloquelistasituaciones]")[0].getSelection();
-			                            			me.config.nmsituac=sel.get("nmsituac")
-			                            			Ice.log(me.config.nmsituac)
-					                             btn.up("bloquecoberturas").down("#gridCoberturas").getStore().load()
-					                             btn.up("bloquecoberturas").down("#gridCoberturas").getStore().filter('amparada','S')
-			                            	}catch(e){
-			                            		Ice.generaExcepcion(e,paso)
-			                            	}
-			                              
-			                            }
-			                        }
-					            ]
-					        }
-						]
+						columns: columns
+						
 						
 						
 						
@@ -138,9 +127,12 @@ Ext.define('Ice.view.bloque.Coberturas', {
 						xtype:'grid',
 						itemId:'gridCoberturas',
 						title:"Coberturas",
-						width:'500px',
+						width:'100%',
 						height:300,
 						columns:comps.COBERTURAS.COBERTURAS.columns,
+						listeners:{
+					    	itemtap:'editarCoberturaMovil'
+					    },
 						store:{
  								fields : comps.COBERTURAS.COBERTURAS.fields,
  								proxy : {
@@ -158,27 +150,30 @@ Ext.define('Ice.view.bloque.Coberturas', {
  			                            'params.pv_estado_i': me.config.estado,
  			                            'params.pv_nmpoliza_i': me.config.nmpoliza,
  			                            'params.pv_nmsuplem_i': me.config.nmsuplem,
- 			                            'params.pv_nmsituac_i': me.config.nmsitua
+ 			                            'params.pv_nmsituac_i': me.getNmsituac()
  			                        }
  								}
  							},
  							items:[
  								{
  						            xtype : 'toolbar',
- 						            docked: 'top',
+ 						            docked: 'bottom',
  						            items:[
  						            	{
  				                        	xtype: 'button',
  				                            text: 'Editar',
- 				                            handler: 'editarCoberturaMovil'
+ 				                            handler: 'editarCoberturaMovil',
+ 				                            hidden:true
  				                        },
  				                       {
  				                        	xtype: 'button',
  				                            text: 'Borrar',
+ 				                           iconCls : 'x-fa fa-remove',
  				                            handler: 'borraCoberturaMovil'
  				                        },
  				                       {
  				                        	xtype: 'button',
+ 				                        	iconCls: 'x-fa fa-plus-circle',
  				                            text: 'Agregar Cobertura',
  				                            handler: function(btn) {
  				                            	try{
@@ -204,7 +199,23 @@ Ext.define('Ice.view.bloque.Coberturas', {
 					
 					////////// formulario editar coberuras
 					var form={
-						xtype: 'formpanel'
+						xtype: 'formpanel',
+						scrollable:true,
+						height:300,
+						items:[
+								{
+						            xtype : 'toolbar',
+						            docked: 'bottom',
+						            items:[
+						            	{
+				                        	xtype: 'button',
+				                            text: 'Guardar',
+				                            handler: 'guardarCoberturaMovil'
+				                        }
+				                      
+						            ]
+								}
+							]
 					}
 					
 					me.add(form)
