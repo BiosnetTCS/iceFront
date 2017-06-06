@@ -30,7 +30,7 @@ Ext.define('Ice.view.main.MainController', {
                 navigationList = refs.navigationTreeList,
                 store = navigationList.getStore(),
                 node = store.findNode('url', hashTag),
-                url = (node && node.get('url')) || 'mesacontrol.action', // 'page404',
+                url = (node && node.get('url')) || hashTag, // 'page404',
                 lastView = me.lastView,
                 // existingItem = mainCard.child('component[routeId=' + hashTag + ']'), <<< jtezva: para siempre crear uno
                 existingItem = false,

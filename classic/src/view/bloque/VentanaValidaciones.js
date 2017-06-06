@@ -2,7 +2,7 @@
  * Created by jtezva on 5/31/2017.
  */
 Ext.define('Ice.view.bloque.VentanaValidaciones', {
-    extend: 'Ext.window.Window',
+    extend: 'Ice.view.componente.Ventana',
     xtype: 'ventanavalidaciones',
     
     constructor: function (config) {

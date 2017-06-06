@@ -100,7 +100,7 @@ Ext.define('Ice.view.main.MainController', {
                 navigationTree = me.navigationTree,
                 store = navigationTree.getStore(),
                 node = store.findNode('url', hashTag),
-                url = (node && node.get('url')) || 'page404',
+                url = (node && node.get('url')) || hashTag, //'page404',
                 item = false; //mainCard.child('component[routeId=' + hashTag + ']'); jtezva para crear siempre nuevo
             
             // para login y roltree no aplica 404

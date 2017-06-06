@@ -3,7 +3,17 @@
  */
 Ext.define('Ice.view.field.DatefieldIce', {
     extend: 'Ext.field.DatePicker',
-    xtype: 'datefieldice'
+    xtype: 'datefieldice',
+    
+    
+    getValue: function () {
+        var fecha = null,
+            value = this.callParent();
+        if (!Ext.isEmpty(value)) {
+            fecha = Ext.Date.format(value, Ext.util.Format.dateFormat);
+        }
+        return fecha;
+    }
     
     /*initComponent: function () {
         var me = this,
