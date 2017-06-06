@@ -54,6 +54,15 @@ Ext.define('Ice.view.field.ComboIce', {
                 extraParams: {
                     catalogo: configIce.catalogo || ''
                 }
+            },
+            listeners: {
+                load: function (me, records, success) {
+                    if (success === true) {
+                        for (var i = 0; i < records.length; i++) {
+                            records[i].set('value', records[i].get('key') + ' - ' + records[i].get('value'));
+                        }
+                    }
+                }
             }
         };
         
