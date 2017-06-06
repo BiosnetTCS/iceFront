@@ -40,11 +40,11 @@ Ext.define('Ice.view.bloque.ListaSituacionesController', {
                 mascara: 'Recuperando datos generales',
                 url: Ice.url.bloque.listaSituaciones.cargar,
                 params: {
-                    'params.cdunieco' : '1',
-                    'params.cdramo': '501',
-                    'params.estado': 'W',
-                    'params.nmpoliza': '11075',
-                    'params.nmsuplem': '0'
+                    'params.cdunieco' : view.cdunieco,
+                    'params.cdramo': view.cdramo,
+                    'params.estado': view.estado,
+                    'params.nmpoliza': view.nmpoliza,
+                    'params.nmsuplem': view.nmsuplem
                 },
                 success: function (json) {
                     var paso2 = 'LLenando store';
