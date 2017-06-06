@@ -19,6 +19,7 @@ Ext.define('Ice.view.field.ComboIce', {
         minWidth: 120
     },
     
+    displayTpl: Ext.create('Ext.XTemplate', '<tpl for=".">{value} ({key})</tpl>'),
     
     initComponent: function () {
         var me = this,
@@ -53,15 +54,6 @@ Ext.define('Ice.view.field.ComboIce', {
                 },
                 extraParams: {
                     catalogo: configIce.catalogo || ''
-                }
-            },
-            listeners: {
-                load: function (me, records, success) {
-                    if (success === true) {
-                        for (var i = 0; i < records.length; i++) {
-                            records[i].set('value', records[i].get('key') + ' - ' + records[i].get('value'));
-                        }
-                    }
                 }
             }
         };
