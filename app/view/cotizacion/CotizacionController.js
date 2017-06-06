@@ -279,12 +279,31 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
         var me = this,
             view = me.getView(),
             refs = view.getReferences(),
-            paso = 'Tarificando';
+            paso = 'Guardando datos';
         try {
             var callbackSuccess = function() {
-                var paso2 = 'Recuperando primas';
+                var paso2 = 'Tarificando';
                 try {
-                    me.mostrarPrimas();
+                    Ice.request({
+                        mascara: paso2,
+                        url: Ice.url.emision.tarificar,
+                        params: {
+                            'params.cdunieco': view.getCdunieco(),
+                            'params.cdramo': view.getCdramo(),
+                            'params.estado': view.getEstado(),
+                            'params.nmpoliza': view.getNmpoliza(),
+                            'params.nmsuplem': view.getNmsuplem(),
+                            'params.nmsituac': '0'
+                        },
+                        success: function (action) {
+                            var paso3 = 'Mostrando tarifa';
+                            try {
+                                me.mostrarPrimas();
+                            } catch (e) {
+                                Ice.manejaExcepcion(e, paso3);
+                            }
+                        }
+                    });
                 } catch (e) {
                     Ice.manejaExcepcion(e, paso2);
                 }
@@ -306,6 +325,29 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
     
     mostrarPrimas: function () {
         Ice.log('Ice.view.cotizacion.CotizacionController.mostrarPrimas');
-        alert('Prima total: $10,000.00');
+        var me = this,
+            paso = 'Recuperando tarifa';
+        try {
+            var view = me.getView();
+            
+            Ext.create({
+                xtype: 'ventanaprimas',
+                
+                cdunieco: view.getCdunieco(),
+                cdramo: view.getCdramo(),
+                estado: view.getEstado(),
+                nmpoliza: view.getNmpoliza(),
+                
+                botones: [{
+                    text: 'Aceptar',
+                    iconCls: 'x-fa fa-check',
+                    handler: function (me) {
+                        me.up('ventanaprimas').cerrar();
+                    }
+                }]
+            }).mostrar();
+        } catch (e) {
+            Ice.manejaExcepcion(e, paso);
+        }
     }
 });
