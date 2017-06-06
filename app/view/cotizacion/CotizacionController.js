@@ -255,12 +255,14 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
     
     onCargarClic: function () {
         Ice.log('Ice.view.cotizacion.CotizacionController.onCargarClic');
-        var paso = 'Cargando cotizaci\u00f3n';
+        var me = this,
+            view = me.getView(),
+            paso = 'Cargando cotizaci\u00f3n';
         try {
             var funcion = function (buttonId, value) {
                 if (buttonId === 'ok' && value) {
                     Ice.query('#mainView').getController().redirectTo(
-                        'cotizacion.action?cdramo=501&cdtipsit=51&cdunieco=1&estado=W&nmsuplem=0&nmpoliza=' + value,
+                        'cotizacion.action?cdramo='+view.getCdramo()+'&cdtipsit='+view.getCdtipsit()+'&cdunieco=1&estado=W&nmsuplem=0&nmpoliza=' + value,
                         true);
                 }
             };
