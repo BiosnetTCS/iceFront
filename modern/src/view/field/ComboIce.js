@@ -6,21 +6,56 @@ Ext.define('Ice.view.field.ComboIce', {
     xtype: 'comboice',
     
     valueField: 'key',
-    displayField: 'value'
+    displayField: 'value',
     
-    /*initComponent: function () {
+    autoSelect: false,
+    
+    initialize: function () {
         var me = this,
-            configIce = me.config, // la configuracion recibida de TCONFSCR
-            configTra = {};        // la transformacion en atributos ext (ejemplo: label se pasa a fieldLabel en toolkit classic)
-        
-        
-        // label -> fieldLabel
-        if (configIce.label) {
-            configTra.fieldLabel = configIce.label;
+            configIce = me.config, // config recibia de TCONFSCR
+            paso = 'Instanciando select modern';
+            
+        try {
+            var store = {
+                autoLoad: true,
+                fields: ['key', 'value', 'aux', 'aux2', 'aux3', 'aux4', 'aux5'],
+                proxy: {
+                    type: 'ajax',
+                    url: Ice.url.core.obtenerCatalogo,
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'list'
+                    },
+                    extraParams: {
+                        catalogo: configIce.catalogo || ''
+                    }
+                }
+            };
+            
+            
+            // extraParams
+            if (configIce.param1) {
+                store.proxy.extraParams[configIce.param1] = configIce.value1 || '';
+            }
+            if (configIce.param2) {
+                store.proxy.extraParams[configIce.param2] = configIce.value2 || '';
+            }
+            if (configIce.param3) {
+                store.proxy.extraParams[configIce.param3] = configIce.value3 || '';
+            }
+            if (configIce.param4) {
+                store.proxy.extraParams[configIce.param4] = configIce.value4 || '';
+            }
+            if (configIce.param5) {
+                store.proxy.extraParams[configIce.param5] = configIce.value5 || '';
+            }
+            
+            
+            me.setStore(store);
+        } catch (e) {
+            Ice.generaExcepcion(e, paso);
         }
         
-        
-        Ext.apply(me, configTra);
-        this.callParent(arguments);
-    }*/
+        me.callParent(arguments);
+    }
 });
