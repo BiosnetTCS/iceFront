@@ -467,9 +467,9 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		
 	},
 	
-	guardar:function(){
-		var paso="";
-		try{
+	guardar:function(params){
+		var paso = 'Validando coberturas';
+		try {
 			var view=this.getView();
 			
 			
@@ -480,24 +480,41 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 					'params.nmpoliza':view.nmpoliza ,
 					'params.cdramo':view.cdramo ,
 					'params.estado':view.estado ,
-					'params.nmsituac':view.nmsituac ,
+					'params.nmsituac':0 ,
 					'params.nmsuplem':view.nmsuplem,
 					bloques:["B18","B19","B19B"]
 				},
 				success:function(json){
-					var list = json.list || [];
-					
-					Ice.log(json)
-					
-					if(list.length && view.success){
-						view.success();
-					}else if(view.failure){
-						view.failure();
-					}
+					Ice.log(json);
+					var paso2 = 'Evaluando validaciones';
+					try {
+    					var list = json.list || [];
+    					if (list.length) {
+    					   alert('validaciones');
+    					   alert('Si una validacion es tipo "error" hay que hacer throw 'Favor de revisar las validaciones');
+    					}
+    					
+    					if (params && params.success) {
+    						params.success();
+					    }
+				    } catch (e) {
+				        Ice.manejaExcepcion(e, paso);
+                        if (params && params.failure) {
+                            params.failure();
+                        }
+				    }
+				},
+				failure: function () {
+				    if (params && params.failure) {
+				        params.failure();
+				    }
 				}
 			});
-		}catch(e){
-			Ice.generaExcepcion(e,paso);
+		} catch (e) {
+			Ice.manejaExcepcion(e, paso);
+			if (params && params.failure) {
+			    params.failure();
+			}
 		}
 	},
 	
