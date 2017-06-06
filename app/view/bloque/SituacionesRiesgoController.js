@@ -219,7 +219,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
       var me = this,
           view = me.getView(),
           refs = view.getReferences(),
-          paso = 'Cargando valores por defecto variables de datos generales';
+          paso = 'Cargando valores por defecto variables de situaciones de riesgo';
           Ice.log('refs',refs);
       try {
           if (view.getDatosVariablesNuevos() !== true) {
@@ -413,14 +413,16 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
           view = me.getView(),
           refs = view.getReferences(),
           paso = 'Antes de validar valores situacion';
+      view.procesandoValoresDefecto = false;
+      view.setDatosFijosNuevos = false;
       try{
           var form = refs.form;
           form.hide();
           values = form.getValues();          
           situacion = {};
           Ice.request({
-              mascara: 'Cargando valores por defecto',
-              url: Ice.url.bloque.situacionesRiesgo.validaciones,              
+              mascara: 'Antes de lanzar validaciones de bloque de situacion',
+              url: Ice.url.bloque.situacionesRiesgo.validaciones,
               params: {                  
                   'params.cdunieco' : view.cdunieco,
                   'params.cdramo' : view.cdramo,
@@ -429,7 +431,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
                   'params.nmsuplem' : view.nmsuplem
               },
               success: function (action) {
-                  var paso2 = 'Seteando valores por defecto';
+                  var paso2 = 'Lanzando validaciones de bloque de situacion';
                   try {
                       if (action.validaciones && action.validaciones.length > 0) {
                           Ext.create('Ice.view.bloque.VentanaValidaciones', {
@@ -457,7 +459,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
                   }
               },
               failure: function () {
-                  view.procesandoValoresDefecto = false;
+                  Ice.mensajeError('Error de red al procesar validaciones');
               }
           });
           Ice.log('situacion',situacion);
