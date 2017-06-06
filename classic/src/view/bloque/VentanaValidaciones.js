@@ -13,6 +13,7 @@ Ext.define('Ice.view.bloque.VentanaValidaciones', {
     },
     
     title: 'Validaciones',
+    layout: 'fit',
     
     config: {
         lista: []
