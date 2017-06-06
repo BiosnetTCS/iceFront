@@ -37,12 +37,10 @@ var Ice = Object.assign(Ice || {}, {
 			 recuperarTatripol:    'emision/obtieneTatripol.action'
          },
          
-         // URLs de cotizacion
-         cotizacion: {
-         },
-         
          // URLs de emision
          emision: {
+            tarificar:     'emision/generarTarificacion.action',
+            obtenerTarifa: 'emision/obtenerDatosTarificacion.action'
          },
          
          bloque: {
@@ -66,15 +64,15 @@ var Ice = Object.assign(Ice || {}, {
                 validaciones: 'emision/validaBloqueSituacion.action'
             },
             coberturas:{
-            	datosCoberturas: 			'/iceMVC/coberturas/obtieneMpoligar.action',
-            	borrarCobertura : 			'/iceMVC/coberturas/movimientoMpoligar.action',//
-            	recuperarTatrigar:			'/iceMVC/coberturas/obtieneTatrigar.action',
-            	guardarCoberturas:			'/iceMVC/coberturas/guardarCoberturas.action',
-            	obtieneTvalogar: 			'/iceMVC/coberturas/obtieneTvalogar.action',
-            	obtieneMpolicap: 			'/iceMVC/coberturas/obtieneMpolicap.action',
-            	agregarCobertura: 			'/iceMVC/coberturas/agregarCobertura.action'
+            	datosCoberturas: 			'coberturas/obtieneMpoligar.action',
+            	borrarCobertura : 			'coberturas/movimientoMpoligar.action',//
+            	recuperarTatrigar:			'coberturas/obtieneTatrigar.action',
+            	guardarCoberturas:			'coberturas/guardarCoberturas.action',
+            	obtieneTvalogar: 			'coberturas/obtieneTvalogar.action',
+            	obtieneMpolicap: 			'coberturas/obtieneMpolicap.action',
+            	agregarCobertura: 			'coberturas/agregarCobertura.action'
             },
-            ejecutarValidacion:			'/iceMVC/emision/validaciones.action'
+            ejecutarValidacion:			'emision/validaciones.action'
             
          }
      },
