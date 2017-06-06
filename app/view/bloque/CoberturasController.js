@@ -735,6 +735,82 @@ Ext.define('Ice.view.bloque.CoberturasController', {
  		Ice.generaExcepcion(e,paso)
  	}
  	
+ },
+ guardarCoberturaMovil:function(me){
+	 var paso=""
+		 	try{
+			    	var view = this.getView();
+			    	var form = me.up('formpanel');
+			    	Ice.log(":::::::",view,me,form)
+			    	var elementos=[]
+			    	form.items.items.forEach(function(it,idx){
+			    		
+			    		if(it.referenceKey){
+				    		elementos.push({
+				    			valor:it.getValue(),
+				    			valorOriginal:it.valorOriginal,
+				    			name:it.referenceKey,
+				    			tabla:it.tabla
+				    		})
+			    		}
+			    		
+			    	});
+			    	Ice.request({
+			    		url:Ice.url.bloque.coberturas.guardarCoberturas,
+			    		jsonData:{
+			    			list:elementos,
+			    			'params.cdunieco':view.cdunieco,
+			    			params:{
+			    				'cdunieco':view.cdunieco,
+				    			'cdramo':view.cdramo,
+				    			'estado':view.estado,
+				    			'nmpoliza':view.nmpoliza,
+				    			'nmsuplem':view.nmsuplem,
+				    			'nmsituac':view.nmsituac,
+				    			'cdgarant':view.cdgarant,
+				    			'cdcapita':view.cdcapita
+			    			}
+			    		},
+			    		success:function(json){
+			    			
+			    			
+			    			var paso="";
+			    			try{
+			    				var list=json.list || [];
+				    			
+				    			if(list.length!=0){
+				    				Ext.create('Ice.view.bloque.VentanaValidaciones', {
+		                                lista: list
+		                            }).mostrar();
+				    				
+//				    				Ice.log("--",list)
+//				    				var win=view.windows.find(function(w){
+//				    					return w.windowName=='conflictos'
+//				    				})
+//				    				Ice.log("-Window->",win)
+//				    				win.down('[tipo=grid]').store.removeAll();
+//				    				win.down('[tipo=grid]').store.add(list);
+//				    				win.show();
+				    			}else{
+				    				Ice.mensajeCorrecto({
+					    				titulo:'Correcto',
+					    				mensaje:"Datos guardados correctamente"
+					    			});
+				    			}
+				    			
+				    			
+				    			view.down("#gridCoberturas").store.load();
+			    			}catch(e){
+			    				Ice.generaExcepcion(e,paso);
+			    			}
+			    			
+			    		}
+			    	});
+			    	
+			    	this.guardar()
+		 	}catch(e){
+		 		Ice.generaExcepcion(e,paso)
+		 	}
  }
     
     
