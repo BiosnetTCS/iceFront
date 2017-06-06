@@ -491,7 +491,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     					var list = json.list || [];
     					if (list.length) {
     					   alert('validaciones');
-    					   alert('Si una validacion es tipo "error" hay que hacer throw 'Favor de revisar las validaciones');
+    					   alert('Si una validacion es tipo "error" hay que hacer throw "Favor de revisar las validaciones"');
     					}
     					
     					if (params && params.success) {
