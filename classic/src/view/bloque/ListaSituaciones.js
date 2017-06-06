@@ -33,7 +33,7 @@
 	        try {
 	            var comps = Ice.generaComponentes({
 	                pantalla: 'BLOQUE_LISTA_SITUACIONES',
-	                seccion: 'LISTA',
+	                seccion: 'GRID',
 	                modulo: me.modulo || '',
 	                estatus: (me.flujo && me.flujo.estatus) || '',
 	                cdramo: me.cdramo || '',
@@ -45,8 +45,8 @@
 	            });
 	            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);
 	            Ext.apply(me, {
-	                columns: comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns.concat(me.config.actionColumns),	                store  : {
-	                	fields: comps.BLOQUE_LISTA_SITUACIONES.LISTA.fields,
+	                columns: comps.BLOQUE_LISTA_SITUACIONES.GRID.columns.concat(me.config.actionColumns),	                store  : {
+	                	fields: comps.BLOQUE_LISTA_SITUACIONES.GRID.fields,
 	                	autoLoad: true,
 	                	proxy: {
 	                        type: 'ajax',

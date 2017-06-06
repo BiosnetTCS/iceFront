@@ -53,13 +53,17 @@ var Ice = Object.assign(Ice || {}, {
                 valoresDefectoVariables: 'emision/datosGenerales/valoresDefectoVariables.action'
             },
             listaSituaciones: {
-                cargar: 'emision/obtieneMpolisit.action'//'jsonLocal/bloqueDatosSituacionCargar.json'
+                cargar: 'emision/obteneListaSituaciones.action'//'jsonLocal/bloqueDatosSituacionCargar.json'
             },
             situacionesRiesgo: {
-                agregar: 'jsonLocal/bloqueSituacionCargar.json',                
+                obtener: 'emision/obtenerSituacion.action',                
                 editar: 'jsonLocal/bloqueSituacionCargar.json',
-                borrar: 'jsonLocal/bloqueSituacionBorrar.json',                
-                cargar: 'emision/obtieneMpolisit.action' //'jsonLocal/bloqueSituacionCargar.json',
+                borrar: 'emision/eliminarSituacion.action',                
+                cargar: 'emision/obteneListaSituaciones.action',
+                actualizar: 'emision/actualizaSituacion.action',
+                valoresDefectoFijos: 'emision/valoresDefectoFijos.action',
+                valoresDefectoVariables: 'emision/valoresDefectoVariables.action',
+                validaciones: 'emision/validaBloqueSituacion.action'
             },
             coberturas:{
             	datosCoberturas: 			'/iceMVC/coberturas/obtieneMpoligar.action',
@@ -752,8 +756,6 @@ var Ice = Object.assign(Ice || {}, {
 	                	obj.name_cdatribu=obj.cdatribu
 	                	obj.maxlengthe=obj.nmlmax
 	                	obj.minlength=obj.nmlmin
-	                	
-	                	
 	                	obj.catalogo=obj.ottabval
 	                };
 	              secciones.url=Ice.url.core.recuperarTatripol;
