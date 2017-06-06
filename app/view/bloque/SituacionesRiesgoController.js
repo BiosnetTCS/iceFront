@@ -86,7 +86,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
       try{
           Ice.log('View items ',view.down('grid'));
           paso = "Antes de agregar situacion de riesgo";
-          Ice.suspendEvents(view);
           var store = view.down('grid').getStore(),
               form = view.down('form');
           Ice.request({
@@ -106,15 +105,16 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
                       if(json.situacion){
 //                          store.add(json.situacion);
                           var refs = view.getReferences();
+                          Ice.suspendEvents(view);
                           for (var att in json.situacion) {
                               if (refs[att]) {
                                   refs[att].setValue(json.situacion[att]);
                               }
                           }
+                          Ice.resumeEvents(view);
                       }
                       Ice.log('form',form);
                       form.show();
-                      Ice.resumeEvents(view);
                   } catch (e) {
                       Ice.manejaExcepcion(e, paso2);
                   }
@@ -133,7 +133,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
       try{
           Ice.log('View items ',view.down('grid'));
           paso = "Antes de editar situacion de riesgo";
-          Ice.suspendEvents(view);
           var store = view.down('grid').getStore(),
               form = view.down('form'),
               data = store.getAt(rowIndex).data;
@@ -159,15 +158,16 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
                           Ice.log("situacion",situacion);
 //                          store.add(json.situacion);
                           var refs = view.getReferences();
+                          Ice.suspendEvents(view);
                           for (var att in situacion) {
                               if (refs[att]) {
                                   refs[att].setValue(situacion[att]);
                               }
                           }
+                          Ice.resumeEvents(view);
                       }
                       Ice.log('form',form);
                       form.show();
-                      Ice.resumeEvents(view);
                   } catch (e) {
                       Ice.manejaExcepcion(e, paso2);
                   }
@@ -186,7 +186,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
           store = view.down('grid').getStore();
       try{
           paso = "Antes de borrar situacion de riesgo";
-          Ice.suspendEvents(view);
           var data = store.getData().getAt(rowIndex).getData();            
           Ice.log('situacion: ',data);
           Ice.request({
@@ -204,7 +203,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
                   var paso2 = 'Antes de recargar store';
                   try {
                       store.reload();
-                      Ice.resumeEvents(view);
                   } catch (e) {
                       Ice.manejaExcepcion(e, paso2);
                   }
@@ -215,33 +213,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
       }
   },
   
-  cargarValoresDefectoFijos: function () {
-      Ice.log('Ice.view.bloque.SituacionesRiesgoController.cargarValoresDefectoFijos');
-      var me = this,
-          view = me.getView(),
-          refs = view.getReferences();
-      var paso = 'Cargando valores por defecto fijos de datos generales';
-      try {
-          if (view.getDatosFijosNuevos() !== true) {
-              Ice.logWarn('Ice.view.bloque.SituacionesRiesgoController.cargarValoresDefectoFijos los datos fijos no son nuevos');
-              return;
-          }
-          
-          var errores = Ext.create(view.modelo, view.getValues()).getValidation().getData();
-          
-          for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
-              var name = view.getCamposDisparanValoresDefectoFijos()[i];
-              if (refs[name] && errores[name] !== true) {
-                  Ice.logWarn('Ice.view.bloque.SitacionesRiesgoController.cargarValoresDefectoFijos invalido <', name, ':', errores[name], '>');
-                  return;
-              }
-          }
-          Ice.log('Ice.view.bloque.SituacionesRiesgoController.cargarValoresDefectoFijos valores cargados ok');
-          view.setDatosFijosNuevos(false);
-      } catch (e) {
-          Ice.manejaExcepcion(e, paso);
-      }
-  },
   
   cargarValoresDefectoVariables: function () {
       Ice.log('Ice.view.bloque.SituacionesRiesgoController.cargarValoresDefectoVariables');
@@ -276,7 +247,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
           var form = refs.form;
           
           Ice.log('Ice.view.bloque.SituacionesRiesgoController.cargarValoresDefectoVariables valores cargados ok');
-          view.setDatosVariablesNuevos(false);
           var valores = {
                   'params.cdunieco': view.cdunieco,
                   'params.cdramo': view.cdramo,
@@ -344,7 +314,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
           paso = 'Antes de guardar valores situacion';          
       view.procesandoValoresDefecto = false;
       view.setDatosFijosNuevos = false;
-      Ice.suspendEvents(view);
       try{
           var form = refs.form;
           form.hide();
@@ -392,7 +361,6 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
                           Ice.mensajeCorrecto('Datos guardados');
                           refs.grid.getStore().reload();
                           Ice.log('proceso exitoso');
-                          Ice.resumeEvents(view);
                       }
                       
                   } catch (e) {
