@@ -387,6 +387,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     	
     	var paso=""
     	try{
+    		alert()
 	    	var view = this.getView();
 	    	var form = me.up('form');
 	    	var elementos=[]
@@ -691,10 +692,11 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	 }
  },
  
- guardarCobertura:function(me){
+ guardarCobertura:function(me){ 
  	
  	var paso=""
  	try{
+ 		
 	    	var view = this.getView();
 	    	var form = me.up('form');
 	    	var elementos=[]
@@ -723,7 +725,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	    		},
 	    		success:function(json){
 	    			
-	    			
+	    			Ice.log("-->_",json)
 	    			var paso="";
 	    			try{
 	    				var list=json.list || [];
@@ -731,14 +733,16 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		    			if(list.length!=0){
 		    				
 		    				
-		    				Ice.log("--",list)
-		    				var win=view.windows.find(function(w){
-		    					return w.windowName=='conflictos'
-		    				})
-		    				Ice.log("-Window->",win)
-		    				win.down('[tipo=grid]').store.removeAll();
-		    				win.down('[tipo=grid]').store.add(list);
-		    				win.show();
+		    				Ice.log("-list->",list)
+		    				Ext.create('Ice.view.bloque.VentanaValidaciones', {
+		                                lista: list
+		                            }).mostrar();
+		    				list.forEach(function(it){
+	    						   if((it.tipo+'').toLowerCase()=='error')
+	    							   throw "Favor de revisar las validaciones"
+	    					   })
+		    				
+		    				
 		    			}else{
 		    				Ice.mensajeCorrecto({
 			    				titulo:'Correcto',
@@ -749,7 +753,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		    			
 		    			view.down("#gridCoberturas").store.load();
 	    			}catch(e){
-	    				Ice.generaExcepcion(e,paso);
+	    				Ice.manejaExcepcion(e, paso);
 	    			}
 	    			
 	    		}
@@ -764,6 +768,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
  guardarCoberturaMovil:function(me){
 	 var paso=""
 		 	try{
+		 		
 			    	var view = this.getView();
 			    	var form = me.up('formpanel');
 			    	Ice.log(":::::::",view,me,form)
@@ -809,15 +814,10 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 				    				Ext.create('Ice.view.bloque.VentanaValidaciones', {
 		                                lista: list
 		                            }).mostrar();
-				    				
-//				    				Ice.log("--",list)
-//				    				var win=view.windows.find(function(w){
-//				    					return w.windowName=='conflictos'
-//				    				})
-//				    				Ice.log("-Window->",win)
-//				    				win.down('[tipo=grid]').store.removeAll();
-//				    				win.down('[tipo=grid]').store.add(list);
-//				    				win.show();
+				    				list.forEach(function(it){
+			    						   if((it.tipo+'').toLowerCase()=='error')
+			    							   throw "Favor de revisar las validaciones"
+			    					   })
 				    			}else{
 				    				Ice.mensajeCorrecto({
 					    				titulo:'Correcto',
@@ -838,6 +838,81 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		 	}catch(e){
 		 		Ice.generaExcepcion(e,paso)
 		 	}
+ },
+ 
+ mostrarCoberturas:function(grid,rowIndex,colIndex) {
+			try {
+				var me = grid.up('bloquecoberturas')
+				var paso = 'limpiando grids'
+				var gridCoberturas = me
+						.down('#gridCoberturas');
+				gridCoberturas.store
+						.removeAll();
+				gridCoberturas.setHidden(false);
+				
+				me
+						.down(
+								'[xtype=form]')
+						.removeAll();
+				paso = 'consultando coberturas'
+				var record = grid
+						.getStore()
+						.getAt(
+								rowIndex);
+				 paso = "Evento selecciona cobertura "
+				
+				gridCoberturas.store.proxy.extraParams = {
+					'params.pv_cdunieco_i' : me.cdunieco,
+					'params.pv_cdramo_i' : me.cdramo,
+					'params.pv_estado_i' : me.estado,
+					'params.pv_nmpoliza_i' : me.nmpoliza,
+					'params.pv_nmsuplem_i' : me.nmsuplem,
+					'params.pv_nmsituac_i' : record.get('nmsituac')
+				}
+				paso = "estableciendo nmsituac";
+				me.config.nmsituac = record.get('nmsituac');
+				me.setNmsituac(record.get('nmsituac'));
+				
+				Ext.ComponentQuery.query("[xtype=bloquelistasituaciones]")[0].nmsitac=record.get('nmsituac')
+				gridCoberturas.store
+						.load()
+				gridCoberturas.store.filter('amparada','S')
+				gridCoberturas
+						.up('[xtype=bloquecoberturas]').nmsituac = record
+						.get('nmsituac')
+						
+			} catch (e) {
+				Ice.generaExcepcion(e,	paso);
+			}
+		},
+onItemTabSituaciones:function(grid,idx,target,record){
+	try{
+		var me = grid.up("bloquecoberturas");
+		me.down("[xtype=formpanel]").removeAll();
+		me.config.nmsituac=record.get("nmsituac");
+	    me.down("#gridCoberturas").getStore().proxy.extraParams['params.pv_nmsituac_i']=me.config.nmsituac
+	    me.down("#gridCoberturas").getStore().load()
+	    me.down("#gridCoberturas").getStore().filter('amparada','S')
+		
+	    Ice.log(me.config.nmsituac)
+	}
+	catch(e){
+		Ice.generaExcepcion(e,	paso);
+	}
+},
+
+mostrarPanelCoberturas:function(btn) {
+ 	try{
+ 		
+ 		btn.up("[xtype=bloquecoberturas]").getItems().items.forEach(function(it){
+ 			it.setHidden(true)
+ 		})
+ 		Ext.ComponentQuery.query("#agregables")[0].getStore().load()
+ 		Ext.ComponentQuery.query("#panela")[0].setHidden(false)
+ 	}catch(e){
+ 		Ice.generaExcepcion(e,paso)
+ 	}
+   
  }
     
     
