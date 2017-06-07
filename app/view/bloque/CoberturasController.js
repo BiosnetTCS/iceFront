@@ -447,7 +447,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	    		}
 	    	});
 	    	
-	    	this.guardar()
+	    	
     	}catch(e){
     		Ice.generaExcepcion(e,paso)
     	}
@@ -526,10 +526,10 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		}
 	},
 	
-  editarCoberturaMovil:function(btn) {
+  editarCoberturaMovil:function(grid,idx,tar,sel) {
    	try{
- 		var me =btn.up("bloquecoberturas");
- 		var sel =Ext.ComponentQuery.query("#gridCoberturas")[0].getSelection();
+ 		var me =grid.up("bloquecoberturas");
+ 		//var sel =Ext.ComponentQuery.query("#gridCoberturas")[0].getSelection();
  			me.config.cdgarant=sel.get("cdgarant")
  			me.config.cdcapita=sel.get("cdcapita")
  			var form=me.down('[xtype=formpanel]');
@@ -784,18 +784,20 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    		url:Ice.url.bloque.coberturas.guardarCoberturas,
 			    		jsonData:{
 			    			list:elementos,
-			    			'params.cdunieco':view.cdunieco,
 			    			params:{
-			    				'cdunieco':view.cdunieco,
-				    			'cdramo':view.cdramo,
-				    			'estado':view.estado,
-				    			'nmpoliza':view.nmpoliza,
-				    			'nmsuplem':view.nmsuplem,
-				    			'nmsituac':view.nmsituac,
-				    			'cdgarant':view.cdgarant,
-				    			'cdcapita':view.cdcapita
+			    				'cdunieco':view.getCdunieco(),
+				    			'cdramo':view.config.cdramo,
+				    			'estado':view.config.estado,
+				    			'nmpoliza':view.config.nmpoliza,
+				    			'nmsuplem':view.config.nmsuplem,
+				    			'nmsituac':view.config.nmsituac,
+				    			'cdgarant':view.config.cdgarant,
+				    			'cdcapita':view.config.cdcapita
 			    			}
-			    		},
+			    			
+			    			
+			    		}
+			    	,
 			    		success:function(json){
 			    			
 			    			
@@ -824,7 +826,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 				    			}
 				    			
 				    			
-				    			view.down("#gridCoberturas").store.load();
+				    			Ext.ComponentQuery.query("#gridCoberturas")[0].getStore().load();
 			    			}catch(e){
 			    				Ice.generaExcepcion(e,paso);
 			    			}
@@ -832,7 +834,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    		}
 			    	});
 			    	
-			    	this.guardar()
+			    	//this.guardar()
 		 	}catch(e){
 		 		Ice.generaExcepcion(e,paso)
 		 	}

@@ -4,7 +4,7 @@
 Ext.define('Ice.view.bloque.ListaSituaciones', {
 	    extend: 'Ext.grid.Grid',
 	    xtype: 'bloquelistasituaciones',	
-		width:'500px',
+		width:'100%',
 		height:300,
 	    	controller: 'bloquelistasituaciones',
 //		    viewModel: 'bloquelistasituaciones',	    

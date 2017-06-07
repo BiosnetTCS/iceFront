@@ -29,7 +29,7 @@
 // 							}
  							if (!config.cdramo || !config.cdtipsit
  									|| !config.modulo) {
- 								throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
+ 								//throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
  							}
  							config.cdunieco = config.cdunieco || '';
  							config.cdramo = config.cdramo || '';
@@ -127,6 +127,8 @@
  																					.down('#gridCoberturas');
  																			gridCoberturas.store
  																					.removeAll();
+ 																			gridCoberturas.setHidden(false);
+ 																			
  																			me
  																					.down(
  																							'[xtype=form]')
@@ -137,12 +139,7 @@
  																					.getAt(
  																							rowIndex);
  																			 paso = "Evento selecciona cobertura "
- 																			// aqui
- 																			// mandar
- 																			// los
- 																			// datos
- 																			// de a
- 																			// deveras
+ 																			
  																			gridCoberturas.store.proxy.extraParams = {
  																				'params.pv_cdunieco_i' : me.cdunieco,
  																				'params.pv_cdramo_i' : me.cdramo,
@@ -153,6 +150,7 @@
  																			}
  																			paso = "estableciendo nmsituac";
  																			me.config.nmsituac = record.get('nmsituac');
+ 																			me.setNmsituac(record.get('nmsituac'));
  																			
  																			Ext.ComponentQuery.query("[xtype=bloquelistasituaciones]")[0].nmsitac=record.get('nmsituac')
  																			gridCoberturas.store
@@ -161,11 +159,9 @@
  																			gridCoberturas
  																					.up('[xtype=bloquecoberturas]').nmsituac = record
  																					.get('nmsituac')
+ 																					
  																		} catch (e) {
- 																			Ice
- 																					.generaExcepcion(
- 																							e,
- 																							paso);
+ 																			Ice.generaExcepcion(e,	paso);
  																		}
  																	}
  																} ]
@@ -175,6 +171,7 @@
  														{
  															xtype : 'gridpanel',
  															itemId : 'gridCoberturas',
+ 															hidden: true,
  															title : 'Coberturas',
  															// width : "700px",
  															tbar : [
@@ -184,6 +181,7 @@
  																	{
  																		xtype : 'button',
  																		itemId : 'btnAgregar',
+ 							 				                        	iconCls: 'x-fa fa-plus-circle',
  																		text : 'Agregar',
  																		handler : 'agregarCobertura'
  																	} ],
