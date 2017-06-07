@@ -74,8 +74,8 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 							
 						}
 						
-						if(config.actioncolumns){
-							config.actioncolumns.forEach(function(it){
+						if(config.actionColumns){
+							config.actionColumns.forEach(function(it){
 								config.columns.push(
 										{
 								            text: '',
