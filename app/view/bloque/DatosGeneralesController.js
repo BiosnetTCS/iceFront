@@ -370,8 +370,18 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                         
                         var refs = view.getReferences();
                         for (var att in json.params) {
-                            if (refs[att]) {
-                                refs[att].setValue(json.params[att]);
+                            var ref = refs[att];
+                            if (ref) {
+                                if (ref.isXType('selectfield') && ref.getStore().getCount() === 0) { // aun no hay registros
+                                    ref.getStore().padre = ref;
+                                    ref.getStore().valorOnLoad = '' + json.params[att];
+                                    ref.getStore().on('load', function handleLoad (me) {
+                                        me.removeListener('load', handleLoad);
+                                        me.padre.setValue(me.valorOnLoad);
+                                    });
+                                } else {
+                                    ref.setValue(json.params[att]);
+                                }
                             }
                         }
                         Ice.resumeEvents(view);
@@ -438,7 +448,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                             var error = false;
                             for (var i = 0; i < action.list.length; i++) {
                                 if (action.list[i].tipo.toLowerCase() === 'error') {
-                                    error = true; // para que no avance si hay validaciones tipo "error"
+                                    //error = true; // para que no avance si hay validaciones tipo "error"
                                     break;
                                 }
                             }

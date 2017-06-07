@@ -476,6 +476,19 @@ var Ice = Object.assign(Ice || {}, {
                             xtype: 'container',
                             padding: '10px',
                             html: mensaje
+                        }, {
+                            xtype: 'toolbar',
+                            docked: 'bottom',
+                            ui: 'footer',
+                            items: [
+                                '->', {
+                                    text: 'Aceptar',
+                                    iconCls: 'x-fa fa-check',
+                                    handler: function (me) {
+                                        me.up('[mensajeIce=true]').hide();
+                                    }
+                                }, '->'
+                            ]
                         }
                     ],
 
