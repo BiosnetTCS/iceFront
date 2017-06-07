@@ -34,6 +34,46 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 		                this.config.flujo = config.flujo || {};
 	               
 		                this.config.modulo = config.modulo || 'COTIZACION';
+		                
+		                
+		                var comps = Ice.generaComponentes({
+								pantalla : 'BLOQUE_LISTA_SITUACIONES',
+								seccion : 'LISTA',
+								modulo : config.modulo || '',
+								estatus : (config.flujo && config.flujo.estatus) || '',
+								cdramo : config.cdramo || '',
+								cdtipsit : config.cdtipsit || '',
+								auxKey : config.auxkey || '',
+								columns : true,
+								fields : true
+							});
+						Ice.log('Ice.view.bloque.Coberturas.initComponent comps:',comps);
+	
+						config.columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns
+						
+						if(Ext.isArray(config.buttons)){
+							if(Ext.isArray(this.config.items)){
+								config.items.push({
+ 						            xtype : 'toolbar',
+ 						            docked: 'bottom',
+ 						            items:[
+ 						            	config.buttons
+ 						            ]
+ 						        })
+							}else{
+								config.items=[{
+ 						            xtype : 'toolbar',
+ 						            docked: 'bottom',
+ 						            items:[
+ 						            	config.buttons
+ 						            ]
+ 						        }]
+							}
+							
+						}
+							
+							
+							
 	               
 		            } catch (e) {
 		                Ice.generaExcepcion(e, paso);
@@ -65,24 +105,11 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 		    initComponent:function(){
 		    	
 		    	
-		    	var me=this;
-		    	var comps = Ice.generaComponentes({
-	                pantalla: 'BLOQUE_LISTA_SITUACIONES',
-	                seccion: 'LISTA',
-	                modulo: me.config.modulo || '',
-	                estatus: (me.config.flujo && me.config.flujo.estatus) || '',
-	                cdramo: me.config.cdramo || '',
-	                cdtipsit: me.config.cdtipsit ||'',
-	                auxKey: me.config.auxkey || '',
-//	                items: true,
-	                columns: true,
-	                fields:true
-	            });
-	            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);
+		    	
 
 	           // me.columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns || [];
 	            
-	            me.buttons=me.config.buttons
+	           
 	            
 	            
 		    },
