@@ -51,6 +51,8 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	
 						config.columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns
 						
+						
+						
 						if(Ext.isArray(config.buttons)){
 							if(Ext.isArray(this.config.items)){
 								config.items.push({
@@ -70,6 +72,22 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
  						        }]
 							}
 							
+						}
+						
+						if(config.actioncolumns){
+							config.actioncolumns.forEach(function(it){
+								config.columns.push(
+										{
+								            text: '',
+								            width: 100,
+								            ignoreExport: true,
+								            cell: {
+								                xtype: 'widgetcell',
+								                widget: it
+								            }
+								        }
+										)
+							});
 						}
 							
 							
