@@ -54,6 +54,8 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	        camposDisparanValoresDefectoVariables: [
 	            'cdunieco', 'cdramo', 'estado', 'nmpoliza', 'nmsituac', 'status', 'nmsuplem', 'cdtipsit'
 	        ],
+	        modelFields: [],
+	        modelValidators: []
 	    },
 	    
 	    
@@ -77,7 +79,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                cdtipsit: me.cdtipsit ||'',
 	                auxKey: me.auxkey || '',
 	                items: true,
-	                validatos: true
+	                validators: true
 	            });
 	            Ice.log('Ice.view.bloque.SituacionesRiesgo.initComponent comps:', comps);
 	            
@@ -91,7 +93,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
                     auxKey: me.auxkey || '',
                     items: true,
                     fields: true,
-                    validatos: true
+                    validators: true
                 });
 	            	            
 	            Ice.log('items',comps.BLOQUE_LISTA_SITUACIONES.LISTA.items);
@@ -118,7 +120,9 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 //                    fields: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.fields,
 //                    validators: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators
 //                });
-	            
+                me.setModelFields(compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.fields);
+                me.setModelValidators(compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators);
+                Ice.log('compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators ',me.getModelValidators());
 	            Ext.apply(me, {
 	                items: [
 	                    {
@@ -165,8 +169,8 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	                        title: 'Editar situacion de riesgo',
 	                        items: comps.BLOQUE_LISTA_SITUACIONES.LISTA.items.concat(compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.items),
 	                        modelo: modelName,
-	                        modelFields: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.fields,
-                            modelValidators: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators,
+//	                        modelFields: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.fields,
+//                            modelValidators: compsForm.BLOQUE_LISTA_SITUACIONES.FORMULARIO.validators,
 	                        layout: 'responsivecolumn',
 	                        hidden: true,
 	                        buttons: [

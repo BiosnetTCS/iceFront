@@ -4,8 +4,6 @@
 Ext.define('Ice.view.bloque.ListaSituaciones', {
 	    extend: 'Ext.grid.Grid',
 	    xtype: 'bloquelistasituaciones',	
-		width:'100%',
-		height:300,
 	    	controller: 'bloquelistasituaciones',
 //		    viewModel: 'bloquelistasituaciones',	    
 
@@ -26,15 +24,18 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 		                if (!config.cdramo || !config.cdtipsit) {
 		                    throw 'Falta ramo y tipo de situaci\u00f3n para bloque de lista de situaciones';
 		                }
-		                this.config.cdunieco = config.cdunieco || '';
-		                this.config.cdramo = config.cdramo || '';
-		                this.config.estado = config.estado || '';
-		                this.config.nmpoliza = config.nmpoliza || '';
-		                this.config.nmsuplem = config.nmsuplem || '';
-		                this.config.flujo = config.flujo || {};
+		                config.cdunieco = config.cdunieco || '';
+		                config.cdramo = config.cdramo || '';
+		                config.estado = config.estado || '';
+		                config.nmpoliza = config.nmpoliza || '';
+		                config.nmsuplem = config.nmsuplem || '';
+		                config.flujo = config.flujo || {};
 	               
-		                this.config.modulo = config.modulo || 'COTIZACION';
+		                config.modulo = config.modulo || 'COTIZACION';
 		                
+		                if (config.estado === 'w') {
+		                    config.estado = 'W';
+		                }
 		                
 		                var comps = Ice.generaComponentes({
 								pantalla : 'BLOQUE_LISTA_SITUACIONES',
@@ -48,63 +49,40 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 								fields : true
 							});
 						Ice.log('Ice.view.bloque.Coberturas.initComponent comps:',comps);
-	
-						config.columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns
-						Ice.log("->",config.columns)
 						
+						config.columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns;
+						config.fields = comps.BLOQUE_LISTA_SITUACIONES.LISTA.fields;
 						
-						if(Ext.isArray(config.buttons)){
-							
-							if(Ext.isArray(config.items)){
-								
-								config.items.push({
- 						            xtype : 'toolbar',
- 						            docked: 'bottom',
- 						            items:[
- 						            	config.buttons
- 						            ]
- 						        })
-							}else{
-								config.items=[{
- 						            xtype : 'toolbar',
- 						            docked: 'bottom',
- 						            items:config.buttons
- 						            
- 						        }]
-							}
-							
+						config.items = config.items || [];
+						config.buttons = config.buttons || [];
+						
+						if (config.buttons.length > 0) {
+						    config.items.push({
+					            xtype : 'toolbar',
+					            docked: 'bottom',
+					            items: config.buttons
+					        });
 						}
 						
-						if(Ext.isArray(config.actionColumns)){
-							var c=[]
+						config.actionColumns = config.actionColumns || [];						
+						if (config.actionColumns.length > 0) {
+							var c = [];
 							config.actionColumns.forEach(function(it){
-								
-								
 								c.push({
-						            text: '',
-						            //width: 100,
+						            width: '60',
 						            ignoreExport: true,
 						            cell: {
 						                xtype: 'widgetcell',
 						                widget: it
 						            }
-						        })
-						        
-						        
+						        });
 							});
-							
-							c=c.concat(config.columns)
-							config.columns=c
-							Ice.log("##d",config.columns)
+							config.columns = config.columns.concat(c);
+							Ice.log("##d",config.columns);
 						}
-							
-							
-							
-	               
 		            } catch (e) {
 		                Ice.generaExcepcion(e, paso);
 		            }
-		        me.initComponent();
 		        me.callParent(arguments);
 		    },
 
@@ -121,24 +99,14 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 				estado : null,
 				nmpoliza : null,
 				nmsuplem : null,
+				
+				//fields generados en constructor
+				fields: []
 		    },    
 		    
 
 		    // configuracio ext
-		    title: 'Lista Situaciones',	    	    
-
-		    tbar: [],
-		    initComponent:function(){
-		    	
-		    	
-		    	
-
-	           // me.columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns || [];
-	            
-	           
-	            
-	            
-		    },
+		    title: 'Lista Situaciones',
 		    
 		    initialize: function () {
 		    	
@@ -148,7 +116,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 		        try {
 		            
 		            
-		        	var comps = Ice.generaComponentes({
+		        	/*var comps = Ice.generaComponentes({
 		                pantalla: 'BLOQUE_LISTA_SITUACIONES',
 		                seccion: 'LISTA',
 		                modulo: me.config.modulo || '',
@@ -159,22 +127,24 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 //		                items: true,
 		                columns: true,
 		                fields:true
-		            });
-		            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);
+		            });*/
+		            //Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);
 		           // me.headerCt.insert(0,comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns.concat(me.config.actionColumns))
-		           
-		        	me.setStore( {
-	                	fields: comps.BLOQUE_LISTA_SITUACIONES.LISTA.fields,
+		            
+		            //Ice.log('Ice.view.bloque.ListaSituaciones.initComponent me',me);
+		            //me.setColumns(me.config.columns);
+		        	me.setStore({
+	                	fields: me.getFields(),
 	                	autoLoad: true,
 	                	proxy: {
 	                        type: 'ajax',
 	                        url: Ice.url.bloque.listaSituaciones.cargar,
 	                        extraParams: {
-	                            'params.cdunieco' : me.config.cdunieco,
-	                            'params.cdramo': me.config.cdramo,
-	                            'params.estado': me.config.estado,
-	                            'params.nmpoliza': me.config.nmpoliza,
-	                            'params.nmsuplem': me.config.nmsuplem
+	                            'params.cdunieco' : me.getCdunieco(),
+	                            'params.cdramo': me.getCdramo(),
+	                            'params.estado': me.getEstado(),
+	                            'params.nmpoliza': me.getNmpoliza(),
+	                            'params.nmsuplem': me.getNmsuplem()
 	                        },
 	                        reader: {
 	                            type: 'json',
@@ -183,8 +153,7 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 	                            rootProperty: 'situaciones'
 	                         }
 	                     }
-	                })
-		            ;
+	                });
 		        	
 		        	//me.setItems();
 		            
