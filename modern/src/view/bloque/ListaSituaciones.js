@@ -50,9 +50,13 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 						Ice.log('Ice.view.bloque.Coberturas.initComponent comps:',comps);
 	
 						config.columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns
+						Ice.log("->",config.columns)
+						
 						
 						if(Ext.isArray(config.buttons)){
-							if(Ext.isArray(this.config.items)){
+							
+							if(Ext.isArray(config.items)){
+								
 								config.items.push({
  						            xtype : 'toolbar',
  						            docked: 'bottom',
@@ -64,12 +68,34 @@ Ext.define('Ice.view.bloque.ListaSituaciones', {
 								config.items=[{
  						            xtype : 'toolbar',
  						            docked: 'bottom',
- 						            items:[
- 						            	config.buttons
- 						            ]
+ 						            items:config.buttons
+ 						            
  						        }]
 							}
 							
+						}
+						
+						if(Ext.isArray(config.actionColumns)){
+							var c=[]
+							config.actionColumns.forEach(function(it){
+								
+								
+								c.push({
+						            text: '',
+						            //width: 100,
+						            ignoreExport: true,
+						            cell: {
+						                xtype: 'widgetcell',
+						                widget: it
+						            }
+						        })
+						        
+						        
+							});
+							
+							c=c.concat(config.columns)
+							config.columns=c
+							Ice.log("##d",config.columns)
 						}
 							
 							

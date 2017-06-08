@@ -113,59 +113,17 @@
  															// width : "100%",
  															actionColumns : [ 
  																{
- 																xtype : 'actioncolumn',
- 																items : [ {
- 																	iconCls : 'x-fa fa-edit',
- 																	tooltip : 'Editar',
- 																	handler : function(
- 																			grid,
- 																			rowIndex,
- 																			colIndex) {
- 																		try {
- 																			var paso = 'limpiando grids'
- 																			var gridCoberturas = me
- 																					.down('#gridCoberturas');
- 																			gridCoberturas.store
- 																					.removeAll();
- 																			gridCoberturas.setHidden(false);
- 																			
- 																			me
- 																					.down(
- 																							'[xtype=form]')
- 																					.removeAll();
- 																			paso = 'consultando coberturas'
- 																			var record = grid
- 																					.getStore()
- 																					.getAt(
- 																							rowIndex);
- 																			 paso = "Evento selecciona cobertura "
- 																			
- 																			gridCoberturas.store.proxy.extraParams = {
- 																				'params.pv_cdunieco_i' : me.cdunieco,
- 																				'params.pv_cdramo_i' : me.cdramo,
- 																				'params.pv_estado_i' : me.estado,
- 																				'params.pv_nmpoliza_i' : me.nmpoliza,
- 																				'params.pv_nmsuplem_i' : me.nmsuplem,
- 																				'params.pv_nmsituac_i' : record.get('nmsituac')
- 																			}
- 																			paso = "estableciendo nmsituac";
- 																			me.config.nmsituac = record.get('nmsituac');
- 																			me.setNmsituac(record.get('nmsituac'));
- 																			
- 																			Ext.ComponentQuery.query("[xtype=bloquelistasituaciones]")[0].nmsitac=record.get('nmsituac')
- 																			gridCoberturas.store
- 																					.load()
- 																			gridCoberturas.store.filter('amparada','S')
- 																			gridCoberturas
- 																					.up('[xtype=bloquecoberturas]').nmsituac = record
- 																					.get('nmsituac')
- 																					
- 																		} catch (e) {
- 																			Ice.generaExcepcion(e,	paso);
- 																		}
- 																	}
- 																} ]
- 															}
+	 																xtype : 'actioncolumn',
+	 																items : [ 
+		 																	{
+			 																	iconCls : 'x-fa fa-edit',
+			 																	tooltip : 'Editar',
+			 																	handler : function(grid,rowIndex,colIndex) {
+			 																		me.getController().mostrarCoberturas(grid,rowIndex,colIndex)
+			 																	}
+			 																} 
+	 																	]
+	 																}
  																]
  														},
  														{
@@ -175,48 +133,47 @@
  															title : 'Coberturas',
  															// width : "700px",
  															tbar : [
- 																	{
- 																		xtype : 'tbfill'
- 																	},
- 																	{
- 																		xtype : 'button',
- 																		itemId : 'btnAgregar',
- 							 				                        	iconCls: 'x-fa fa-plus-circle',
- 																		text : 'Agregar',
- 																		handler : 'agregarCobertura'
- 																	} ],
- 															columns : comps.COBERTURAS.COBERTURAS.columns
- 																	.concat({
- 																		xtype : 'actioncolumn',
- 																		width : 50,
- 																		items : [
- 																				{
- 																					iconCls : 'x-fa fa-edit',
- 																					tooltip : 'Editar',
- 																					handler : 'editarCobertura'
- 																				},
- 																				{
- 																					iconCls : 'x-fa fa-remove',
- 																					tooltip : 'Borrar',
- 																					handler : 'borraCobertura',
- 																					isDisabled : 'coberturaObligatoria'
- 																				} ]
- 																	}),
- 															bbar : Ext
- 																	.create(
- 																			'Ext.PagingToolbar',
- 																			{
- 																				store : store,
- 																				displayInfo : true,
- 																				emptyMsg : "",
- 																				displayMsg : 'Coberturas {0} - {1} of {2}',
- 																				inputItemWidth : 35
- 																			}),
+	 																	{
+	 																		xtype : 'tbfill'
+	 																	},
+	 																	{
+	 																		xtype : 'button',
+	 																		itemId : 'btnAgregar',
+	 							 				                        	iconCls: 'x-fa fa-plus-circle',
+	 																		text : 'Agregar',
+	 																		handler : 'agregarCobertura'
+	 																	} 
+ 																	],
+ 															columns : comps.COBERTURAS.COBERTURAS.columns.concat(
+	 																	{
+	 																		xtype : 'actioncolumn',
+	 																		width : 50,
+	 																		items : [
+		 																				{
+		 																					iconCls : 'x-fa fa-edit',
+		 																					tooltip : 'Editar',
+		 																					handler : 'editarCobertura'
+		 																				},
+		 																				{
+		 																					iconCls : 'x-fa fa-remove',
+		 																					tooltip : 'Borrar',
+		 																					handler : 'borraCobertura',
+		 																					isDisabled : 'coberturaObligatoria'
+		 																				} 
+	 																				]
+	 																	}
+	 																	),
+ 															bbar : Ext.create('Ext.PagingToolbar',{
+						 																				store : store,
+						 																				displayInfo : true,
+						 																				emptyMsg : "",
+						 																				displayMsg : 'Coberturas {0} - {1} of {2}',
+						 																				inputItemWidth : 35
+						 																			}),
  															store : store
  														},
  														{
  															xtype : 'form',
- 															// width : "100%",
  															layout : {
  																type : 'column'
  															},
@@ -224,13 +181,7 @@
  															},
  															buttons : [ {
  																text : 'Guardar',
- 																formBind : true, // only
- 																					// enabled
- 																					// once
- 																					// the
- 																					// form
- 																					// is
- 																					// valid
+ 																formBind : true, 
  																disabled : true,
  																handler : 'guardarCobertura'
  															} ]

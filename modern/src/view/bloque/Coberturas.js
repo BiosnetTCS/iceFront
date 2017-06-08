@@ -4,12 +4,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
 		xtype	:		'bloquecoberturas',
 		controller : 'bloquecoberturas',
 		scrollable:true,
-		
-		//layout: 'fit',
-		//cls: 'big-100 small-100',
 	     width: '900px',
-	     //heigth: '900px',
-		// validacion de parametros de entrada
+	     
 		constructor : function(config) {
 			Ice.log(
 							'Ice.view.bloque.Coberturas.constructor config:',
@@ -19,10 +15,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
 				if (!config) {
 					throw 'No hay datos para bloque coberturas';
 				}
-				if (config.failure || config.success) {
-					//throw 'Falta funciones success y failure  para bloque de coberturas';
-				}
-				if (config.cdramo || config.cdtipsit
+				
+				if (!config.cdramo || !config.cdtipsit
 						|| !config.modulo) {
 					//throw 'Falta ramo y tipo de situaci\u00f3n para bloque de coberturas';
 				}
@@ -32,6 +26,19 @@ Ext.define('Ice.view.bloque.Coberturas', {
 				config.nmpoliza = config.nmpoliza || '';
 				config.nmsuplem = config.nmsuplem || '';
 				config.flujo = config.flujo || {};
+				
+				
+				config.columns = config.columns || [];
+				config.columns.push({
+					text: 'cesar',
+					minWidth: 50,
+					flex: 1
+				}, {
+					text: 'alvaro',
+					minWidth: 50,
+					flex: 1
+				});
+				
 			} catch (e) {
 				Ice.generaExcepcion(e, paso);
 			}
@@ -62,33 +69,13 @@ Ext.define('Ice.view.bloque.Coberturas', {
 					paso = " creando grid coberturas";
 					
 					
-					var comps = Ice.generaComponentes({
-		                pantalla: 'BLOQUE_LISTA_SITUACIONES',
-		                seccion: 'LISTA',
-		                modulo: me.config.modulo || '',
-		                estatus: (me.config.flujo && me.config.flujo.estatus) || '',
-		                cdramo: me.config.cdramo || '',
-		                cdtipsit: me.config.cdtipsit ||'',
-		                auxKey: me.config.auxkey || '',
-//		                items: true,
-		                columns: true,
-		                fields:true
-		            });
-		            Ice.log('Ice.view.bloque.ListaSituaciones.initComponent comps:', comps);
-
-		            var columns=comps.BLOQUE_LISTA_SITUACIONES.LISTA.columns || [];
+					
 					
 					var it={
 							
 					    listeners:{
 					    	itemtap:function(grid,idx,target,record){
-					    		
-	                            me.config.nmsituac=record.get("nmsituac");
-	                            grid.up("bloquecoberturas").down("#gridCoberturas").getStore().proxy.extraParams['params.pv_nmsituac_i']=me.config.nmsituac
-	                            grid.up("bloquecoberturas").down("#gridCoberturas").getStore().load()
-	                            grid.up("bloquecoberturas").down("#gridCoberturas").getStore().filter('amparada','S')
-					    		
-			                    Ice.log(me.config.nmsituac)
+					    		me.getController().onItemTabSituaciones(grid,idx,target,record)
 					    	}
 					    },
 						xtype : 'bloquelistasituaciones',
@@ -98,14 +85,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
                         cdramo: me.config.cdramo,
                         estado: me.config.estado,
                         nmpoliza: me.config.nmpoliza,
-                        nmsuplem: me.config.nmsuplem,
-						//maxHeigth : '250px',
-						columns: columns
-						
-						
-						
-						
-			            
+                        nmsuplem: me.config.nmsuplem
 						
 					}
 					me.add(it)
@@ -126,6 +106,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 					var gridCoberturas={
 						xtype:'grid',
 						itemId:'gridCoberturas',
+						scrollable:true,
 						title:"Coberturas",
 						width:'100%',
 						height:300,
@@ -176,16 +157,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
  				                        	iconCls: 'x-fa fa-plus-circle',
  				                            text: 'Agregar Cobertura',
  				                            handler: function(btn) {
- 				                            	try{
- 				                            		
- 				                            		btn.up("[xtype=bloquecoberturas]").getItems().items.forEach(function(it){
- 				                            			it.setHidden(true)
- 				                            		})
- 				                            		Ext.ComponentQuery.query("#agregables")[0].getStore().load()
- 				                            		Ext.ComponentQuery.query("#panela")[0].setHidden(false)
- 				                            	}catch(e){
- 				                            		Ice.generaExcepcion(e,paso)
- 				                            	}
+ 				                            	me.getCoberturas().mostrarPanelCoberturas(btn)
  				                              
  				                            }
  				                        }
