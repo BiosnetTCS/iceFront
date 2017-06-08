@@ -250,33 +250,38 @@ Ext.define('Ice.view.bloque.CoberturasController', {
       },
       
       editarCobertura:function(grid, rowIndex, colIndex) {
+    	  var me = this, 
+    	      view = me.getView(), 
+    	      refs = view.getReferences(),
+    	      form = refs.form;
     	  var paso="Evento selecciona cobertura "
     	  try{
-      		me = this.getView();
-      		var form=me.down('[xtype=form]');
+      		
       		form.removeAll();
     		var record = grid.getStore().getAt(rowIndex);
       		paso="estableciendo cdgarant";
-      		me.cdgarant=record.get('cdgarant');
-      		me.cdcapita=record.get('cdcapita');
+      		view.cdgarant=record.get('cdgarant');
+      		view.cdcapita=record.get('cdcapita');
       		
 
-      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].cdgarant=record.get('cdgarant')
-      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].cdcapita=record.get('cdcapita')
+      		view.cdgarant=record.get('cdgarant')
+      		view.cdcapita=record.get('cdcapita')
       		
-      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdgarant=record.get('cdgarant')
-      		Ext.ComponentQuery.query("[xtype=bloquecoberturas]")[0].config.cdcapita=record.get('cdcapita')
+      		view.config.cdgarant=record.get('cdgarant')
+      		view.config.cdcapita=record.get('cdcapita')
     		Ice.log("record:", record);	
     		 var comps = Ice.generaComponentes({
 	                pantalla: 'TATRIGAR',
 	                seccion: 'TATRIGAR',
-	                modulo: me.modulo || '',
-	                estatus: (me.flujo && me.flujo.estatus) || '',
-	                cdramo: me.cdramo || '',
-	                cdtipsit: me.cdtipsit ||'',
-	                auxKey: me.auxkey || '',
+	                modulo: view.modulo || '',
+	                estatus: (view.flujo && view.flujo.estatus) || '',
+	                cdramo: view.cdramo || '',
+	                cdtipsit: view.cdtipsit ||'',
+	                auxKey: view.auxkey || '',
 	                cdgarant:record.get('cdgarant') || '',
-	                items: true
+	                items: true,
+	                fields:true,
+	                validators:true
 	            });
     		 
     		 
@@ -284,12 +289,14 @@ Ext.define('Ice.view.bloque.CoberturasController', {
             var mpolicap=Ice.generaComponentes({
                 pantalla: 'BLOQUE_COBERTURAS',
                 seccion: 'MPOLICAP',
-                modulo: me.modulo || '',
-                estatus: (me.flujo && me.flujo.estatus) || '',
-                cdramo: me.cdramo || '',
-                cdtipsit: me.cdtipsit ||'',
-                auxKey: me.auxkey || '',
-                items: true
+                modulo: view.modulo || '',
+                estatus: (view.flujo && view.flujo.estatus) || '',
+                cdramo: view.cdramo || '',
+                cdtipsit: view.cdtipsit ||'',
+                auxKey: view.auxkey || '',
+                items: true,
+                fields:true,
+                validators:true
                
             });
             mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items.forEach(function(it,idx){
@@ -298,9 +305,14 @@ Ext.define('Ice.view.bloque.CoberturasController', {
             
             form.setTitle(record.get('cdgarant')+" - "+record.get('dsgarant'))
             form.removeAll();
+            
             form.add(mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items);
             form.add(comps.TATRIGAR.TATRIGAR.items);
             
+            form.modelValidators=Object.assign({},comps.TATRIGAR.TATRIGAR.validators,mpolicap.BLOQUE_COBERTURAS.MPOLICAP.validators)
+            form.modelFields=mpolicap.BLOQUE_COBERTURAS.MPOLICAP.fields.concat(comps.TATRIGAR.TATRIGAR.fields);
+            
+            Ice.log("-------->",form.modelValidators)
             this.cargarValores(form);   
     		
     	}catch(e){
@@ -455,7 +467,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     	
     },
     cargarSituaciones:function(me){
-    	var paso="cargando situaciones"
+    	var paso="cargando situaciones";
     	try{
 	    	var me = this,
 	        view = me.getView();
@@ -463,7 +475,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 				view.down("[xtype=bloquelistasituaciones]").store.load();
 			}
     	}catch(e){
-    		Ice.generaExcepcion(e,paso)
+    		Ice.generaExcepcion(e,paso);
     	}
 		
 	},
@@ -545,7 +557,9 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	                cdtipsit: me.config.cdtipsit ||'',
 	                auxKey: me.config.auxkey || '',
 	                cdgarant:me.config.cdgarant || '',
-	                items: true
+	                items: true,
+	                fields:true,
+	                validators:true
 	            });
     		 
     		 
@@ -558,12 +572,19 @@ Ext.define('Ice.view.bloque.CoberturasController', {
                 cdramo: me.config.cdramo || '',
                 cdtipsit: me.config.cdtipsit ||'',
                 auxKey: me.config.auxkey || '',
-                items: true
+                items: true,
+                fields:true,
+                validators:true
                
             });
             mpolicap.BLOQUE_COBERTURAS.MPOLICAP.items.forEach(function(it,idx){
             	it.tabla="MPOLICAP"
             })
+            
+            form.modelValidators=Object.assign({},comps.TATRIGAR.TATRIGAR.validators,mpolicap.BLOQUE_COBERTURAS.MPOLICAP.validators)
+            form.modelFields=mpolicap.BLOQUE_COBERTURAS.MPOLICAP.fields.concat(comps.TATRIGAR.TATRIGAR.fields);
+            
+            Ice.log("-------->",form.modelValidators)
             
             form.setTitle(sel.get("cdgarant")+" - "+sel.get('dsgarant'))
             form.removeAll();
@@ -700,6 +721,8 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	    	var view = this.getView();
 	    	var form = me.up('form');
 	    	var elementos=[]
+	    	this.validarCampos(form)
+	    	
 	    	form.items.items.forEach(function(it,idx){
 	    		elementos.push({
 	    			valor:it.getValue(),
@@ -761,7 +784,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 	    	
 	    	this.guardar()
  	}catch(e){
- 		Ice.generaExcepcion(e,paso)
+ 		Ice.manejaExcepcion(e,paso)
  	}
  	
  },
@@ -771,6 +794,9 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 		 		
 			    	var view = this.getView();
 			    	var form = me.up('formpanel');
+			    	paso = 'Validando campos'
+			    	this.validarCampos(form);
+			    	paso='enviando datos'
 			    	Ice.log(":::::::",view,me,form)
 			    	var elementos=[]
 			    	form.items.items.forEach(function(it,idx){
@@ -836,7 +862,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    	
 			    	//this.guardar()
 		 	}catch(e){
-		 		Ice.generaExcepcion(e,paso)
+		 		Ice.manejaExcepcion(e,paso)
 		 	}
  },
  
@@ -890,6 +916,24 @@ onItemTabSituaciones:function(grid,idx,target,record){
 		var me = grid.up("bloquecoberturas");
 		me.down("[xtype=formpanel]").removeAll();
 		me.config.nmsituac=record.get("nmsituac");
+		me.down("#gridCoberturas").getStore().on({
+			load:function(store){
+				var paso='cargando coberturas';
+				try{
+					if(store.count()>0){
+						Ext.ComponentQuery.query("[xtype=button]",me.down("#gridCoberturas")).forEach(function(it){
+							it.setDisabled(false)
+						});
+					}else{
+						Ext.ComponentQuery.query("[xtype=button]",me.down("#gridCoberturas")).forEach(function(it){
+							it.setDisabled(true)
+						});
+					}
+				}catch(e){
+					Ice.manejaExcepcion(e,paso)
+				}
+			}
+		})
 	    me.down("#gridCoberturas").getStore().proxy.extraParams['params.pv_nmsituac_i']=me.config.nmsituac
 	    me.down("#gridCoberturas").getStore().load()
 	    me.down("#gridCoberturas").getStore().filter('amparada','S')
@@ -913,7 +957,74 @@ mostrarPanelCoberturas:function(btn) {
  		Ice.generaExcepcion(e,paso)
  	}
    
- }
+ },
+ 
+validarCampos:function(form){
+	form
+	var paso='';
+	try{
+		if(!form.modelValidators || !form.modelFields){
+			throw 'No se puede validar el formulario'+form.getTitle();
+		}
+		
+		paso = 'Construyendo modelo de validaci\u00f3n';
+		
+		var validators={};
+		var refs=form.getReferences();
+		var ref=null;
+		var view=this.getView();
+		Ice.log("-]",form);
+		form.items.items.filter(function(it){
+			return it.isHidden()!==true && typeof it.getName =='function' && form.modelValidators[it.getName()] ;
+		})
+		.forEach(function(it){
+			validators[it.getName()] = form.modelValidators[it.getName()];
+		});
+		
+		Ice.log("refs , validators",refs, validators)
+		
+		var modelName = Ext.id();
+        var  modelo = Ext.define(modelName, {
+            extend: 'Ext.data.Model',
+            fields: form.modelFields,
+            validators: validators
+        });
+        
+       Ice.log( "Modelo",modelo)
+        
+        paso = 'Validando datos';
+        errores = Ext.create(modelName, form.getValues()).getValidation().getData();
+        Ice.log("Errores",errores)
+        var sinErrores = true,
+        erroresString = '';
+	    Ext.suspendLayouts();
+	    for (var name in errores) {
+	        if (errores[name] !== true) {
+	            sinErrores = false;
+	            var ref = view.down('[name=' + name + ']');
+	            if (Ext.manifest.toolkit === 'classic') {
+	                ref.setActiveError(errores[name]);
+	            } else {
+	                erroresString = erroresString + ref.getLabel() + ': ' + errores[name] + '<br/>';
+	            }
+	        }
+	    }
+	    Ext.resumeLayouts();
+	    
+	    if (sinErrores !== true) {
+	        if (Ext.manifest.toolkit === 'classic') {
+	            throw 'Favor de revisar los datos';
+	        } else {
+	            throw erroresString;
+	        }
+	    }
+		
+	}catch(e){
+		Ice.generaExcepcion(e,paso);
+	}
+},
+
+obtenerErrores:function(){}
     
     
 });

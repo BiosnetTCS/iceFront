@@ -725,7 +725,7 @@ var Ice = Object.assign(Ice || {}, {
 		                	obj.label=obj.dsatribu;
 		                	obj.tipocampo=obj.swformat
 		                	obj.name_cdatribu=obj.cdatribu
-		                	obj.maxlengthe=obj.nmlmax
+		                	obj.maxlength=obj.nmlmax
 		                	obj.minlength=obj.nmlmin
 		                	obj.catalogo=Ext.isEmpty((""+obj.ottabval).trim())?false:obj.ottabval
 		                	Ice.log("******",obj.catalogo)

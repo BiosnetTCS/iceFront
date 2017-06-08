@@ -51,6 +51,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 			modulo : null,
 			flujo : null,
 			cdtipsit : null,
+			
 			// llave de BD
 			cdunieco : null,
 			cdramo : null,
@@ -58,7 +59,11 @@ Ext.define('Ice.view.bloque.Coberturas', {
 			nmpoliza : null,
 			nmsuplem : null,
 			nmsituac : '',
-			cdgarant : ''
+			cdgarant : '',
+			
+			// para validar datos
+	        modelFields: [],
+	        modelValidators: []
 		},
 		title : 'Coberturas',
 		initialize : function() {
@@ -67,9 +72,6 @@ Ext.define('Ice.view.bloque.Coberturas', {
 				try {
 					
 					paso = " creando grid coberturas";
-					
-					
-					
 					
 					var it={
 							
@@ -149,12 +151,14 @@ Ext.define('Ice.view.bloque.Coberturas', {
  				                       {
  				                        	xtype: 'button',
  				                            text: 'Borrar',
- 				                           iconCls : 'x-fa fa-remove',
+ 				                            iconCls : 'x-fa fa-remove',
+ 				                            disabled:true,
  				                            handler: 'borraCoberturaMovil'
  				                        },
  				                       {
  				                        	xtype: 'button',
  				                        	iconCls: 'x-fa fa-plus-circle',
+ 				                        	disabled:true,
  				                            text: 'Agregar Cobertura',
  				                            handler: function(btn) {
  				                            	me.getCoberturas().mostrarPanelCoberturas(btn)
@@ -172,6 +176,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 					////////// formulario editar coberuras
 					var form={
 						xtype: 'formpanel',
+						reference: 'form',
 						scrollable:true,
 						height:300,
 						items:[
@@ -242,16 +247,22 @@ Ext.define('Ice.view.bloque.Coberturas', {
 						                },
 						                listeners:{
 						                	load:function(st){
-						                		var remover=-1;
-						            			while((remover=st.find('amparada','S'))!=-1){
-						            				st.removeAt(remover)
-						            			}
-						            			
-						                		st.data.items.forEach(function(it,idx){
-						                			Ice.log("-->",it)
-						                			it.data.amparada=true;
-						                		});
-						            			
+						                		
+						                		var paso=''
+						                		try{
+						                			paso='filtrando en grid agrega cobertura'
+							                		var remover=-1;
+							            			while((remover=st.find('amparada','S'))!=-1){
+							            				st.removeAt(remover);
+							            			}
+							            			
+							                		st.data.items.forEach(function(it,idx){
+							                			Ice.log("-->",it);
+							                			it.data.amparada=true;
+							                		});
+						                		}catch(e){
+						                			Ice.generaExcepcion(e,paso);
+						                		}
 						            			
 						                	}
 						                }

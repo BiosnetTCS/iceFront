@@ -174,6 +174,7 @@
  														},
  														{
  															xtype : 'form',
+ 															reference: 'form',
  															layout : {
  																type : 'column'
  															},
