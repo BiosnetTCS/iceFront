@@ -1024,7 +1024,19 @@ validarCampos:function(form){
 	}
 },
 
-obtenerErrores:function(){}
+obtenerErrores:function(){},
+
+cargar: function(){
+    Ice.log('Ice.view.bloque.CoberturasController.cargarValoresDefectoVariables');
+    var me = this,
+        view = me.getView(),
+        refs = view.getReferences();
+    try{
+        refs.grid.getController().cargar();
+    } catch(e) {
+        Ice.generaExcepcion(e, paso);
+    }
+}
     
     
 });

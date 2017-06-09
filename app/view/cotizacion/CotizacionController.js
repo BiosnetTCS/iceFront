@@ -166,7 +166,16 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
             if (view.getGuardadoAutomaticoSuspendido() !== true && oldCard && oldCard.getController && oldCard.getController()
                 && oldCard.getController().guardar) {
                 paso = 'Guardando datos';
-                var callbackSuccess = function () {};
+                var callbackSuccess = function () {
+                    alert();
+                    var pasoCargar = "";
+                    try{
+                        pasoCargar = "Cargando atributos de bloque";
+                        newCard.getController().cargar();
+                    } catch (e){
+                        Ice.manejaExcepcion(e, pasoCargar);
+                    }
+                };
                 
                 var callbackFailure = function () {
                     var paso2 = 'Regresando a paso anterior';
@@ -330,6 +339,7 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
         var me = this,
             paso = 'Recuperando tarifa';
         try {
+//            return;
             var view = me.getView();
             
             Ext.create({

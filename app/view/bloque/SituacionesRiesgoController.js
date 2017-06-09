@@ -567,6 +567,18 @@ Ext.define('Ice.view.bloque.SituacionesRiesgoController', {
           Ice.manejaExcepcion(e, paso);
       }   
       Ice.log('Ice.view.bloque.SituacionesRiesgoController.guardar ok');
+  },
+  
+  cargar: function(){
+      Ice.log('Ice.view.bloque.CoberturasController.cargarValoresDefectoVariables');
+      var me = this,
+          view = me.getView(),
+          refs = view.getReferences();
+      try{
+          refs.grid.getController().cargar();
+      } catch(e) {
+          Ice.generaExcepcion(e, paso);
+      }
   }
   
 });
