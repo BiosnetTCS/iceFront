@@ -51,6 +51,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 			modulo : null,
 			flujo : null,
 			cdtipsit : null,
+			auxkey :null,
 			
 			// llave de BD
 			cdunieco : null,
@@ -60,6 +61,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
 			nmsuplem : null,
 			nmsituac : '',
 			cdgarant : '',
+			cdcapita : '',
 			
 			// para validar datos
 	        modelFields: [],
@@ -88,7 +90,9 @@ Ext.define('Ice.view.bloque.Coberturas', {
                         estado: me.config.estado,
                         nmpoliza: me.config.nmpoliza,
                         nmsuplem: me.config.nmsuplem,
-                        reference: 'grid'
+                        reference: 'grid',
+                        width:'100%',
+						height:300
 					}
 					me.add(it)
 					//////////// grid coberturas //////
@@ -161,7 +165,7 @@ Ext.define('Ice.view.bloque.Coberturas', {
  				                        	disabled:true,
  				                            text: 'Agregar Cobertura',
  				                            handler: function(btn) {
- 				                            	me.getCoberturas().mostrarPanelCoberturas(btn)
+ 				                            	me.getController().mostrarPanelCoberturas(btn)
  				                              
  				                            }
  				                        }
