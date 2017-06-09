@@ -914,17 +914,17 @@ onItemTabSituaciones:function(grid,idx,target,record){
 		var me = grid.up("bloquecoberturas");
 		me.down("[xtype=formpanel]").removeAll();
 		me.setNmsituac(record.get("nmsituac"));
-		me.down("#gridCoberturas").getStore().on({
+		me.down("bloquelistasituaciones").getStore().on({
 			load:function(store){
 				var paso='cargando coberturas';
 				try{
 					if(store.count()>0){
 						Ice.query("[xtype=button]",me.down("#gridCoberturas")).forEach(function(it){
-							it.setDisabled(false)
+							it.setDisabled(false);
 						});
 					}else{
 						Ice.query("[xtype=button]",me.down("#gridCoberturas")).forEach(function(it){
-							it.setDisabled(true)
+							it.setDisabled(true);
 						});
 					}
 				}catch(e){
@@ -932,7 +932,7 @@ onItemTabSituaciones:function(grid,idx,target,record){
 				}
 			}
 		})
-	    me.down("#gridCoberturas").getStore().proxy.extraParams['params.pv_nmsituac_i']=me.config.nmsituac
+	    me.down("#gridCoberturas").getStore().proxy.extraParams['params.pv_nmsituac_i']=me.getNmsituac();
 	    me.down("#gridCoberturas").getStore().load()
 	    me.down("#gridCoberturas").getStore().filter('amparada','S')
 		
