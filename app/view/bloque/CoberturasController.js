@@ -248,6 +248,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
     	  var paso="Evento selecciona cobertura "
     	  try{
       		
+    		view.down("#btnGuardarCobertura").setHidden(false);  
       		form.removeAll();
     		var record = grid.getStore().getAt(rowIndex);
       		paso="estableciendo cdgarant";
@@ -533,6 +534,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
   editarCoberturaMovil:function(grid,idx,tar,sel) {
    	try{
    		var view = this.getView();
+   		view.down("#btnGuardarCobertura").setHidden(false);  
  		var me =grid.up("bloquecoberturas");
  		//var sel =Ext.ComponentQuery.query("#gridCoberturas")[0].getSelection();
  			view.setCdgarant(sel.get("cdgarant"));

@@ -185,6 +185,8 @@
  															},
  															buttons : [ {
  																text : 'Guardar',
+ 																hidden: true,
+ 																itemId : "btnGuardarCobertura",
  																handler : 'guardarCobertura'
  															} ]
  														} ],

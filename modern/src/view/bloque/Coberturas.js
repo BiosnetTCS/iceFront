@@ -191,6 +191,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
 						            	{
 				                        	xtype: 'button',
 				                            text: 'Guardar',
+				                            hidden: true,
+											itemId : "btnGuardarCobertura",
 				                            handler: 'guardarCoberturaMovil'
 				                        }
 				                      
