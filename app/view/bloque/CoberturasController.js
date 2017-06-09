@@ -919,10 +919,12 @@ onItemTabSituaciones:function(grid,idx,target,record){
 				var paso='cargando coberturas';
 				try{
 					if(store.count()>0){
+						Ice.log("deshabilitando")
 						Ice.query("[xtype=button]",me.down("#gridCoberturas")).forEach(function(it){
 							it.setDisabled(false);
 						});
 					}else{
+						Ice.log("habilitando")
 						Ice.query("[xtype=button]",me.down("#gridCoberturas")).forEach(function(it){
 							it.setDisabled(true);
 						});
