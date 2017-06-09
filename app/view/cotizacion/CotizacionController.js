@@ -167,7 +167,6 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
                 && oldCard.getController().guardar) {
                 paso = 'Guardando datos';
                 var callbackSuccess = function () {
-                    alert();
                     var pasoCargar = "";
                     try{
                         pasoCargar = "Cargando atributos de bloque";
