@@ -48,6 +48,8 @@
  						modulo : null,
  						flujo : null,
  						cdtipsit : null,
+
+ 						auxkey :null,
  						// llave de BD
  						cdunieco : null,
  						cdramo : null,
@@ -55,7 +57,8 @@
  						nmpoliza : null,
  						nmsuplem : null,
  						nmsituac : '',
- 						cdgarant : ''
+ 						cdgarant : '',
+ 						cdcapita : ''
  					},
  					// configuracio ext
  					title : 'Coberturas',
@@ -183,8 +186,8 @@
  															},
  															buttons : [ {
  																text : 'Guardar',
- 																formBind : true, 
- 																disabled : true,
+ 																hidden: true,
+ 																itemId : "btnGuardarCobertura",
  																handler : 'guardarCobertura'
  															} ]
  														} ],
