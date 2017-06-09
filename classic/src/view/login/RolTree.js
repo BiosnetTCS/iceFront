@@ -19,7 +19,7 @@ Ext.define('Ice.view.login.RolTree', {
     style: 'padding: 100px 0px 0px 20px; background: url(resources/images/BGEasyAlea.jpg); background-repeat: no-repeat; background-size: cover;background-position: 10% 25%; !important;',
     tpl: new Ext.XTemplate(
         '<tpl for=".">',
-            '<div class="btn_rol_suscriptor">',
+            '<div class="btn_rol_suscriptor thumb-wrap">',
               '<table style="width:100%;" border="0">',
                 '<tr><td></td><td class="txt_btn_rol" style="text-align:left; padding-left:35px; width:100% ">{dssisrol}</td><td class="chev_rol"></td></tr>',
               '</table>',
