@@ -87,8 +87,8 @@ Ext.define('Ice.view.bloque.Coberturas', {
                         cdramo: me.config.cdramo,
                         estado: me.config.estado,
                         nmpoliza: me.config.nmpoliza,
-                        nmsuplem: me.config.nmsuplem
-						
+                        nmsuplem: me.config.nmsuplem,
+                        reference: 'grid'
 					}
 					me.add(it)
 					//////////// grid coberturas //////
