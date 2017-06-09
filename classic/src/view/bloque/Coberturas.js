@@ -113,8 +113,9 @@
  								                            nmpoliza: me.nmpoliza,
  								                            nmsuplem: me.nmsuplem,
  															maxHeigth : '250px',
+ 															reference: 'grid',
  															// width : "100%",
- 															actionColumns : [ 
+ 															actionColumns : [
  																{
 	 																xtype : 'actioncolumn',
 	 																items : [ 

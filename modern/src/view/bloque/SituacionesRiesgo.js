@@ -54,6 +54,7 @@ Ext.define('Ice.view.bloque.SituacionesRiesgo', {
 	        camposDisparanValoresDefectoVariables: [
 	            'cdunieco', 'cdramo', 'estado', 'nmpoliza', 'nmsituac', 'status', 'nmsuplem', 'cdtipsit', 'fefecsit'
 	        ],
+	        modelFields: [],
 	        modelValidators: []
 		},
 		// configuracio ext
