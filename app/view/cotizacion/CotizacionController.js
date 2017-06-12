@@ -319,7 +319,14 @@ Ext.define('Ice.view.cotizacion.CotizacionController', {
                 }
             };
             
-            var activeTab = refs.tabpanel.getActiveTab();
+            var activeTab;
+            
+            if (Ext.manifest.toolkit === 'classic') {
+                activeTab = refs.tabpanel.getActiveTab();
+            } else {
+                activeTab = refs.tabpanel.getActiveItem();
+            }
+             
             if (activeTab && activeTab.getController && activeTab.getController().guardar) {
                 activeTab.getController().guardar({
                     success: callbackSuccess

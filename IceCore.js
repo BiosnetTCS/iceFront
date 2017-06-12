@@ -1197,6 +1197,12 @@ var Ice = Object.assign(Ice || {}, {
             }
             
             
+            // padres
+            if (item.xtype === 'comboice' && config.padres) {
+                item.padres = config.padres.split(',');
+            }
+            
+            
             // format
             if (item.xtype === 'datefieldice') {
                 item.format = Ext.util.Format.dateFormat;

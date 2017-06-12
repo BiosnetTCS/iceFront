@@ -19,6 +19,12 @@ Ext.define('Ice.view.field.ComboIce', {
         minWidth: 120
     },
     
+    
+    config: {
+        padres: []
+    },
+    
+    
     initComponent: function () {
         var me = this,
             configIce = me.config, // la configuracion recibida de TCONFSCR
@@ -77,6 +83,46 @@ Ext.define('Ice.view.field.ComboIce', {
         
         Ext.apply(me, configTra);
         this.callParent(arguments);
+        
+        
+        if (me.getPadres().length > 0 && me.up('form')) {
+            
+            me.heredar = function () {
+                var padresValues = {
+                    idPadre: null,
+                    idPadre2: null,
+                    idPadre3: null,
+                    idPadre4: null,
+                    idPadre5: null
+                };
+                for (var i = 0; i < me.getPadres().length; i++) {
+                    var padreName = me.getPadres()[i],
+                        padreComp = me.up('form').down('[name=' + padreName + ']');
+                    if (padreComp) {
+                        padresValues['idPadre' + (i === 0
+                            ? ''
+                            : (i + 1)
+                            )] = padreComp.getSubmitValue();
+                    }
+                }
+                Ice.log('padresValues:', padresValues);
+                me.getStore().reload({
+                    params: Ice.convertirAParams(padresValues)
+                });
+            };
+            
+            for (var i = 0; i < me.getPadres().length; i++) {
+                var padreName = me.getPadres()[i];
+                var padreComp = Ice.query('[name=' + padreName + ']'); // TODO no debe ser global, debe ir sobre form, pero da error
+                if (padreComp) {
+                    padreComp.on({
+                        blur: function () {
+                            me.heredar();
+                        }
+                    });
+                }
+            }
+        }
     },
     
     validator: function (val) {
