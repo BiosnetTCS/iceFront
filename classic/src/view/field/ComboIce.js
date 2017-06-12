@@ -19,7 +19,6 @@ Ext.define('Ice.view.field.ComboIce', {
         minWidth: 120
     },
     
-    
     initComponent: function () {
         var me = this,
             configIce = me.config, // la configuracion recibida de TCONFSCR

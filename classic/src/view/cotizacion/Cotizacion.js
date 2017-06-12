@@ -24,11 +24,15 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             config.modulo = config.modulo || 'COTIZACION';
             config.flujo = config.flujo || {};
             
+            if (config.estado === 'w') {
+                config.estado = 'W';
+            }
+            
             // parche para prueba de carga
-            config.cdunieco = 1;
-            config.estado = 'W';
-            config.nmpoliza = 11075;
-            config.nmsuplem = 0;
+            // config.cdunieco = 1;
+            // config.estado = 'W';
+            // config.nmpoliza = 17196;
+            // config.nmsuplem = 0;
         } catch (e) {
             Ice.generaExcepcion(e, paso);
         }
@@ -58,6 +62,11 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
             ui: 'footer',
             items: [
                 '->', {
+                    text: 'Cargar',
+                    reference: 'cargarbutton',
+                    iconCls: 'x-fa fa-cloud-download',
+                    handler: 'onCargarClic'
+                }, {
                     text: 'Anterior',
                     reference: 'anteriorbutton',
                     iconCls: 'x-fa fa-backward',
@@ -87,6 +96,7 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
         modulo: null,
         flujo: null,
         cdtipsit: null,
+        auxkey: null,
     
         // llave
         cdunieco: null,
@@ -100,7 +110,10 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
         
         // contenidos
         bloques: [],
-        bloqueActual: -1
+        bloqueActual: -1,
+        
+        // comportamiento
+        guardadoAutomaticoSuspendido: false
     },
     
     
@@ -118,7 +131,7 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                 estatus: (me.flujo && me.flujo.estatus) || '',
                 cdramo: me.cdramo || '',
                 cdtipsit: me.cdtipsit ||'',
-                auxKey: me.auxkey || '',
+                auxkey: me.auxkey || '',
                 
                 items: true
             });

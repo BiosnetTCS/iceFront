@@ -1,15 +1,14 @@
 /**
- * Created by jtezva on 5/22/2017.
+ * Created by jtezva on 6/5/2017.
  */
 Ext.define('Ice.view.bloque.DatosGenerales', {
     extend: 'Ext.form.Panel',
     xtype: 'bloquedatosgenerales',
     
     controller: 'bloquedatosgenerales',
-    //viewModel: 'bloquedatosgenerales',
     
     requires: [
-        'Ext.ux.layout.ResponsiveColumn'
+        'Ext.Toolbar'
     ],
     
     
@@ -67,53 +66,57 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
     
     
     // configuracion ext
-    // para el responsive small-(%) big-(%)
-    layout: 'responsivecolumn',
-    
-    //modelValidation: true,
+    layout: 'default',
     
     scrollable: true,
     
     bodyPadding: '10px 0px 0px 10px',
-    defaults: {
-        margin: '0px 10px 10px 0px',
-        cls: 'big-50 small-100'
-    },
     
-    
-    tbar: [
-        '->',
+    items: [
         {
-            iconCls: 'x-fa fa-eye',
-            tooltip: 'Mostrar/ocultar',
-            handler: function (me) {
-                Ice.toggleOcultos(me.up('form'));
-            }
-        }
-    ],
-    
-    buttons: [
-        /*
-        {
-            text: 'Limpiar',
-            iconCls: 'x-fa fa-refresh',
-            handler: 'onLimpiarClic'
+            xtype: 'toolbar',
+            docked: 'top',
+            ui: 'header',
+            items: [
+                '->',
+                {
+                    iconCls: 'x-fa fa-eye',
+                    itemId: 'botonMostrarOcultarTodo',
+                    tooltip: 'Mostrar/ocultar',
+                    handler: function (me) {
+                        Ice.toggleOcultos(me.padre);
+                    }
+                }
+            ]
         }, {
-            text: 'Cargar',
-            iconCls: 'x-fa fa-download',
-            handler: 'onCargarClic'
-        },
-        */
-        {
-            text: 'Guardar',
-            iconCls: 'x-fa fa-save',
-            handler: 'onGuardarClic'
+            xtype: 'toolbar',
+            docked: 'bottom',
+            ui: 'footer',
+            items: [
+                /*
+                {
+                    text: 'Limpiar',
+                    iconCls: 'x-fa fa-refresh',
+                    handler: 'onLimpiarClic'
+                }, {
+                    text: 'Cargar',
+                    iconCls: 'x-fa fa-download',
+                    handler: 'onCargarClic'
+                },
+                */
+                {
+                    text: 'Guardar',
+                    iconCls: 'x-fa fa-save',
+                    handler: 'onGuardarClic'
+                }
+            ]
         }
     ],
+
     
     // configuracion que usa datos de entrada
-    initComponent: function () {
-        Ice.log('Ice.view.bloque.DatosGenerales.initComponent [this, args]:', this, arguments);
+    initialize: function () {
+        Ice.log('Ice.view.bloque.DatosGenerales.initialize [this, args]:', this, arguments);
         var me = this,
             paso = 'Construyendo bloque de datos generales';
         try {
@@ -121,42 +124,34 @@ Ext.define('Ice.view.bloque.DatosGenerales', {
             var comps = Ice.generaComponentes({
                 pantalla: 'BLOQUE_DATOS_GENERALES',
                 seccion: 'FORMULARIO',
-                modulo: me.modulo || '',
-                estatus: (me.flujo && me.flujo.estatus) || '',
-                cdramo: me.cdramo || '',
-                cdtipsit: me.cdtipsit ||'',
-                auxkey: me.auxkey || '',
+                modulo: me.getModulo() || '',
+                estatus: (me.getFlujo() && me.getFlujo().estatus) || '',
+                cdramo: me.getCdramo() || '',
+                cdtipsit: me.getCdtipsit() ||'',
+                auxkey: me.getAuxkey() || '',
                 
                 items: true,
                 fields: true,
                 validators: true
             });
             
-            
-            // agregar binding a los componentes
-            //for (var i = 0; i < comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items.length; i++) {
-            //    var item = comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items[i];
-            //    item.bind = '{datos.' + item.name + '}';
-            //}
-            //Ice.log('items con bind:', comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items);
-
-            
-            // creando modelo para validaciones
-            //var modelName = Ext.id();
-            //Ext.define(modelName, {
-            //    extend: 'Ext.data.Model',
-            //    fields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
-            //    validators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
-            //});
-            
+            if (Ext.manifest.toolkit !== 'classic') {
+                for (var i = 0; i < comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items.length; i++) {
+                    comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items[i].style = 'float: left; margin: 0px 10px 10px 0px;';
+                    comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items[i].userCls = 'big-50 small-100';
+                }
+            }
             
             // agregar items, y agregar modelo para el modelValidation
-            Ext.apply(me, {
-                items: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items,
-                //modelo: modelName
-                modelFields: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields,
-                modelValidators: comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators
-            });
+            me.add(comps.BLOQUE_DATOS_GENERALES.FORMULARIO.items);
+            me.setModelFields(comps.BLOQUE_DATOS_GENERALES.FORMULARIO.fields);
+            me.setModelValidators(comps.BLOQUE_DATOS_GENERALES.FORMULARIO.validators);
+            
+            
+            var botonMostrarTodo = me.down('#botonMostrarOcultarTodo');
+            if (botonMostrarTodo) {
+                botonMostrarTodo.padre = me;
+            }
             
             
             // construir componente

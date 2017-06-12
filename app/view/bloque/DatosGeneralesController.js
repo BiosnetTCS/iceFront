@@ -25,8 +25,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     paso2 = 'Definiendo comportamiento de bloque de datos generales';
                     me.custom();
                     
-                    if (view.cdunieco && view.cdramo && view.estado && view.nmpoliza
-                        && !Ext.isEmpty(view.nmsuplem) && view.modulo) {
+                    if (view.getCdunieco() && view.getCdramo() && view.getEstado() && view.getNmpoliza()
+                        && !Ext.isEmpty(view.getNmsuplem()) && view.getModulo()) {
                         paso2 = 'Cargando bloque de datos generales';
                         me.cargar();
                     }
@@ -71,12 +71,26 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
                 var name = view.getCamposDisparanValoresDefectoFijos()[i];
                 if (refs[name]) {
-                    refs[name].setFieldStyle('border-left: 1px solid yellow;');
-                    refs[name].on({
-                        blur: function () {
-                            me.cargarValoresDefectoFijos();
-                        }
-                    });
+                    if (Ext.manifest.toolkit === 'classic') {
+                        refs[name].setFieldStyle('border-left: 1px solid yellow;');
+                    } else {
+                        refs[name].setStyle('border-left: 1px solid yellow;');
+                    }
+                    
+                    
+                    if (Ext.manifest.toolkit !== 'classic' && refs[name].isXType('selectfield')) { // para los select
+                        refs[name].on({
+                            change: function () {
+                                me.cargarValoresDefectoFijos();
+                            }
+                        });
+                    } else {
+                        refs[name].on({
+                            blur: function () {
+                                me.cargarValoresDefectoFijos();
+                            }
+                        });
+                    }
                 }
             }
             
@@ -85,12 +99,26 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             for (var i = 0; i < view.getCamposDisparanValoresDefectoVariables().length; i++) {
                 var name = view.getCamposDisparanValoresDefectoVariables()[i];
                 if (refs[name]) {
-                    refs[name].setFieldStyle('border-right: 1px solid blue;');
-                    refs[name].on({
-                        blur: function (ref) {
-                            me.cargarValoresDefectoVariables(ref);
-                        }
-                    });
+                    if (Ext.manifest.toolkit === 'classic') {
+                        refs[name].setFieldStyle('border-right: 1px solid blue;');
+                    } else {
+                        refs[name].setStyle('border-right: 1px solid blue;');
+                    }
+                    
+                    
+                    if (Ext.manifest.toolkit !== 'classic' && refs[name].isXType('selectfield')) { // para los select
+                        refs[name].on({
+                            change: function (ref) {
+                                me.cargarValoresDefectoVariables(ref);
+                            }
+                        });
+                    } else {
+                        refs[name].on({
+                            blur: function (ref) {
+                                me.cargarValoresDefectoVariables(ref);
+                            }
+                        });
+                    }
                 }
             }
         } catch (e) {
@@ -125,9 +153,9 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             var errores = me.obtenerErrores(),
                 viewValues = view.getValues(),
                 valores = {
-                    'params.b1_cdramo': view.cdramo,
-                    'params.b1_nmsuplem': view.nmsuplem || '0',
-                    'params.swcolind': view.swcolind
+                    'params.b1_cdramo': view.getCdramo(),
+                    'params.b1_nmsuplem': view.getNmsuplem() || '0',
+                    'params.swcolind': view.getSwcolind()
                 };
             
             for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
@@ -139,7 +167,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 valores['params.' + name] = viewValues[name];
             }
             
-            view.procesandoValoresDefecto = true;
+            view.setProcesandoValoresDefecto(true);
             accedeProcesar = true;
             
             Ice.request({
@@ -150,7 +178,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     var paso2 = 'Seteando valores por defecto';
                     try {
                         view.setDatosFijosNuevos(false);
-                        view.procesandoValoresDefecto = false;
+                        view.setProcesandoValoresDefecto(false);
                         
                         if (!action.params) {
                             throw 'No se cargaron datos';
@@ -164,16 +192,18 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                             throw 'No se gener\u00f3 el n\u00famero cotizaci\u00f3n';
                         }
                         
-                        view.cdunieco = view.getValues().b1_cdunieco;
-                        view.estado = action.params.b1_estado;
-                        view.nmpoliza = action.params.b1_nmpoliza;
-                        view.nmsuplem = view.getValues().b1_nmsuplem || '0';
+                        view.setCdunieco(view.getValues().b1_cdunieco);
+                        view.setEstado(action.params.b1_estado);
+                        view.setNmpoliza(action.params.b1_nmpoliza);
+                        view.setNmsuplem(view.getValues().b1_nmsuplem || '0');
                         
-                        if (!view.cdunieco || !view.cdramo || !view.estado || !view.nmpoliza || Ext.isEmpty(view.nmsuplem)) {
+                        if (!view.getCdunieco() || !view.getCdramo() || !view.getEstado() || !view.getNmpoliza()
+                            || Ext.isEmpty(view.getNmsuplem())) {
                             throw 'No se gener\u00f3 la llave de p\u00f3liza';
                         }
                         
-                        view.fireEvent('llaveGenerada', view, view.cdunieco, view.cdramo, view.estado, view.nmpoliza, view.nmsuplem);
+                        view.fireEvent('llaveGenerada', view, view.getCdunieco(), view.getCdramo(), view.getEstado(), view.getNmpoliza(),
+                            view.getNmsuplem());
                         
                         Ice.suspendEvents(view);
                         for (var att in action.params) {
@@ -185,25 +215,25 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                         
                         //me.cargarValoresDefectoVariables();
                         // no permitir modificar la llave
-                        for (var i = 0; i < view.camposDisparanValoresDefectoFijos.length; i++) {
-                            var name = view.camposDisparanValoresDefectoFijos[i];
+                        for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
+                            var name = view.getCamposDisparanValoresDefectoFijos()[i];
                             if (refs[name]) {
                                 refs[name].setReadOnly(true);
                             }
                         }
                     } catch (e) {
-                        view.procesandoValoresDefecto = false;
+                        view.setProcesandoValoresDefecto(false);
                         Ice.manejaExcepcion(e, paso2);
                     }
                 },
                 failure: function () {
-                    view.procesandoValoresDefecto = false;
+                    view.getProcesandoValoresDefecto(false);
                 }
             });
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
             if (accedeProcesar === true) {
-                view.procesandoValoresDefecto = false;
+                view.getProcesandoValoresDefecto(false);
             }
         }
     },
@@ -221,17 +251,17 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 return;
             }
             
-            if (!view.estado) {
+            if (!view.getEstado()) {
                 Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables view no tiene view.estado');
                 return;
             }
             
-            if (!view.nmpoliza) {
+            if (!view.getNmpoliza()) {
                 Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables view no tiene view.nmpoliza');
                 return;
             }
             
-            if (view.procesandoValoresDefecto === true) {
+            if (view.getProcesandoValoresDefecto() === true) {
                 Ice.logWarn('Ice.view.bloque.DatosGeneralesController.cargarValoresDefectoVariables valores defecto ya en proceso');
                 return;
             }
@@ -251,14 +281,14 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             for (var att in viewValues) {
                 valores['params.' + att] = viewValues[att];
             }
-            valores['params.b1_cdramo'] = view.cdramo;
-            valores['params.b1_estado'] = view.estado;
+            valores['params.b1_cdramo'] = view.getCdramo();
+            valores['params.b1_estado'] = view.getEstado();
             
-            view.procesandoValoresDefecto = true;
+            view.setProcesandoValoresDefecto(true);
             accedeProcesar = true;
             
             if (!valores['params.b1_nmpoliza']) {
-                valores['params.b1_nmpoliza'] = view.nmpoliza;
+                valores['params.b1_nmpoliza'] = view.getNmpoliza();
             }
             
             Ice.request({
@@ -269,7 +299,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                     var paso2 = 'Seteando valores por defecto';
                     try {
                         view.setDatosVariablesNuevos(false);
-                        view.procesandoValoresDefecto = false;
+                        view.setProcesandoValoresDefecto(false);
                         
                         if (!action.params) {
                             return;
@@ -283,18 +313,18 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                         }
                         Ice.resumeEvents(view);
                     } catch (e) {
-                        view.procesandoValoresDefecto = false;
+                        view.setProcesandoValoresDefecto(false);
                         Ice.manejaExcepcion(e, paso2);
                     }
                 },
                 failure: function () {
-                    view.procesandoValoresDefecto = false;
+                    view.setProcesandoValoresDefecto(false);
                 }
             });
         } catch (e) {
             Ice.manejaExcepcion(e, paso);
             if (accedeProcesar === true) {
-                view.procesandoValoresDefecto = false;
+                view.setProcesandoValoresDefecto(false);
             }
         }
     },
@@ -321,18 +351,18 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                 mascara: 'Recuperando datos generales',
                 url: Ice.url.bloque.datosGenerales.cargar,
                 params: {
-                    'params.cdunieco': view.cdunieco || '',
-                    'params.cdramo': view.cdramo || '',
-                    'params.estado': view.estado || '',
-                    'params.nmpoliza': view.nmpoliza || '',
-                    'params.nmsuplem': view.nmsuplem || 0,
-                    'params.swcolind': view.swcolind || 'I'
+                    'params.cdunieco': view.getCdunieco() || '',
+                    'params.cdramo': view.getCdramo() || '',
+                    'params.estado': view.getEstado() || '',
+                    'params.nmpoliza': view.getNmpoliza() || '',
+                    'params.nmsuplem': view.getNmsuplem() || 0,
+                    'params.swcolind': view.getSwcolind() || 'I'
                 },
                 success: function (json) {
                     var paso2 = 'Seteando valores';
                     try {
-                        view.datosFijosNuevos = false;
-                        view.datosVariablesNuevos = false;
+                        view.setDatosFijosNuevos(false);
+                        view.setDatosVariablesNuevos(false);
                         
                         Ice.suspendEvents(view);
                         
@@ -340,15 +370,25 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                         
                         var refs = view.getReferences();
                         for (var att in json.params) {
-                            if (refs[att]) {
-                                refs[att].setValue(json.params[att]);
+                            var ref = refs[att];
+                            if (ref) {
+                                if (ref.isXType('selectfield') && ref.getStore().getCount() === 0) { // aun no hay registros
+                                    ref.getStore().padre = ref;
+                                    ref.getStore().valorOnLoad = '' + json.params[att];
+                                    ref.getStore().on('load', function handleLoad (me) {
+                                        me.removeListener('load', handleLoad);
+                                        me.padre.setValue(me.valorOnLoad);
+                                    });
+                                } else {
+                                    ref.setValue(json.params[att]);
+                                }
                             }
                         }
                         Ice.resumeEvents(view);
                         
                         // no permitir modificar la llave
-                        for (var i = 0; i < view.camposDisparanValoresDefectoFijos.length; i++) {
-                            var name = view.camposDisparanValoresDefectoFijos[i];
+                        for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
+                            var name = view.getCamposDisparanValoresDefectoFijos()[i];
                             if (refs[name]) {
                                 refs[name].setReadOnly(true);
                             }
@@ -390,11 +430,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             refs = view.getReferences(),
             paso = 'Validando datos generales';
         try {
-            var valido = me.validarDatos();
-            
-            if (valido !== true) {
-                throw 'Favor de revisar los datos';
-            }
+            me.validarDatos();
             
             paso = 'Guardando datos generales';
             Ice.request({
@@ -412,7 +448,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
                             var error = false;
                             for (var i = 0; i < action.list.length; i++) {
                                 if (action.list[i].tipo.toLowerCase() === 'error') {
-                                    //error = true; para que no avance si hay validaciones tipo "error"
+                                    //error = true; // para que no avance si hay validaciones tipo "error"
                                     break;
                                 }
                             }
@@ -501,17 +537,17 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
         try {
             Ice.suspendEvents(view);
             view.reset();
-            view.datosFijosNuevos = true;
-            view.datosVariablesNuevos = true;
-            view.cdunieco = null;
-            view.nmpoliza = null;
-            view.nmsuplem = 0;
+            view.setDatosFijosNuevos(true);
+            view.setDatosVariablesNuevos(true);
+            view.setCdunieco(null);
+            view.setNmpoliza(null);
+            view.setNmsuplem(0);
             Ice.resumeEvents(view);
             
             
             // permitir modificar la llave
-            for (var i = 0; i < view.camposDisparanValoresDefectoFijos.length; i++) {
-                var name = view.camposDisparanValoresDefectoFijos[i];
+            for (var i = 0; i < view.getCamposDisparanValoresDefectoFijos().length; i++) {
+                var name = view.getCamposDisparanValoresDefectoFijos()[i];
                 if (refs[name]) {
                     refs[name].setReadOnly(false);
                 }
@@ -536,8 +572,8 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             var validators = {}, ref;
             for (var att in refs) {
                 ref = refs[att];
-                if (ref.isHidden() !== true && view.modelValidators[ref.name]) { // solo para no ocultos
-                    validators[ref.name] = view.modelValidators[ref.name];
+                if (ref.isHidden() !== true && view.getModelValidators()[ref.getName()]) { // solo para no ocultos
+                    validators[ref.getName()] = view.getModelValidators()[ref.getName()];
                 }
             }
             Ice.log('Ice.view.bloque.DatosGeneralesController.obtenerErrores validators:', validators);
@@ -545,7 +581,7 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
             var modelName = Ext.id();
             Ext.define(modelName, {
                 extend: 'Ext.data.Model',
-                fields: view.modelFields,
+                fields: view.getModelFields(),
                 validators: validators
             });
             
@@ -566,26 +602,35 @@ Ext.define('Ice.view.bloque.DatosGeneralesController', {
         var me = this,
             view = me.getView(),
             refs = view.getReferences(),
-            paso = 'Validando datos generales visibles',
-            valido = false;
+            paso = 'Validando datos generales visibles';
         try {
             var errores = me.obtenerErrores();
             
-            var sinErrores = true;
+            var sinErrores = true,
+                erroresString = '';
             Ext.suspendLayouts();
             for (var name in errores) {
                 if (errores[name] !== true) {
                     sinErrores = false;
-                    Ice.log('buscando para montar error:', name);
-                    view.down('[name=' + name + ']').setActiveError(errores[name]);
+                    var ref = view.down('[name=' + name + ']');
+                    if (Ext.manifest.toolkit === 'classic') {
+                        ref.setActiveError(errores[name]);
+                    } else {
+                        erroresString = erroresString + ref.getLabel() + ': ' + errores[name] + '<br/>';
+                    }
                 }
             }
             Ext.resumeLayouts();
             
-            valido = sinErrores === true;
+            if (sinErrores !== true) {
+                if (Ext.manifest.toolkit === 'classic') {
+                    throw 'Favor de revisar los datos';
+                } else {
+                    throw erroresString;
+                }
+            }
         } catch (e) {
-            Utils.generaExcepcion(e, paso);
+            Ice.generaExcepcion(e, paso);
         }
-        return valido;
     },
 });

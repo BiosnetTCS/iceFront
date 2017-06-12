@@ -35,33 +35,32 @@ Ext.define('Ice.view.bloque.ListaSituacionesController', {
             view = me.getView(),
             paso = 'Cargando bloque de datos generales';
         try {
-            Ice.suspendEvents(view);
-            Ice.request({
-                mascara: 'Recuperando datos generales',
-                url: Ice.url.bloque.listaSituaciones.cargar,
-                params: {
-                    'params.cdunieco' : '1',
-                    'params.cdramo': '501',
-                    'params.estado': 'W',
-                    'params.nmpoliza': '11075',
-                    'params.nmsuplem': '0'
-                },
-                success: function (json) {
-                    var paso2 = 'LLenando store';
-                    try {
-                        var store = view.store;
-                        Ice.log("lista",json.situaciones);
-                        Ice.log("vista",view);
-                        if(json.situaciones){
-                            store.loadData(json.situaciones);
-                        }
-                        Ice.resumeEvents(view);
-                    } catch (e) {
-                        Ice.manejaExcepcion(e, paso2);
-                    }
-                }
-            });
-        } catch (e) {            Ice.resumeEvents(view);
+            view.getStore().reload();
+//            Ice.request({
+//                mascara: 'Recuperando datos generales',
+//                url: Ice.url.bloque.listaSituaciones.cargar,
+//                params: {
+//                    'params.cdunieco' : view.cdunieco,
+//                    'params.cdramo': view.cdramo,
+//                    'params.estado': view.estado,
+//                    'params.nmpoliza': view.nmpoliza,
+//                    'params.nmsuplem': view.nmsuplem
+//                },
+//                success: function (json) {
+//                    var paso2 = 'LLenando store';
+//                    try {
+//                        var store = view.store;
+//                        Ice.log("lista",json.situaciones);
+//                        Ice.log("vista",view);
+//                        if(json.situaciones){
+//                            store.loadData(json.situaciones);
+//                        }
+//                    } catch (e) {
+//                        Ice.manejaExcepcion(e, paso2);
+//                    }
+//                }
+//            });
+        } catch (e) {
             Ice.manejaExcepcion(e, paso);
         }
     }    
