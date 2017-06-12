@@ -116,7 +116,7 @@ Ext.define('Ice.view.bloque.CoberturasController', {
 			    	handler : function(me){
 			    		
 			    		var list=[];
-			    		me.up("window").down("#gridAgrega")[0].getSelectionModel().getSelection().forEach(function(it,idx){
+			    		me.up("window").down("#gridAgrega").getSelectionModel().getSelection().forEach(function(it,idx){
 			    			
 			    			Ice.log("Data: ",it.data)
 			    			var obj={
@@ -1030,7 +1030,8 @@ cargar: function(){
     Ice.log('Ice.view.bloque.CoberturasController.cargarValoresDefectoVariables');
     var me = this,
         view = me.getView(),
-        refs = view.getReferences();
+        refs = view.getReferences(),
+        paso = 'Cargando bloque de coberturas';
     try{
         refs.grid.getController().cargar();
     } catch(e) {
