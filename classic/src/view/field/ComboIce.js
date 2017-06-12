@@ -112,9 +112,12 @@ Ext.define('Ice.view.field.ComboIce', {
             };
             
             for (var i = 0; i < me.getPadres().length; i++) {
-                var padreName = me.getPadres()[i];
-                var padreComp = Ice.query('[name=' + padreName + ']'); // TODO no debe ser global, debe ir sobre form, pero da error
+                var padreName = me.getPadres()[i],
+                    padreComp = Ice.query('[name=' + padreName + ']'); // TODO no debe ser global, debe ir sobre form, pero da error
                 if (padreComp) {
+                    if (typeof padreComp.length === 'number') {
+                        padreComp = padreComp[padreComp.length - 1];
+                    }
                     padreComp.on({
                         blur: function () {
                             me.heredar();
