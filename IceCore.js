@@ -72,7 +72,10 @@ var Ice = Object.assign(Ice || {}, {
             	obtieneMpolicap: 			'coberturas/obtieneMpolicap.action',
             	agregarCobertura: 			'coberturas/agregarCobertura.action'
             },
-            ejecutarValidacion:			'emision/validaciones.action'
+            ejecutarValidacion:			'emision/validaciones.action',
+            personas:{
+            	obtenerDomicilios:			'jsonLocal/obtenerDomicilios.json'
+            }
             
          }
      },
