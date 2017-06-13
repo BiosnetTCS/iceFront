@@ -10,6 +10,12 @@ Ext.define('Ice.view.field.ComboIce', {
     
     autoSelect: false,
     
+    
+    config: {
+        padres: []
+    },
+    
+    
     initialize: function () {
         var me = this,
             configIce = me.config, // config recibia de TCONFSCR
@@ -56,6 +62,54 @@ Ext.define('Ice.view.field.ComboIce', {
             Ice.generaExcepcion(e, paso);
         }
         
+        
         me.callParent(arguments);
+        
+        
+        if (me.getPadres().length > 0) {
+            me.heredar = function () {
+                var padresValues = {
+                    idPadre: null,
+                    idPadre2: null,
+                    idPadre3: null,
+                    idPadre4: null,
+                    idPadre5: null
+                };
+                for (var i = 0; i < me.getPadres().length; i++) {
+                    var padreName = me.getPadres()[i],
+                        padreComp = me.getParent().down('[name=' + padreName +']');
+                    if (padreComp) {
+                        padresValues['idPadre' + (i === 0
+                            ? ''
+                            : (i + 1)
+                            )] = padreComp.getValue();
+                    }
+                }
+                Ice.log('padresValues:', padresValues);
+                me.getStore().reload({
+                    params: Ice.convertirAParams(padresValues)
+                });
+            };
+            
+            for (var i = 0; i < me.getPadres().length; i++) {
+                var padreName = me.getPadres()[i];
+                var padreComp = me.getParent().down('[name=' + padreName +']');
+                if (padreComp) {
+                    if (padreComp.xtype === 'comboice') {
+                        padreComp.on({
+                            change: function () {
+                                me.heredar();
+                            }
+                        });
+                    } else {
+                        padreComp.on({
+                            blur: function () {
+                                me.heredar();
+                            }
+                        });
+                    }
+                }
+            }
+        }
     }
 });

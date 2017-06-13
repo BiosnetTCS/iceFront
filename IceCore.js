@@ -72,7 +72,10 @@ var Ice = Object.assign(Ice || {}, {
             	obtieneMpolicap: 			'coberturas/obtieneMpolicap.action',
             	agregarCobertura: 			'coberturas/agregarCobertura.action'
             },
-            ejecutarValidacion:			'emision/validaciones.action'
+            ejecutarValidacion:			'emision/validaciones.action',
+            personas:{
+            	obtenerDomicilios:			'jsonLocal/obtenerDomicilios.json'
+            }
             
          }
      },
@@ -1194,6 +1197,12 @@ var Ice = Object.assign(Ice || {}, {
             if (config.catalogo) {
                 item.xtype = 'comboice';
                 item.catalogo = config.catalogo;
+            }
+            
+            
+            // padres
+            if (item.xtype === 'comboice' && config.padres) {
+                item.padres = config.padres.split(',');
             }
             
             
