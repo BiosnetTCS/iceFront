@@ -56,7 +56,7 @@ Ext.define('Ice.view.cotizacion.Cotizacion', {
                 listeners: {
                     tabchange: 'onTabchangeEvent'
                 }
-            }],
+            }]
         }, {
             xtype: 'toolbar',
             ui: 'footer',
