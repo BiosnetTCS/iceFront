@@ -326,7 +326,7 @@
     }
 
     .#{$prefix}treelist-item-expanded {
-        background-color: $item-expanded-background-color;
+        background-color:$azulo3-s !important;
 
         & .#{$prefix}treelist-item {
             background-color: $item-expanded-child-background-color;

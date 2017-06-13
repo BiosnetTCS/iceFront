@@ -967,9 +967,19 @@ font-family:FontAwesome !important;
 height: 13px !important;
 }
 
-
 .x-column-header-over .x-column-header-trigger:before, .x-column-header-open .x-column-header-trigger:before{
 content: "\f107" !important;
 }
+        
+ .x-treelist-item-expander:after{
+  content: "\f105" !important;
+ }
     
-    
+ 
+ .x-treelist-item-expanded > * > * > .x-treelist-item-expander:after{
+ content: "\f107" !important;
+ }
+ 
+ .x-scroller > .x-inner:before, .x-scroller > .x-inner:after {
+content:none !important;
+}
