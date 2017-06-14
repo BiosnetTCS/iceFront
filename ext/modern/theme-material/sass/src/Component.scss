@@ -135,14 +135,14 @@ html, body {
 	border-bottom-width:0px;
 	border-left-color:#00B5CB;
 	display:block;
-	width:80%;
+	width: 80%;
 	margin: 20px auto;
 	padding: 10px;
 	background-color: rgba(0, 51, 160, .75);
 	color:#FFF; 
 	font-size:16px;
-	min-height:60px; 
-	line-height: 35px;
+	min-height: 60px; 
+	line-height: 45px;
 	-webkit-transition: all .25s ease-in-out;
 		&:hover{
 		 -webkit-transform: scale(1.1);
@@ -162,13 +162,13 @@ html, body {
     	font-style: normal;
     	font-weight: normal;
     	text-decoration: inherit;
-   	 	color: #fff;
+   	 	color: #ffffff;
    		font-size: 18px;
     	padding-right: 0.5em;
    	 	position: absolute;
     	top: 10px;
    		left: 0;
-    	line-height: 10px;}
+    	line-height: 25px;}
 }
  
 .chev_rol:after {
@@ -177,7 +177,7 @@ html, body {
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;
-    color: #fff;
+    color: #ffffff;
     font-size: 18px;
     padding-right: 0.5em;
     left: 0;

@@ -1,4 +1,4 @@
-/*---------- Tipografía Corporativa Sura 2017 DIN medium y regular--------------*/
+/*---------- Tipografía Corporativa Sura 2017 DIN medium y regular
 
 
 @include font-face(DIN-Regular, "fonts/DIN-Regular");
@@ -31,7 +31,7 @@
   font-weight: normal;
   font-style: normal;
 }
-
+--------------*/
 
 /*---------- Termina Tipografía Corporativa--------------*/
 
@@ -116,8 +116,21 @@
  /*Botones*/	
 	
 	
-	
-	
+
+ /*Login*/
+ 
+ .sura-logo_bco{   
+    .main-logo {
+    	img{
+        	width:118px;
+            top: 8px;
+            position: relative;
+           }
+    	}
+    }
+ 
+
+
 	
 
  /*Panel*/
